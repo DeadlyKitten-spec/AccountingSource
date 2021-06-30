@@ -121,6 +121,9 @@ namespace applications
             button29.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button29.FlatAppearance.BorderColor = FlatColor;
 
+            button30.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            button30.FlatAppearance.BorderColor = FlatColor;
+
             //dgv.AutoGenerateColumns = false;
 
             if (f == true)
@@ -4031,6 +4034,18 @@ namespace applications
         {
             PersonalStatBuy psb = new PersonalStatBuy();
             psb.Show();
+        }
+
+        private void button30_Click(object sender, EventArgs e)
+        {
+            VaultStatement vaultStatement = new VaultStatement();
+            vaultStatement.Show();
+        }
+
+        private void button27_Click(object sender, EventArgs e)
+        {
+            Product product = new Product();
+            product.Show();
         }
     }
 }

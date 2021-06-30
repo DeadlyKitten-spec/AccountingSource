@@ -81,11 +81,12 @@ namespace applications
                 Vault vault = this.Owner as Vault;
                 vault.dataGridView2.Rows.Add();
                 vault.dataGridView2[0, vault.dataGridView2.Rows.Count - 2].Value = comboBox6.Text;
-                vault.dataGridView2[1, vault.dataGridView2.Rows.Count - 2].Value = textBox1.Text;
+                vault.dataGridView2[1, vault.dataGridView2.Rows.Count - 2].Value = textBox2.Text;
+                vault.dataGridView2[2, vault.dataGridView2.Rows.Count - 2].Value = textBox1.Text;
                 vault.dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                 this.Close();
             }
-            else
+            /*else
             {   if (table == 1)
                 {
                     Vault vault = this.Owner as Vault;
@@ -104,7 +105,34 @@ namespace applications
                     vault.dataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                     this.Close();
                 }
+            }*/
+        }
+
+        private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string Query = "SELECT * FROM `product` WHERE `name` = '" + comboBox6.Text + "';";
+            DB db = new DB();
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+            MySqlDataReader myReader;
+            string[] names = new string[100];
+            int k = 0;
+            try
+            {
+                db.openConnection();
+                myReader = cmdDataBase.ExecuteReader();
+
+                int j = 0;
+                while (myReader.Read())
+                {
+                    textBox2.Text = myReader.GetString("price");
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            db.closeConnection();
         }
     }
 }

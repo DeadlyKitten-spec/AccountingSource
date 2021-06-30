@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button29 = new System.Windows.Forms.Button();
             this.button26 = new System.Windows.Forms.Button();
             this.button27 = new System.Windows.Forms.Button();
             this.button28 = new System.Windows.Forms.Button();
@@ -87,7 +88,7 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.button16 = new System.Windows.Forms.Button();
-            this.button29 = new System.Windows.Forms.Button();
+            this.button30 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
@@ -103,6 +104,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(245)))), ((int)(((byte)(196)))));
+            this.panel1.Controls.Add(this.button30);
             this.panel1.Controls.Add(this.button29);
             this.panel1.Controls.Add(this.button26);
             this.panel1.Controls.Add(this.button27);
@@ -169,13 +171,27 @@
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
             // 
+            // button29
+            // 
+            this.button29.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(237)))), ((int)(((byte)(147)))));
+            this.button29.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button29.ForeColor = System.Drawing.Color.Black;
+            this.button29.Location = new System.Drawing.Point(1586, 93);
+            this.button29.Name = "button29";
+            this.button29.Size = new System.Drawing.Size(154, 41);
+            this.button29.TabIndex = 69;
+            this.button29.Text = "Ведомость по покупателям";
+            this.button29.UseVisualStyleBackColor = false;
+            this.button29.Click += new System.EventHandler(this.button29_Click);
+            // 
             // button26
             // 
             this.button26.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(237)))), ((int)(((byte)(147)))));
             this.button26.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button26.ForeColor = System.Drawing.Color.Black;
-            this.button26.Location = new System.Drawing.Point(1415, 135);
+            this.button26.Location = new System.Drawing.Point(1415, 139);
             this.button26.Name = "button26";
             this.button26.Size = new System.Drawing.Size(154, 41);
             this.button26.TabIndex = 68;
@@ -189,13 +205,13 @@
             this.button27.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button27.ForeColor = System.Drawing.Color.Black;
-            this.button27.Location = new System.Drawing.Point(1595, 154);
+            this.button27.Location = new System.Drawing.Point(1415, 94);
             this.button27.Name = "button27";
             this.button27.Size = new System.Drawing.Size(154, 41);
             this.button27.TabIndex = 67;
             this.button27.Text = "Товары";
             this.button27.UseVisualStyleBackColor = false;
-            this.button27.Visible = false;
+            this.button27.Click += new System.EventHandler(this.button27_Click);
             // 
             // button28
             // 
@@ -203,7 +219,7 @@
             this.button28.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button28.ForeColor = System.Drawing.Color.Black;
-            this.button28.Location = new System.Drawing.Point(1415, 173);
+            this.button28.Location = new System.Drawing.Point(1415, 177);
             this.button28.Name = "button28";
             this.button28.Size = new System.Drawing.Size(154, 41);
             this.button28.TabIndex = 66;
@@ -686,7 +702,7 @@
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(154, 41);
             this.button9.TabIndex = 21;
-            this.button9.Text = "Номенклатура";
+            this.button9.Text = "Грузы";
             this.button9.UseVisualStyleBackColor = false;
             this.button9.Click += new System.EventHandler(this.button9_Click);
             this.button9.MouseEnter += new System.EventHandler(this.button9_MouseEnter);
@@ -803,23 +819,23 @@
             // 
             this.dgv.AllowUserToDeleteRows = false;
             this.dgv.AllowUserToOrderColumns = true;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dgv.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgv.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgv.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgv.DefaultCellStyle = dataGridViewCellStyle10;
             this.dgv.Location = new System.Drawing.Point(36, 244);
             this.dgv.Name = "dgv";
             this.dgv.Size = new System.Drawing.Size(1850, 760);
@@ -863,19 +879,19 @@
             this.button16.UseVisualStyleBackColor = false;
             this.button16.Click += new System.EventHandler(this.button16_Click_2);
             // 
-            // button29
+            // button30
             // 
-            this.button29.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(237)))), ((int)(((byte)(147)))));
-            this.button29.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button29.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button29.ForeColor = System.Drawing.Color.Black;
-            this.button29.Location = new System.Drawing.Point(1586, 93);
-            this.button29.Name = "button29";
-            this.button29.Size = new System.Drawing.Size(154, 41);
-            this.button29.TabIndex = 69;
-            this.button29.Text = "Ведомость по покупателям";
-            this.button29.UseVisualStyleBackColor = false;
-            this.button29.Click += new System.EventHandler(this.button29_Click);
+            this.button30.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(237)))), ((int)(((byte)(147)))));
+            this.button30.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button30.ForeColor = System.Drawing.Color.Black;
+            this.button30.Location = new System.Drawing.Point(1443, 214);
+            this.button30.Name = "button30";
+            this.button30.Size = new System.Drawing.Size(103, 23);
+            this.button30.TabIndex = 87;
+            this.button30.Text = "Отчеты";
+            this.button30.UseVisualStyleBackColor = false;
+            this.button30.Click += new System.EventHandler(this.button30_Click);
             // 
             // WorkSpace
             // 
@@ -962,5 +978,6 @@
         private System.Windows.Forms.Button button27;
         private System.Windows.Forms.Button button28;
         private System.Windows.Forms.Button button29;
+        private System.Windows.Forms.Button button30;
     }
 }

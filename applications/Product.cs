@@ -11,13 +11,12 @@ using System.Windows.Forms;
 
 namespace applications
 {
-    public partial class Nomenclature : Form
+    public partial class Product : Form
     {
-        public Nomenclature()
+        public Product()
         {
             InitializeComponent();
-            //FillDGV();
-            comboBox1.Text = "Груз";
+            comboBox1.Text = "Товар";
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox4.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -31,7 +30,10 @@ namespace applications
             this.ControlBox = false;
         }
 
-        public string val = "";
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
 
         Point lastPoint;
         private void panel2_MouseDown(object sender, MouseEventArgs e)
@@ -62,65 +64,19 @@ namespace applications
             }
         }
 
-        void FillDGV()
+        private void pictureBox1_Click(object sender, EventArgs e)
         {
-            dataGridView1.Rows.Clear();
-            string Query = "SELECT * FROM `namecargo`";
-            DB db = new DB();
-            MySqlDataAdapter adapter = new MySqlDataAdapter();
-            MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
-            MySqlDataReader myReader;
-            string[] names = new string[100];
-            int k = 0;
-            try
-            {
-                db.openConnection();
-                myReader = cmdDataBase.ExecuteReader();
-
-                int j = 0;
-                while (myReader.Read())
-                {
-                    string objName = myReader.GetString("name");
-                    bool f = true;
-                    for (int i = 0; i < names.Length; i++)
-                    {
-                        if (names[i] != null)
-                        {
-                            if (names[i].Equals(objName))
-                            {
-                                f = false;
-                                break;
-                            }
-                        }
-                    }
-                    if (f == true)
-                    {
-                        names[j] = objName;
-                        j++;
-                        dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[0, k].Value = objName;
-                        k++;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            db.closeConnection();
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-        }
-
-
-        private void pictureBox1_Click_1(object sender, EventArgs e)
-        {   
             if (comboBox1.SelectedIndex == 0)
             {
+                if (textBox1.Text.Equals(""))
+                {
+                    textBox1.Text = "0";
+                }
                 DB db = new DB();
-                MySqlCommand command = new MySqlCommand("INSERT INTO `product` (`group`, `name`) VALUES (@group, @cargo)", db.getConnection());
-                
+                MySqlCommand command = new MySqlCommand("INSERT INTO `product` (`group`, `price`, `name`) VALUES (@group, @price, @cargo)", db.getConnection());
+
                 command.Parameters.Add("@group", MySqlDbType.VarChar).Value = comboBox2.Text;
+                command.Parameters.Add("@price", MySqlDbType.VarChar).Value = textBox1.Text;
                 command.Parameters.Add("@cargo", MySqlDbType.VarChar).Value = textBox2.Text;
                 db.openConnection();
 
@@ -129,6 +85,7 @@ namespace applications
                 db.closeConnection();
 
                 textBox2.Text = "";
+                textBox1.Text = "";
                 dataGridView1.Rows.Clear();
                 string Query = "SELECT * FROM `product` WHERE `group` = '" + comboBox2.Text + "';";
                 MySqlDataAdapter adapter = new MySqlDataAdapter();
@@ -166,6 +123,7 @@ namespace applications
                                 dataGridView1.Rows.Add();
                                 //dataGridView1[0, k].Value = k + 1;
                                 dataGridView1[0, k].Value = objName;
+                                dataGridView1["price", k].Value = myReader.GetString("price");
                                 k++;
                             }
                             j++;
@@ -245,17 +203,12 @@ namespace applications
             }
         }
 
-        private void pictureBox2_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-        }
-
         private void pictureBox3_Click(object sender, EventArgs e)
         {
             if (comboBox1.SelectedIndex == 0)
             {
                 DB db = new DB();
-                MySqlCommand command = new MySqlCommand("UPDATE `product` SET `name` = '" + textBox2.Text + "' WHERE `name` = '" + val + "'", db.getConnection());
+                MySqlCommand command = new MySqlCommand("UPDATE `product` SET `name` = '" + textBox2.Text + "', `price` = '" + textBox1.Text + "' WHERE `name` = '" + val + "'", db.getConnection());
 
                 db.openConnection();
 
@@ -308,6 +261,7 @@ namespace applications
                                 dataGridView1.Rows.Add();
                                 //dataGridView1[0, k].Value = k + 1;
                                 dataGridView1[0, k].Value = objName;
+                                dataGridView1["price", k].Value = myReader.GetString("price");
                                 k++;
                             }
                             j++;
@@ -392,10 +346,14 @@ namespace applications
             }
         }
 
+
+        public string val = "";
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int idx = dataGridView1.CurrentRow.Index;
             val = dataGridView1[0, idx].Value.ToString();
+            textBox2.Text = dataGridView1["name", idx].Value.ToString();
+            textBox1.Text = dataGridView1["price", idx].Value.ToString();
         }
 
         private void pictureBox4_Click(object sender, EventArgs e)
@@ -449,6 +407,7 @@ namespace applications
                                 dataGridView1.Rows.Add();
                                 //dataGridView1[0, k].Value = k + 1;
                                 dataGridView1[0, k].Value = objName;
+                                dataGridView1["price", k].Value = myReader.GetString("price");
                                 k++;
                             }
                             j++;
@@ -528,7 +487,6 @@ namespace applications
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //dataGridView1.Rows.Clear();
             comboBox2.Items.Clear();
             if (comboBox1.SelectedIndex == 0)
             {
@@ -725,6 +683,7 @@ namespace applications
                                 dataGridView1.Rows.Add();
                                 //dataGridView1[0, k].Value = k + 1;
                                 dataGridView1[0, k].Value = objName;
+                                dataGridView1["price", k].Value = myReader.GetString("price");
                                 k++;
                             }
                             j++;
