@@ -32,7 +32,9 @@ namespace applications
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            Dictionaries dictionaries = new Dictionaries();
+            dictionaries.Show();
+            this.Close();
         }
 
         Point lastPoint;
@@ -683,7 +685,7 @@ namespace applications
                                 dataGridView1.Rows.Add();
                                 //dataGridView1[0, k].Value = k + 1;
                                 dataGridView1[0, k].Value = objName;
-                                dataGridView1["price", k].Value = myReader.GetString("price");
+                                dataGridView1[1, k].Value = myReader.GetString("price");
                                 k++;
                             }
                             j++;

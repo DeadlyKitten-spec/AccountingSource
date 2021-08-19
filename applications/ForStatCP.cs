@@ -14,5 +14,8 @@ namespace applications
         public int countTrip;
         public double price;
         public double sum;
+        public double tax;
+        public double wotax;
+        public double cash;
     }
 }

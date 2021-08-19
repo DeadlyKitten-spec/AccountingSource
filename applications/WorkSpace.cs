@@ -48,7 +48,7 @@ namespace applications
             button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button1.FlatAppearance.BorderColor = FlatColor;
 
-            button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            /*button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button6.FlatAppearance.BorderColor = FlatColor;
 
             button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -61,7 +61,7 @@ namespace applications
             button9.FlatAppearance.BorderColor = FlatColor;
 
             button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button10.FlatAppearance.BorderColor = FlatColor;
+            button10.FlatAppearance.BorderColor = FlatColor;*/
 
             button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button3.FlatAppearance.BorderColor = FlatColor;
@@ -76,8 +76,8 @@ namespace applications
             button11.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button11.FlatAppearance.BorderColor = FlatColor;
 
-            button15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button15.FlatAppearance.BorderColor = FlatColor;
+            /*button15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            button15.FlatAppearance.BorderColor = FlatColor;*/
 
             button16.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button16.FlatAppearance.BorderColor = FlatColor;
@@ -89,8 +89,8 @@ namespace applications
             button18.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button18.FlatAppearance.BorderColor = FlatColor;
 
-            button20.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button20.FlatAppearance.BorderColor = FlatColor;
+            /*button20.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            button20.FlatAppearance.BorderColor = FlatColor;*/
 
             button21.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button21.FlatAppearance.BorderColor = FlatColor;
@@ -103,17 +103,17 @@ namespace applications
             button23.FlatAppearance.BorderColor = FlatColor;
             button23.BringToFront();
 
-            button24.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button24.FlatAppearance.BorderColor = FlatColor;
+            /*button24.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            button24.FlatAppearance.BorderColor = FlatColor;*/
 
             button25.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button25.FlatAppearance.BorderColor = FlatColor;
 
-            button26.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            /*button26.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button26.FlatAppearance.BorderColor = FlatColor;
 
             button27.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button27.FlatAppearance.BorderColor = FlatColor;
+            button27.FlatAppearance.BorderColor = FlatColor;*/
 
             button28.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button28.FlatAppearance.BorderColor = FlatColor;
@@ -123,6 +123,9 @@ namespace applications
 
             button30.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button30.FlatAppearance.BorderColor = FlatColor;
+
+            button31.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            button31.FlatAppearance.BorderColor = FlatColor;
 
             //dgv.AutoGenerateColumns = false;
 
@@ -422,7 +425,7 @@ namespace applications
             db.closeConnection();
         }
 
-        private void button6_MouseEnter(object sender, EventArgs e)
+        /*private void button6_MouseEnter(object sender, EventArgs e)
         {
             colorButton = button1.BackColor;
             button6.BackColor = Color.Khaki;
@@ -464,7 +467,7 @@ namespace applications
         private void button9_MouseLeave(object sender, EventArgs e)
         {
             button9.BackColor = colorButton;
-        }
+        }*/
 
         private void button6_Click(object sender, EventArgs e)
         {
@@ -896,6 +899,7 @@ namespace applications
 
         private void dgv_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            //MessageBox.Show("asd");
             if (idCupterBool)
             {
                 for (int i = 0; i < dgv.ColumnCount; i++)
@@ -927,6 +931,7 @@ namespace applications
                 new DataGridViewTextBoxColumn() { Name = "сars", HeaderText = "Автомобиль" },
                 new DataGridViewTextBoxColumn() { Name = "driver", HeaderText = "Водитель" },
                 new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Расчет наличными" },
+                new DataGridViewTextBoxColumn() { Name = "tax", HeaderText = "Без НДС" },
                 new DataGridViewTextBoxColumn() { Name = "numberDocTrip", HeaderText = "Номер ТТН" },
                 new DataGridViewTextBoxColumn() { Name = "paid", HeaderText = "Оплачено" });
                 dgv.Rows.Clear();
@@ -1048,14 +1053,18 @@ namespace applications
                             dgv[14, i].Value = myReader.GetString("cash");
                         else
                             dgv[14, i].Value = " ";
-                        if (!myReader.GetString("numberDocTrip").Equals("-1"))
-                            dgv[15, i].Value = myReader.GetString("numberDocTrip");
+                        if (!myReader.GetString("tax").Equals("пусто"))
+                            dgv[15, i].Value = myReader.GetString("tax");
                         else
                             dgv[15, i].Value = " ";
-                        if (!myReader.GetString("paid").Equals("пусто"))
-                            dgv[16, i].Value = myReader.GetString("paid");
+                        if (!myReader.GetString("numberDocTrip").Equals("-1"))
+                            dgv[16, i].Value = myReader.GetString("numberDocTrip");
                         else
                             dgv[16, i].Value = " ";
+                        if (!myReader.GetString("paid").Equals("пусто"))
+                            dgv[17, i].Value = myReader.GetString("paid");
+                        else
+                            dgv[17, i].Value = " ";
                         i++;
                     }
                 }
@@ -1135,6 +1144,7 @@ namespace applications
                     new DataGridViewTextBoxColumn() { Name = "сars", HeaderText = "Автомобиль" },
                     new DataGridViewTextBoxColumn() { Name = "driver", HeaderText = "Водитель" },
                     new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Расчет наличными" },
+                    new DataGridViewTextBoxColumn() { Name = "tax", HeaderText = "Без НДС" },
                     new DataGridViewTextBoxColumn() { Name = "numberDocTrip", HeaderText = "Номер ТТН" },
                     new DataGridViewTextBoxColumn() { Name = "paid", HeaderText = "Оплачено" });
                     dgv.Rows.Clear();
@@ -1256,14 +1266,18 @@ namespace applications
                                 dgv[14, i].Value = myReader.GetString("cash");
                             else
                                 dgv[14, i].Value = " ";
-                            if (!myReader.GetString("numberDocTrip").Equals("-1"))
-                                dgv[15, i].Value = myReader.GetString("numberDocTrip");
+                            if (!myReader.GetString("tax").Equals("пусто"))
+                                dgv[15, i].Value = myReader.GetString("tax");
                             else
                                 dgv[15, i].Value = " ";
-                            if (!myReader.GetString("paid").Equals("пусто"))
-                                dgv[16, i].Value = myReader.GetString("paid");
+                            if (!myReader.GetString("numberDocTrip").Equals("-1"))
+                                dgv[16, i].Value = myReader.GetString("numberDocTrip");
                             else
                                 dgv[16, i].Value = " ";
+                            if (!myReader.GetString("paid").Equals("пусто"))
+                                dgv[17, i].Value = myReader.GetString("paid");
+                            else
+                                dgv[17, i].Value = " ";
                             i++;
                         }
                     }
@@ -1405,6 +1419,14 @@ namespace applications
                                 {
                                     write.checkBox1.CheckState = CheckState.Unchecked;
                                 }
+                                if (myReader.GetString("tax").Equals("Да"))
+                                {
+                                    write.checkBox5.CheckState = CheckState.Checked;
+                                }
+                                else
+                                {
+                                    write.checkBox5.CheckState = CheckState.Unchecked;
+                                }
                                 if (myReader.GetString("paid").Equals("Да"))
                                 {
                                     write.checkBox2.CheckState = CheckState.Checked;
@@ -1520,6 +1542,14 @@ namespace applications
                                 else
                                 {
                                     write.checkBox1.CheckState = CheckState.Unchecked;
+                                }
+                                if (myReader.GetString("tax").Equals("Да"))
+                                {
+                                    write.checkBox5.CheckState = CheckState.Checked;
+                                }
+                                else
+                                {
+                                    write.checkBox5.CheckState = CheckState.Unchecked;
                                 }
                                 if (myReader.GetString("paid").Equals("Да"))
                                 {
@@ -4046,6 +4076,13 @@ namespace applications
         {
             Product product = new Product();
             product.Show();
+        }
+
+        private void button31_Click(object sender, EventArgs e)
+        {
+            Dictionaries dictionaries = new Dictionaries();
+            dictionaries.Show();
+            dictionaries.Owner = this;
         }
     }
 }

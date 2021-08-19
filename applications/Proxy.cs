@@ -665,7 +665,7 @@ namespace applications
             string[] ddttt = ddtt[0].Split('.');
             ddt = ddttt[2] + "-" + ddttt[1] + "-" + ddttt[0];
             DB db = new DB();
-            string query = "UPDATE `proxy` SET `date` = '" + dt + "', `type` = '" + comboBox1.Text + "', `counterparty` = '" + comboBox2.Text + "', `numberDoc` = '" + textBox1.Text + "', `nameCargo` = '" + comboBox3.Text + "', `cargoCount` = '" + textBox2.Text + "', `price` = '" + textBox3.Text + "', `sum` = '" + textBox4.Text + "' WHERE `date` = '" + ddt + "' AND `counterparty` = '" + dataGridView1[3, dataGridView1.CurrentRow.Index].Value + "' AND `numberDoc` = '" + dataGridView1[2, dataGridView1.CurrentRow.Index].Value + "' AND `nameCargo` = '" + dataGridView1[4, dataGridView1.CurrentRow.Index].Value + "';";
+            string query = "UPDATE `proxy` SET `date` = '" + dt + "', `type` = '" + comboBox1.Text + "', `counterparty` = '" + comboBox2.Text + "', `numberDoc` = '" + textBox1.Text + "', `nameCargo` = '" + comboBox3.Text + "', `cargoCount` = '" + textBox2.Text + "', `price` = '" + textBox3.Text + "', `sum` = '" + textBox4.Text + "', `change` = '" + textBox2.Text + "' WHERE `date` = '" + ddt + "' AND `counterparty` = '" + dataGridView1[3, dataGridView1.CurrentRow.Index].Value + "' AND `numberDoc` = '" + dataGridView1[2, dataGridView1.CurrentRow.Index].Value + "' AND `nameCargo` = '" + dataGridView1[4, dataGridView1.CurrentRow.Index].Value + "';";
             MySqlCommand command = new MySqlCommand(query , db.getConnection());
             //MessageBox.Show(query);
             

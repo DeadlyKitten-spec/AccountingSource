@@ -34,6 +34,13 @@ namespace applications
             button13.FlatAppearance.BorderColor = FlatColor;
             button15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button15.FlatAppearance.BorderColor = FlatColor;
+
+            pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox6.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox4.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox8.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox7.SizeMode = PictureBoxSizeMode.StretchImage;
         }
 
         void LoadDGV()
@@ -61,7 +68,9 @@ namespace applications
             dataGridView3.Columns.Clear();
             dataGridView3.Columns.AddRange(
             new DataGridViewTextBoxColumn() { Name = "product", HeaderText = "Товар" },
-            new DataGridViewTextBoxColumn() { Name = "count", HeaderText = "Кол-во" });
+            new DataGridViewTextBoxColumn() { Name = "price", HeaderText = "Расценок" },
+            new DataGridViewTextBoxColumn() { Name = "count", HeaderText = "Кол-во" },
+            new DataGridViewTextBoxColumn() { Name = "ope", HeaderText = "Операция" });
         }
 
 
@@ -222,6 +231,10 @@ namespace applications
         {
             ForProduct fp = new ForProduct();
             fp.table = 0;
+            fp.comboBox1.Hide();
+            fp.label3.Hide();
+            //fp.label2.Hide();
+            //fp.textBox2.Hide();
             fp.Owner = this;
             fp.Show();
         }
@@ -413,6 +426,10 @@ namespace applications
         {
             ForProduct fp = new ForProduct();
             fp.table = 1;
+            fp.comboBox1.Hide();
+            fp.label3.Hide();
+            fp.label2.Hide();
+            fp.textBox2.Hide();
             fp.Owner = this;
             fp.Show();
         }
@@ -593,7 +610,7 @@ namespace applications
 
                     //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
                     command.Parameters.Add("@date", MySqlDbType.Date).Value = dateTimePicker2.Value;
-                    command.Parameters.Add("@ope", MySqlDbType.VarChar).Value = "Брак";
+                    command.Parameters.Add("@ope", MySqlDbType.VarChar).Value = dataGridView3[3, i].Value;
                     command.Parameters.Add("@product", MySqlDbType.VarChar).Value = dataGridView3[0, i].Value;
                     string numm = dataGridView3[1, i].Value.ToString();
                     for (int p = 0; p < numm.Length; p++)
@@ -640,6 +657,21 @@ namespace applications
                 pictureBox4.Show();
                 pictureBox6.Show();
             }
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView3_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

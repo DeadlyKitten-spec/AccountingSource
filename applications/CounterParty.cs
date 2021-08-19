@@ -106,9 +106,9 @@ namespace applications
                 if (!counter[i].name.Equals("-1"))
                 {
                     dataGridView1.Rows.Add();
-                    dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[1, k].Value = counter[i].name;
-                    dataGridView1[2, k].Value = counter[i].status;
+                    //dataGridView1[0, k].Value = k + 1;
+                    dataGridView1[0, k].Value = counter[i].name;
+                    dataGridView1[1, k].Value = counter[i].status;
                     k++;
                 }
                 else
@@ -246,9 +246,9 @@ namespace applications
                     if (!counter[i].name.Equals("-1"))
                     {
                         dataGridView1.Rows.Add();
-                        dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[1, k].Value = counter[i].name;
-                        dataGridView1[2, k].Value = counter[i].status;
+                        //dataGridView1[0, k].Value = k + 1;
+                        dataGridView1[0, k].Value = counter[i].name;
+                        dataGridView1[1, k].Value = counter[i].status;
                         k++;
                     }
                     else
@@ -262,7 +262,9 @@ namespace applications
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            Dictionaries dictionaries = new Dictionaries();
+            dictionaries.Show();
+            this.Close();
         }
 
         Point lastPoint;
@@ -298,41 +300,41 @@ namespace applications
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int idx = dataGridView1.CurrentRow.Index;
-            val = dataGridView1[1, idx].Value.ToString();
-            if(dataGridView1[2, idx].Value != null)
+            val = dataGridView1[0, idx].Value.ToString();
+            if(dataGridView1[1, idx].Value != null)
             {
-                if (dataGridView1[2, idx].Value.Equals("Диспетчер"))
+                if (dataGridView1[1, idx].Value.Equals("Диспетчер"))
                 {
                     checkBox1.CheckState = CheckState.Unchecked;
                     checkBox2.CheckState = CheckState.Unchecked;
                     checkBox3.CheckState = CheckState.Checked;
                 }
-                if (dataGridView1[2, idx].Value.Equals("Грузополучатель/грузоотправитель"))
+                if (dataGridView1[1, idx].Value.Equals("Грузополучатель/грузоотправитель"))
                 {
                     checkBox1.CheckState = CheckState.Checked;
                     checkBox2.CheckState = CheckState.Checked;
                     checkBox3.CheckState = CheckState.Unchecked;
                 }
-                if (dataGridView1[2, idx].Value.Equals("Грузополучатель"))
+                if (dataGridView1[1, idx].Value.Equals("Грузополучатель"))
                 {
                     checkBox1.CheckState = CheckState.Checked;
                     checkBox2.CheckState = CheckState.Unchecked;
                     checkBox3.CheckState = CheckState.Unchecked;
                 }
-                if (dataGridView1[2, idx].Value.Equals("Б/С"))
+                if (dataGridView1[1, idx].Value.Equals("Б/С"))
                 {
                     checkBox1.CheckState = CheckState.Unchecked;
                     checkBox2.CheckState = CheckState.Unchecked;
                     checkBox3.CheckState = CheckState.Unchecked;
                 }
-                if (dataGridView1[2, idx].Value.Equals("Грузоотправитель"))
+                if (dataGridView1[1, idx].Value.Equals("Грузоотправитель"))
                 {
                     checkBox1.CheckState = CheckState.Unchecked;
                     checkBox2.CheckState = CheckState.Checked;
                     checkBox3.CheckState = CheckState.Unchecked;
                 }
             }
-            textBox2.Text = dataGridView1[1, idx].Value.ToString();
+            textBox2.Text = dataGridView1[0, idx].Value.ToString();
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
@@ -519,9 +521,9 @@ namespace applications
                     if (!counter[i].name.Equals("-1"))
                     {
                         dataGridView1.Rows.Add();
-                        dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[1, k].Value = counter[i].name;
-                        dataGridView1[2, k].Value = counter[i].status;
+                        //dataGridView1[0, k].Value = k + 1;
+                        dataGridView1[0, k].Value = counter[i].name;
+                        dataGridView1[1, k].Value = counter[i].status;
                         k++;
                     }
                     else
@@ -618,9 +620,9 @@ namespace applications
                 if (!counter[i].name.Equals("-1"))
                 {
                     dataGridView1.Rows.Add();
-                    dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[1, k].Value = counter[i].name;
-                    dataGridView1[2, k].Value = counter[i].status;
+                    //dataGridView1[0, k].Value = k + 1;
+                    dataGridView1[0, k].Value = counter[i].name;
+                    dataGridView1[1, k].Value = counter[i].status;
                     k++;
                 }
                 else

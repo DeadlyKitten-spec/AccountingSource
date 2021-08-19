@@ -171,6 +171,12 @@
     </Compile>
     <Compile Include="DB.cs" />
     <Compile Include="DGVPrinter.cs" />
+    <Compile Include="Dictionaries.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dictionaries.Designer.cs">
+      <DependentUpon>Dictionaries.cs</DependentUpon>
+    </Compile>
     <Compile Include="documents.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -371,6 +377,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CRViewerZP.resx">
       <DependentUpon>CRViewerZP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dictionaries.resx">
+      <DependentUpon>Dictionaries.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="documents.resx">
       <DependentUpon>documents.cs</DependentUpon>

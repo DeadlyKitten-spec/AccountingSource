@@ -62,10 +62,10 @@ namespace applications
                         names[j] = objName;
                         j++;
                         dataGridView1.Rows.Add();
-                        dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[1, k].Value = objName;
-                        dataGridView1[2, k].Value = myReader.GetString("option");
-                        dataGridView1[3, k].Value = myReader.GetString("type");
+                        //dataGridView1[0, k].Value = k + 1;
+                        dataGridView1[0, k].Value = objName;
+                        dataGridView1[1, k].Value = myReader.GetString("option");
+                        dataGridView1[2, k].Value = myReader.GetString("type");
                         k++;
                     }
                 }
@@ -79,6 +79,8 @@ namespace applications
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
+            Dictionaries dictionaries = new Dictionaries();
+            dictionaries.Show();
             this.Close();
         }
 
@@ -134,10 +136,10 @@ namespace applications
                         names[j] = objName;
                         j++;
                         dataGridView1.Rows.Add();
-                        dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[1, k].Value = objName;
-                        dataGridView1[2, k].Value = myReader.GetString("option");
-                        dataGridView1[3, k].Value = myReader.GetString("type");
+                        //dataGridView1[0, k].Value = k + 1;
+                        dataGridView1[0, k].Value = objName;
+                        dataGridView1[1, k].Value = myReader.GetString("option");
+                        dataGridView1[2, k].Value = myReader.GetString("type");
                         k++;
                     }
                 }
@@ -152,10 +154,10 @@ namespace applications
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int idx = dataGridView1.CurrentRow.Index;
-            val = dataGridView1[1, idx].Value.ToString();
-            textBox2.Text = dataGridView1[1, idx].Value.ToString();
-            textBox1.Text = dataGridView1[2, idx].Value.ToString();
-            comboBox1.Text = dataGridView1[3, idx].Value.ToString();
+            val = dataGridView1[0, idx].Value.ToString();
+            textBox2.Text = dataGridView1[0, idx].Value.ToString();
+            textBox1.Text = dataGridView1[1, idx].Value.ToString();
+            comboBox1.Text = dataGridView1[2, idx].Value.ToString();
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
@@ -207,10 +209,10 @@ namespace applications
                         names[j] = objName;
                         j++;
                         dataGridView1.Rows.Add();
-                        dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[1, k].Value = objName;
-                        dataGridView1[2, k].Value = myReader.GetString("option");
-                        dataGridView1[3, k].Value = myReader.GetString("type");
+                        //dataGridView1[0, k].Value = k + 1;
+                        dataGridView1[0, k].Value = objName;
+                        dataGridView1[1, k].Value = myReader.GetString("option");
+                        dataGridView1[2, k].Value = myReader.GetString("type");
                         k++;
                     }
                 }
@@ -270,10 +272,10 @@ namespace applications
                         names[j] = objName;
                         j++;
                         dataGridView1.Rows.Add();
-                        dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[1, k].Value = objName;
-                        dataGridView1[2, k].Value = myReader.GetString("option");
-                        dataGridView1[3, k].Value = myReader.GetString("type");
+                        //dataGridView1[0, k].Value = k + 1;
+                        dataGridView1[0, k].Value = objName;
+                        dataGridView1[1, k].Value = myReader.GetString("option");
+                        dataGridView1[2, k].Value = myReader.GetString("type");
                         k++;
                     }
                 }

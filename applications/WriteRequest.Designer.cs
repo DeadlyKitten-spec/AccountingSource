@@ -97,6 +97,8 @@
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label22 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -111,6 +113,8 @@
             // mainPanel
             // 
             this.mainPanel.BackColor = System.Drawing.Color.LightCyan;
+            this.mainPanel.Controls.Add(this.label17);
+            this.mainPanel.Controls.Add(this.checkBox5);
             this.mainPanel.Controls.Add(this.pictureBox5);
             this.mainPanel.Controls.Add(this.pictureBox4);
             this.mainPanel.Controls.Add(this.pictureBox3);
@@ -261,7 +265,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft YaHei", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(1455, 385);
+            this.label10.Location = new System.Drawing.Point(1454, 348);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(196, 28);
             this.label10.TabIndex = 54;
@@ -270,7 +274,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(1659, 395);
+            this.checkBox1.Location = new System.Drawing.Point(1658, 358);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(15, 14);
             this.checkBox1.TabIndex = 53;
@@ -883,6 +887,25 @@
             this.label21.TabIndex = 39;
             this.label21.Text = "Исполненная заявка";
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft YaHei", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label17.Location = new System.Drawing.Point(1454, 389);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(99, 28);
+            this.label17.TabIndex = 76;
+            this.label17.Text = "Без НДС";
+            // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Location = new System.Drawing.Point(1658, 399);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(15, 14);
+            this.checkBox5.TabIndex = 75;
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
             // WriteRequest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -980,5 +1003,7 @@
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.Label label17;
+        public System.Windows.Forms.CheckBox checkBox5;
     }
 }

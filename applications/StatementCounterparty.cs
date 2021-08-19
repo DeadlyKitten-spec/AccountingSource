@@ -198,6 +198,9 @@ namespace applications
                     salary[i].price = -1;
                     salary[i].countTrip = -1;
                     salary[i].sum = -1;
+                    salary[i].tax = 0;
+                    salary[i].wotax = 0;
+                    salary[i].cash = 0;
                 }
                 int sumTrip = 0;
                 bool fobj = false;
@@ -233,6 +236,21 @@ namespace applications
                                 {
                                     idmorelast = idlast;
                                     salary[i].countTrip++;
+                                    if (myReader.GetString("tax").Equals("Да"))
+                                    {
+                                        salary[i].wotax += double.Parse(myReader.GetString("priceSalary"));
+                                    }
+                                    else
+                                    {
+                                        if (myReader.GetString("cash").Equals("Да"))
+                                        {
+                                            salary[i].cash += double.Parse(myReader.GetString("priceSalary"));
+                                        }
+                                        else
+                                        {
+                                            salary[i].tax += double.Parse(myReader.GetString("priceSalary"));
+                                        }
+                                    }
                                     break;
                                 }
                                 else
@@ -278,6 +296,21 @@ namespace applications
                                 //MessageBox.Show(myReader.GetString("priceSalary"));
                                 salary[itter].price = double.Parse(myReader.GetString("priceSalary"));
                                 salary[itter].countTrip = 1;
+                                if (myReader.GetString("tax").Equals("Да"))
+                                {
+                                    salary[itter].wotax += double.Parse(myReader.GetString("priceSalary"));
+                                }
+                                else
+                                {
+                                    if (myReader.GetString("cash").Equals("Да"))
+                                    {
+                                        salary[itter].cash += double.Parse(myReader.GetString("priceSalary"));
+                                    }
+                                    else
+                                    {
+                                        salary[itter].tax += double.Parse(myReader.GetString("priceSalary"));
+                                    }
+                                }
                                 fobj = false;
                                 itter = -1;
                             }
@@ -301,12 +334,19 @@ namespace applications
                     new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Название Объекта" },
                     new DataGridViewTextBoxColumn() { Name = "countTrip", HeaderText = "Кол-во рейсов" },
                     new DataGridViewTextBoxColumn() { Name = "price", HeaderText = "Расценок" },
-                    new DataGridViewTextBoxColumn() { Name = "sum", HeaderText = "Сумма" });
+                    new DataGridViewTextBoxColumn() { Name = "sum", HeaderText = "Общая сумма" },
+                    new DataGridViewTextBoxColumn() { Name = "tax", HeaderText = "С НДС" },
+                    new DataGridViewTextBoxColumn() { Name = "wotax", HeaderText = "Без  НДС" },
+                    new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Наличными" });
+                    //new DataGridViewTextBoxColumn() { Name = "fuel", HeaderText = "Затраты топлива" });
                     dgv.Rows.Clear();
                     //dgv.Rows.Add();
                     int itterr = 0;
                     double summ = 0;
                     double summcar = 0;
+                    double taxcar = 0;
+                    double wotaxcar = 0;
+                    double cashcar = 0;
                     int sumTripcar = 0;
                     bool gggg = false;
                     int asdgh = 0;
@@ -335,10 +375,16 @@ namespace applications
                         dgv[2, asdgh].Value = salary[i].countTrip;
                         dgv[3, asdgh].Value = salary[i].price;
                         dgv[4, asdgh].Value = salary[i].sum;
+                        dgv[5, asdgh].Value = salary[i].tax;
+                        dgv[6, asdgh].Value = salary[i].wotax;
+                        dgv[7, asdgh].Value = salary[i].cash;
                         summcar += salary[i].sum;
                         sumTripcar += salary[i].countTrip;
                         summ += salary[i].sum;
                         sumTrip += salary[i].countTrip;
+                        taxcar += salary[i].tax;
+                        wotaxcar += salary[i].wotax;
+                        cashcar += salary[i].cash;
                         asdgh++;
                         /*if (gggg)
                         {
@@ -353,8 +399,11 @@ namespace applications
                                         dgv[2, itterr].Value = "0";
                                         dgv[3, itterr].Value = "0";*/
                     dgv[2, itterr].Value = sumTrip;
-                    dgv[3, itterr].Value = summ / sumTrip;
+                    //dgv[3, itterr].Value = Math.Round(summ / sumTrip, 2); ;
                     dgv[4, itterr].Value = summ;
+                    dgv[5, asdgh].Value = taxcar;
+                    dgv[6, asdgh].Value = wotaxcar;
+                    dgv[7, asdgh].Value = cashcar;
                     /*dgv[0, itterr + 1].Value = "ЗП водителю";
                     dgv[4, itterr + 1].Value = summ * 0.15;*/
                     dgv.Rows[itterr].DefaultCellStyle.BackColor = Color.LightGray;
@@ -383,6 +432,9 @@ namespace applications
                     salary[i].price = -1;
                     salary[i].countTrip = -1;
                     salary[i].sum = -1;
+                    salary[i].tax = 0;
+                    salary[i].wotax = 0;
+                    salary[i].cash = 0;
                 }
                 int sumTrip = 0;
                 bool fobj = false;
@@ -418,6 +470,21 @@ namespace applications
                                 {
                                     idmorelast = idlast;
                                     salary[i].countTrip++;
+                                    if (myReader.GetString("tax").Equals("Да"))
+                                    {
+                                        salary[i].wotax += double.Parse(myReader.GetString("priceSalary"));
+                                    }
+                                    else
+                                    {
+                                        if (myReader.GetString("cash").Equals("Да"))
+                                        {
+                                            salary[i].cash += double.Parse(myReader.GetString("priceSalary"));
+                                        }
+                                        else
+                                        {
+                                            salary[i].tax += double.Parse(myReader.GetString("priceSalary"));
+                                        }
+                                    }
                                     break;
                                 }
                                 else
@@ -463,6 +530,21 @@ namespace applications
                                 //MessageBox.Show(myReader.GetString("priceSalary"));
                                 salary[itter].price = double.Parse(myReader.GetString("priceSalary"));
                                 salary[itter].countTrip = 1;
+                                if (myReader.GetString("tax").Equals("Да"))
+                                {
+                                    salary[itter].wotax += double.Parse(myReader.GetString("priceSalary"));
+                                }
+                                else
+                                {
+                                    if (myReader.GetString("cash").Equals("Да"))
+                                    {
+                                        salary[itter].cash += double.Parse(myReader.GetString("priceSalary"));
+                                    }
+                                    else
+                                    {
+                                        salary[itter].tax += double.Parse(myReader.GetString("priceSalary"));
+                                    }
+                                }
                                 fobj = false;
                                 itter = -1;
                             }
@@ -486,12 +568,22 @@ namespace applications
                     new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Название Объекта" },
                     new DataGridViewTextBoxColumn() { Name = "countTrip", HeaderText = "Кол-во рейсов" },
                     new DataGridViewTextBoxColumn() { Name = "price", HeaderText = "Расценок" },
-                    new DataGridViewTextBoxColumn() { Name = "sum", HeaderText = "Сумма" });
+                    new DataGridViewTextBoxColumn() { Name = "sum", HeaderText = "Общая сумма" },
+                    new DataGridViewTextBoxColumn() { Name = "tax", HeaderText = "С НДС" },
+                    new DataGridViewTextBoxColumn() { Name = "wotax", HeaderText = "Без  НДС" },
+                    new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Наличными" });
+                    //new DataGridViewTextBoxColumn() { Name = "fuel", HeaderText = "Затраты топлива" });
                     dgv.Rows.Clear();
                     //dgv.Rows.Add();
                     int itterr = 0;
                     double summ = 0;
                     double summcar = 0;
+                    double tax = 0;
+                    double taxcar = 0;
+                    double wotax = 0;
+                    double wotaxcar = 0;
+                    double cash = 0;
+                    double cashcar = 0;
                     int sumTripcar = 0;
                     bool gggg = false;
                     int asdgh = 0;
@@ -504,6 +596,9 @@ namespace applications
                         salaryTar[i].price = -1;
                         salaryTar[i].countTrip = -1;
                         salaryTar[i].sum = -1;
+                        salaryTar[i].tax = 0;
+                        salaryTar[i].wotax = 0;
+                        salaryTar[i].cash = 0;
                     }
                     int k = 0;
                     for(int i = 0; i < 1000; i++)
@@ -513,11 +608,17 @@ namespace applications
                             salaryTar[k].cp = "Итого";
                             salaryTar[k].countTrip = sumTripcar;
                             salaryTar[k].sum = summcar;
+                            salaryTar[k].tax = taxcar;
+                            salaryTar[k].wotax = wotaxcar;
+                            salaryTar[k].cash = cashcar;
                             k++;
                             salaryTar[k].cp = "Всего";
                             salaryTar[k].countTrip = sumTrip;
                             salaryTar[k].sum = summ;
-                            salaryTar[k].price = summ / sumTrip;
+                            salaryTar[k].price = Math.Round(summ / sumTrip, 2);
+                            salaryTar[k].tax = tax;
+                            salaryTar[k].wotax = wotax;
+                            salaryTar[k].cash = cash;
                             itterr = i;
                             break;
                         }
@@ -526,15 +627,27 @@ namespace applications
                             salaryTar[k].cp = "Итого";
                             salaryTar[k].countTrip = sumTripcar;
                             salaryTar[k].sum = summcar;
+                            salaryTar[k].tax = taxcar;
+                            salaryTar[k].wotax = wotaxcar;
+                            salaryTar[k].cash = cashcar;
                             k++;
                             sumTripcar = 0;
                             summcar = 0;
+                            taxcar = 0;
+                            wotaxcar = 0;
+                            cashcar = 0;
                         }
                         salaryTar[k] = salary[i];
                         summ += salary[i].sum;
                         sumTrip += salary[i].countTrip;
                         summcar += salary[i].sum;
                         sumTripcar += salary[i].countTrip;
+                        tax += salary[i].tax;
+                        taxcar += salary[i].tax;
+                        wotax += salary[i].wotax;
+                        wotaxcar += salary[i].wotax;
+                        cash += salary[i].cash;
+                        cashcar += salary[i].cash;
                         k++;
                     }
                     for(int i = 0; i < 1000; i++)
@@ -551,6 +664,9 @@ namespace applications
                         dgv[3, i].Value = salaryTar[i].price;
                         //MessageBox.Show(asdgh.ToString());
                         dgv[4, i].Value = salaryTar[i].sum;
+                        dgv[5, i].Value = salaryTar[i].tax;
+                        dgv[6, i].Value = salaryTar[i].wotax;
+                        dgv[7, i].Value = salaryTar[i].cash;
                         if (salaryTar[i].cp.Equals("Итого"))
                         {
                             dgv[1, i].Value = "";

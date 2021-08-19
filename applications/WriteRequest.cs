@@ -267,7 +267,7 @@ namespace applications
             {
                 for (int i = 0; i < WriteRequest.CargoCount; i++)
                 {
-                    MySqlCommand command = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @trip, @ttn, @paid, @salary)", db.getConnection());
+                    MySqlCommand command = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary)", db.getConnection());
 
                     command.Parameters.Add("@id", MySqlDbType.Int32).Value = idRequest;
                     command.Parameters.Add("@data", MySqlDbType.Date).Value = dateTimePicker1.Value;
@@ -433,6 +433,14 @@ namespace applications
                     else
                     {
                         command.Parameters.Add("@cash", MySqlDbType.VarChar).Value = "Нет";
+                    }
+                    if (checkBox5.CheckState == CheckState.Checked)
+                    {
+                        command.Parameters.Add("@tax", MySqlDbType.VarChar).Value = "Да";
+                    }
+                    else
+                    {
+                        command.Parameters.Add("@tax", MySqlDbType.VarChar).Value = "Нет";
                     }
                     if (!textBox6.Text.Equals("Введите номер"))
                     {
@@ -627,6 +635,7 @@ namespace applications
             textBox3.Text = "1";
             checkBox1.CheckState = CheckState.Unchecked;
             checkBox2.CheckState = CheckState.Unchecked;
+            checkBox5.CheckState = CheckState.Unchecked;
             textBox1.Text = "";
             textBox4.Text = "";
             label13.Hide();
@@ -1269,356 +1278,85 @@ namespace applications
 
         private void button2_Click(object sender, EventArgs e)
         {
-            try
+            DialogResult result = MessageBox.Show(
+                       "Введенные данные верны?",
+                       "Сообщение",
+                       MessageBoxButtons.YesNo,
+                       MessageBoxIcon.Information,
+                       MessageBoxDefaultButton.Button1
+                       //MessageBoxOptions.DefaultDesktopOnly
+                       );
+
+            if (result == DialogResult.Yes)
             {
-                string[] Cargoo = new string[100];
-                double[] numCargoo = new double[100];
-                int CargoCountt = 0;
-                bool cargoEmpty = true;
-                bool cargoNumEmpty = true;
-                string num = "proba";
-                for (int p = 0; p < dataGridView1.Rows.Count - 1; p++)
+                try
                 {
-                    Cargoo[CargoCountt] = dataGridView1["cargo", p].Value.ToString();
-                    if (dataGridView1["cargoNum", p].Value != null)
-                    {
-                        num = dataGridView1["cargoNum", p].Value.ToString();
-                        for (int j = 0; j < num.Length; j++)
-                        {
-                            if (num[j] == '.')
-                            {
-                                string[] ans = num.Split('.');
-                                num = ans[0] + "," + ans[1];
-                                break;
-                            }
-                        }
-                        numCargoo[CargoCountt] = double.Parse(num);
-                        cargoNumEmpty = false;
-                    }
-                    else
-                    {
-                        cargoNumEmpty = true;
-                    }
-                    CargoCountt++;
-                    cargoEmpty = false;
-                }
-                if (CargoCountt == 0)
-                {
-                    CargoCountt++;
-                }
-
-                bool pointCheck = true;
-                bool doneCheck = false;
-                bool paid = false;
-                string statusans = "";
-
-                /*if ((!comboBox8.Text.Equals("") && !comboBox9.Text.Equals("")) || (!comboBox8.Text.Equals("пусто") && !comboBox9.Text.Equals("пусто")))
-                {
-                    pointCheck = true;
-                }*/
-
-                if(comboBox8.Text.Equals("") || comboBox8.Text.Equals("пусто") || comboBox9.Text.Equals("") || comboBox9.Text.Equals("пусто"))
-                {
-                    pointCheck = false;
-                }
-                if (!textBox6.Text.Equals("Введите номер"))
-                {
-                    doneCheck = true;
-                }
-                if (checkBox2.CheckState == CheckState.Checked)
-                {
-                    paid = true;
-                }
-                //if (severalCargo == true)
-                //{
-                DB db = new DB();
-                MySqlCommand com;
-                bool fstat = false;
-                for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
-                {
-                    com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @trip, @ttn, @paid, @salary)", db.getConnection());
-
-
-                    com.Parameters.AddWithValue("@id", idRequest);
-                    com.Parameters.AddWithValue("@data", dateTimePicker1.Value);
-                    com.Parameters.AddWithValue("@accept", dateTimePicker3.Value);
-                    string dtp4 = dateTimePicker4.Value.ToString();
-                    string[] sdtp4 = dtp4.Split(' ');
-                    string[] ssdtp4 = sdtp4[1].Split(':');
-                    dtp4 = ssdtp4[0] + ":" + ssdtp4[1];
-                    com.Parameters.AddWithValue("@timeAccept", dtp4);
-                    com.Parameters.AddWithValue("@deal", comboBox1.Text);
-                    //if(!comboBox2.Text.Equals(""))
-                    com.Parameters.AddWithValue("@ourFirms", comboBox2.Text);
-                    //else
-                    //   com.Parameters.AddWithValue("@ourFirms", " ");
-                    //if (!comboBox3.Text.Equals(""))
-                    com.Parameters.AddWithValue("@buyer", comboBox3.Text);
-                    //else
-                    //  com.Parameters.AddWithValue("@buyer", " ");
-                    //if (!comboBox4.Text.Equals(""))
-                    com.Parameters.AddWithValue("@sender", comboBox4.Text);
-                    //else
-                    //  com.Parameters.AddWithValue("@sender", " ");
-                    //if (!comboBox5.Text.Equals(""))
-                    com.Parameters.AddWithValue("@recipient", comboBox5.Text);
-                    //else
-                    // com.Parameters.AddWithValue("@recipient", " ");
-                    //if (!comboBox6.Text.Equals(""))
-                    com.Parameters.AddWithValue("@object", comboBox6.Text);
-                    //else
-                    //  com.Parameters.AddWithValue("@object", " ");
-                    com.Parameters.AddWithValue("@objectArrive", comboBox13.Text);
-                    com.Parameters.AddWithValue("@objectSend", comboBox12.Text);
-                    //com.Parameters.AddWithValue("@status", "Назначена");
-                    //com.Parameters.AddWithValue("@nameCargo", Cargo[i]);
-                    //com.Parameters.AddWithValue("@numberNomenclature", textBox2.Text);
-                    //if (!textBox3.Text.Equals(""))
-                    //else
-                    //  com.Parameters.AddWithValue("@numberTrip", " ");
-                    //if (!comboBox8.Text.Equals(""))
-                    //if(dataGridView1[""])
-
-                    if (cargoEmpty == false)
-                    {
-                        com.Parameters.AddWithValue("@cargo", Cargoo[i]);
-                        if (cargoNumEmpty == false)
-                        {
-                            com.Parameters.AddWithValue("@nomenclature", numCargoo[i]);
-                        }
-                        else
-                        {
-                            com.Parameters.AddWithValue("@nomenclature", 0);
-                        }
-                    }
-                    else
-                    {
-                        com.Parameters.AddWithValue("@cargo", "пусто");
-                        com.Parameters.AddWithValue("@nomenclature", 0);
-                    }
-
-                    com.Parameters.AddWithValue("@traffic", comboBox14.Text);
-                    if (!textBox2.Text.Equals("Добавьте комментарий"))
-                    {
-                        com.Parameters.AddWithValue("@coment", textBox2.Text);
-                    }
-                    else
-                    {
-                        com.Parameters.AddWithValue("@coment", "пусто");
-                    }
-                    if (!textBox1.Text.Equals(""))
-                    {
-                        com.Parameters.AddWithValue("@salary", textBox1.Text);
-                    }
-                    else
-                    {
-                        com.Parameters.AddWithValue("@salary", "пусто");
-                    }
-                    com.Parameters.AddWithValue("@contractor", comboBox7.Text);
-                    com.Parameters.AddWithValue("@cars", comboBox8.Text);
-                    //else
-                    //  com.Parameters.AddWithValue("@cars", " ");
-                    //if (!comboBox9.Text.Equals(""))
-                    com.Parameters.AddWithValue("@driveCont", comboBox11.Text);
-                    com.Parameters.AddWithValue("@drivers", comboBox9.Text);
-                    //else
-                    //  com.Parameters.AddWithValue("@drivers", " ");
-                    //if (!textBox5.Text.Equals(""))
-                    com.Parameters.AddWithValue("@numberDocDriver", dataGridView1[2, i].Value);
-                    //else
-                    //  com.Parameters.AddWithValue("@numberDocDriver", " ");
-                    string[] forDate = dataGridView1[3, i].Value.ToString().Split('.');
-                    //MessageBox.Show(dataGridView1[3, i].Value.ToString());
-                    //com.Parameters.Add("@dateDocDriver", MySqlDbType.Date).Value = new DateTime(int.Parse(forDate[2]), int.Parse(forDate[1]), int.Parse(forDate[0]));
-                    com.Parameters.AddWithValue("@dateDocDriver", new DateTime(int.Parse(forDate[2]), int.Parse(forDate[1]), int.Parse(forDate[0])));
-
-                    //if (!comboBox10.Text.Equals(""))
-                    com.Parameters.AddWithValue("@from", dataGridView1[1, i].Value);
-                    //else
-                    //  com.Parameters.AddWithValue("@fromCounterparty", " ");
-                    if (checkBox1.CheckState == CheckState.Checked)
-                    {
-                        com.Parameters.AddWithValue("@cash", "Да");
-                    }
-                    else
-                    {
-                        com.Parameters.AddWithValue("@cash", "Нет");
-                    }
-                    if (pointCheck)
-                    {
-                        if (paid)
-                        {
-                            if (doneCheck)
-                            {
-                                com.Parameters.AddWithValue("@status", "Исполнена");
-                                statusans = "исполнена";
-                            }
-                            else
-                            {
-                                com.Parameters.AddWithValue("@status", "Оплачена");
-                            }
-                        }
-                        else
-                        {
-                            if (doneCheck)
-                            {
-                                com.Parameters.AddWithValue("@status", "Исполнена");
-                                statusans = "исполнена";
-                            }
-                            else
-                            {
-                                com.Parameters.AddWithValue("@status", "Назначена");
-                                statusans = "назначена";
-                            }
-                        }
-                    }
-                    else
-                    {
-                        com.Parameters.AddWithValue("@status", "В работе");
-                        statusans = "в работе";
-                    }
-                    com.Parameters.AddWithValue("@ttn", dateTimePicker5.Value);
-                    if (!textBox6.Text.Equals("Введите номер"))
-                        com.Parameters.AddWithValue("@trip", textBox6.Text);
-                    else
-                        com.Parameters.AddWithValue("@trip", -1);
-                    if (checkBox2.CheckState == CheckState.Checked)
-                    {
-                        com.Parameters.AddWithValue("@paid", "Да");
-                        //com.Parameters.AddWithValue("@status", "Оплачена");
-                    }
-                    else
-                    {
-                        com.Parameters.AddWithValue("@paid", "Нет");
-                        //com.Parameters.AddWithValue("@status", "Исполнена");
-                    }
-                    db.openConnection();
-
-                    if (com.ExecuteNonQuery() >= 1)
-                    {
-                        //MessageBox.Show(idRequest);
-                        fstat = true;
-                        //MessageBox.Show("Заявка обновлена и " + statusans);
-                    }
-                    else
-                    {
-                        //MessageBox.Show(idRequest);
-                        fstat = false;
-                        //MessageBox.Show("Заявка не обновлена");
-                    }
-
-                }
-                if (statusans.Equals("исполнена") || statusans.Equals("назначена"))
-                {
-
+                    string[] Cargoo = new string[100];
+                    double[] numCargoo = new double[100];
+                    int CargoCountt = 0;
+                    bool cargoEmpty = true;
+                    bool cargoNumEmpty = true;
+                    string num = "proba";
                     for (int p = 0; p < dataGridView1.Rows.Count - 1; p++)
                     {
-                        string[] forDatet = dataGridView1[3, p].Value.ToString().Split('.');
-                        //DateTime dt = new DateTime(int.Parse(forDatet[2]), int.Parse(forDatet[1]), int.Parse(forDatet[0]));
-                        string dt = forDatet[2] + forDatet[1] + forDatet[0];
-                        MySqlCommand comand = new MySqlCommand("SELECT * FROM `proxy` WHERE `date` = '" + dt + "' AND `counterparty` = '" + dataGridView1[1, p].Value + "' AND `numberDoc` = '" + dataGridView1[2, p].Value + "' AND `nameCargo` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
-                        MySqlDataReader myReader;
-                        double change = 0;
-                        try
+                        Cargoo[CargoCountt] = dataGridView1["cargo", p].Value.ToString();
+                        if (dataGridView1["cargoNum", p].Value != null)
                         {
-                            db.openConnection();
-                            myReader = comand.ExecuteReader();
-
-                            while (myReader.Read())
+                            num = dataGridView1["cargoNum", p].Value.ToString();
+                            for (int j = 0; j < num.Length; j++)
                             {
-                                change = double.Parse(myReader.GetString("change"));
-                                change -= double.Parse(dataGridView1[4, p].Value.ToString());
+                                if (num[j] == '.')
+                                {
+                                    string[] ans = num.Split('.');
+                                    num = ans[0] + "," + ans[1];
+                                    break;
+                                }
                             }
-                            myReader.Close();
+                            numCargoo[CargoCountt] = double.Parse(num);
+                            cargoNumEmpty = false;
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            MessageBox.Show(ex.Message);
+                            cargoNumEmpty = true;
                         }
-                        db.closeConnection();
-
-                        comand = new MySqlCommand("UPDATE `proxy` SET `change` = '" + change.ToString() + "'WHERE `date` = '" + dt + "' AND `counterparty` = '" + dataGridView1[1, p].Value + "' AND `numberDoc` = '" + dataGridView1[2, p].Value + "' AND `nameCargo` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
-                        db.openConnection();
-
-                        comand.ExecuteNonQuery();
-
-                        db.closeConnection();
+                        CargoCountt++;
+                        cargoEmpty = false;
                     }
-                }
-                if (statusans.Equals("исполнена"))
-                {
-                    if (comboBox1.Text.Equals("Поставка"))
+                    if (CargoCountt == 0)
                     {
-                        if (status.Equals("nothing") || status.Equals("Назначена") || status.Equals("В работе"))
-                        {
-                            for (int p = 0; p < dataGridView1.Rows.Count - 1; p++)
-                            {
-                                MySqlCommand comand = new MySqlCommand("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
-                                //MessageBox.Show("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';");
-                                MySqlDataReader myReader;
-                                double change = 0;
-                                try
-                                {
-                                    db.openConnection();
-                                    myReader = comand.ExecuteReader();
-
-                                    while (myReader.Read())
-                                    {
-                                        change = double.Parse(myReader.GetString("count"));
-                                        change -= double.Parse(dataGridView1[4, p].Value.ToString());
-                                    }
-                                    myReader.Close();
-                                }
-                                catch (Exception ex)
-                                {
-                                    MessageBox.Show(ex.Message);
-                                }
-                                db.closeConnection();
-
-                                comand = new MySqlCommand("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
-                                //MessageBox.Show("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';");
-                                db.openConnection();
-
-                                comand.ExecuteNonQuery();
-
-                                db.closeConnection();
-
-                                comand = new MySqlCommand("INSERT INTO `operations` (`date`, `operation`, `product`, `count`) VALUES (@date, @ope, @product, @count)", db.getConnection());
-
-                                //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
-                                comand.Parameters.Add("@date", MySqlDbType.Date).Value = dateTimePicker1.Value;
-                                //int idtemp = int.Parse(idRequest) - 1;
-                                comand.Parameters.Add("@ope", MySqlDbType.VarChar).Value = "Заявка №" + idRequest;
-                                comand.Parameters.Add("@product", MySqlDbType.VarChar).Value = dataGridView1[0, p].Value;
-                                string numm = dataGridView1[4, p].Value.ToString();
-                                for (int c = 0; c < numm.Length; c++)
-                                {
-                                    if (numm[c] == '.')
-                                    {
-                                        string[] ans = numm.Split('.');
-                                        numm = ans[0] + "," + ans[1];
-                                        break;
-                                    }
-                                }
-                                comand.Parameters.Add("@count", MySqlDbType.VarChar).Value = numm;
-                                db.openConnection();
-
-                                comand.ExecuteNonQuery();
-
-                                db.closeConnection();
-                            }
-                        }
+                        CargoCountt++;
                     }
-                }
-                if (fstat)
-                {
-                    com = new MySqlCommand("DELETE FROM `request` WHERE `id` = '" + idRequest + "';", db.getConnection());
-                    db.openConnection();
-                    com.ExecuteNonQuery();
-                    db.closeConnection();
+
+                    bool pointCheck = true;
+                    bool doneCheck = false;
+                    bool paid = false;
+                    string statusans = "";
+
+                    /*if ((!comboBox8.Text.Equals("") && !comboBox9.Text.Equals("")) || (!comboBox8.Text.Equals("пусто") && !comboBox9.Text.Equals("пусто")))
+                    {
+                        pointCheck = true;
+                    }*/
+
+                    if (comboBox8.Text.Equals("") || comboBox8.Text.Equals("пусто") || comboBox9.Text.Equals("") || comboBox9.Text.Equals("пусто"))
+                    {
+                        pointCheck = false;
+                    }
+                    if (!textBox6.Text.Equals("Введите номер"))
+                    {
+                        doneCheck = true;
+                    }
+                    if (checkBox2.CheckState == CheckState.Checked)
+                    {
+                        paid = true;
+                    }
+                    //if (severalCargo == true)
+                    //{
+                    DB db = new DB();
+                    MySqlCommand com;
+                    bool fstat = false;
                     for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                     {
-                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @trip, @ttn, @paid, @salary)", db.getConnection());
+                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary)", db.getConnection());
 
 
                         com.Parameters.AddWithValue("@id", idRequest);
@@ -1726,6 +1464,14 @@ namespace applications
                         {
                             com.Parameters.AddWithValue("@cash", "Нет");
                         }
+                        if (checkBox5.CheckState == CheckState.Checked)
+                        {
+                            com.Parameters.AddWithValue("@tax", "Да");
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@tax", "Нет");
+                        }
                         if (pointCheck)
                         {
                             if (paid)
@@ -1790,213 +1536,515 @@ namespace applications
                         }
 
                     }
-                    MessageBox.Show("Заявка обновлена и " + statusans);
-                }
-                else
-                {
-                    MessageBox.Show("Заявка не обновлена");
-                }
-                db.closeConnection();
-            }
-            catch
-            {
-                MessageBox.Show("Что-то пошло не так, заявка не обновлена. Попробуйте еще раз или свяжитесь с программистом");
-            }
-           
-            //}
-            //else
-            //{
-               /* DB db = new DB();
-                MySqlCommand com = new MySqlCommand("UPDATE request SET id=@id, docDate=@docDate, dateAccept=@accept, timeAccept=@timeAccept, deal=@deal, ourFirms=@ourFirms, buyer=@buyer, sender=@sender, recipient=@recipient, object=@object, objectArrive=@arrive, objectSend=@objectSend, status=@status, nameCargo=@nameCargo, numberNomenclature=@nom, traffic=@traffic, coment=@coment, contractor=@contractor, cars=@cars, driveCont=@driveCont, drivers=@drivers, numberDocDriver=@numberDocDriver, dateDocDriver=@dateDocDriver, fromCounterparty=@fromCounterparty, cash=@cash, dateTTN=@ttn, paid=@paid, numberDocTrip=@trip, priceSalary=@salary WHERE id = '" + idRequest + "';", db.getConnection());
-
-
-                com.Parameters.AddWithValue("@id", idRequest);
-                com.Parameters.AddWithValue("@docDate", dateTimePicker1.Value);
-                com.Parameters.AddWithValue("@accept", dateTimePicker3.Value);
-                string dtp4 = dateTimePicker4.Value.ToString();
-                string[] sdtp4 = dtp4.Split(' ');
-                string[] ssdtp4 = sdtp4[1].Split(':');
-                dtp4 = ssdtp4[0] + ":" + ssdtp4[1];
-                com.Parameters.AddWithValue("@timeAccept", dtp4);
-                com.Parameters.AddWithValue("@deal", comboBox1.Text);
-                //if(!comboBox2.Text.Equals(""))
-                com.Parameters.AddWithValue("@ourFirms", comboBox2.Text);
-                //else
-                //   com.Parameters.AddWithValue("@ourFirms", " ");
-                //if (!comboBox3.Text.Equals(""))
-                com.Parameters.AddWithValue("@buyer", comboBox3.Text);
-                //else
-                //  com.Parameters.AddWithValue("@buyer", " ");
-                //if (!comboBox4.Text.Equals(""))
-                com.Parameters.AddWithValue("@sender", comboBox4.Text);
-                //else
-                //  com.Parameters.AddWithValue("@sender", " ");
-                //if (!comboBox5.Text.Equals(""))
-                com.Parameters.AddWithValue("@recipient", comboBox5.Text);
-                //else
-                // com.Parameters.AddWithValue("@recipient", " ");
-                //if (!comboBox6.Text.Equals(""))
-                com.Parameters.AddWithValue("@object", comboBox6.Text);
-                //else
-                //  com.Parameters.AddWithValue("@object", " ");
-                com.Parameters.AddWithValue("@arrive", comboBox13.Text);
-                com.Parameters.AddWithValue("@objectSend", comboBox12.Text);
-                //com.Parameters.AddWithValue("@status", "Назначена");
-                //com.Parameters.AddWithValue("@nameCargo", Cargo[i]);
-                //com.Parameters.AddWithValue("@numberNomenclature", textBox2.Text);
-                //if (!textBox3.Text.Equals(""))
-                //else
-                //  com.Parameters.AddWithValue("@numberTrip", " ");
-                //if (!comboBox8.Text.Equals(""))
-                if(dataGridView1["cargo", 0].Value != null)
-                {
-                    if(dataGridView1["cargoNum", 0].Value != null)
+                    if (statusans.Equals("исполнена") || statusans.Equals("назначена"))
                     {
-                        com.Parameters.AddWithValue("nameCargo", dataGridView1["cargo", 0].Value.ToString());
-                        num = dataGridView1["cargoNum", 0].Value.ToString();
-                        for (int j = 0; j < num.Length; j++)
+
+                        for (int p = 0; p < dataGridView1.Rows.Count - 1; p++)
                         {
-                            if (num[j] == '.')
+                            string[] forDatet = dataGridView1[3, p].Value.ToString().Split('.');
+                            //DateTime dt = new DateTime(int.Parse(forDatet[2]), int.Parse(forDatet[1]), int.Parse(forDatet[0]));
+                            string dt = forDatet[2] + forDatet[1] + forDatet[0];
+                            MySqlCommand comand = new MySqlCommand("SELECT * FROM `proxy` WHERE `date` = '" + dt + "' AND `counterparty` = '" + dataGridView1[1, p].Value + "' AND `numberDoc` = '" + dataGridView1[2, p].Value + "' AND `nameCargo` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
+                            MySqlDataReader myReader;
+                            double change = 0;
+                            try
                             {
-                                string[] ans = num.Split('.');
-                                num = ans[0] + "," + ans[1];
-                                break;
+                                db.openConnection();
+                                myReader = comand.ExecuteReader();
+
+                                while (myReader.Read())
+                                {
+                                    change = double.Parse(myReader.GetString("change"));
+                                    change -= double.Parse(dataGridView1[4, p].Value.ToString());
+                                }
+                                myReader.Close();
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+                            db.closeConnection();
+
+                            comand = new MySqlCommand("UPDATE `proxy` SET `change` = '" + change.ToString() + "'WHERE `date` = '" + dt + "' AND `counterparty` = '" + dataGridView1[1, p].Value + "' AND `numberDoc` = '" + dataGridView1[2, p].Value + "' AND `nameCargo` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
+                            db.openConnection();
+
+                            comand.ExecuteNonQuery();
+
+                            db.closeConnection();
+                        }
+                    }
+                    if (statusans.Equals("исполнена"))
+                    {
+                        if (comboBox1.Text.Equals("Поставка"))
+                        {
+                            if (status.Equals("nothing") || status.Equals("Назначена") || status.Equals("В работе"))
+                            {
+                                for (int p = 0; p < dataGridView1.Rows.Count - 1; p++)
+                                {
+                                    MySqlCommand comand = new MySqlCommand("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
+                                    //MessageBox.Show("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';");
+                                    MySqlDataReader myReader;
+                                    double change = 0;
+                                    try
+                                    {
+                                        db.openConnection();
+                                        myReader = comand.ExecuteReader();
+
+                                        while (myReader.Read())
+                                        {
+                                            change = double.Parse(myReader.GetString("count"));
+                                            change -= double.Parse(dataGridView1[4, p].Value.ToString());
+                                        }
+                                        myReader.Close();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        MessageBox.Show(ex.Message);
+                                    }
+                                    db.closeConnection();
+
+                                    comand = new MySqlCommand("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
+                                    //MessageBox.Show("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';");
+                                    db.openConnection();
+
+                                    comand.ExecuteNonQuery();
+
+                                    db.closeConnection();
+
+                                    comand = new MySqlCommand("INSERT INTO `operations` (`date`, `operation`, `product`, `count`) VALUES (@date, @ope, @product, @count)", db.getConnection());
+
+                                    //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
+                                    comand.Parameters.Add("@date", MySqlDbType.Date).Value = dateTimePicker1.Value;
+                                    //int idtemp = int.Parse(idRequest) - 1;
+                                    comand.Parameters.Add("@ope", MySqlDbType.VarChar).Value = "Заявка №" + idRequest;
+                                    comand.Parameters.Add("@product", MySqlDbType.VarChar).Value = dataGridView1[0, p].Value;
+                                    string numm = dataGridView1[4, p].Value.ToString();
+                                    for (int c = 0; c < numm.Length; c++)
+                                    {
+                                        if (numm[c] == '.')
+                                        {
+                                            string[] ans = numm.Split('.');
+                                            numm = ans[0] + "," + ans[1];
+                                            break;
+                                        }
+                                    }
+                                    comand.Parameters.Add("@count", MySqlDbType.VarChar).Value = numm;
+                                    db.openConnection();
+
+                                    comand.ExecuteNonQuery();
+
+                                    db.closeConnection();
+                                }
                             }
                         }
-                        double nom = double.Parse(num);
-                        com.Parameters.AddWithValue("nom", nom);
+                    }
+                    if (fstat)
+                    {
+                        com = new MySqlCommand("DELETE FROM `request` WHERE `id` = '" + idRequest + "';", db.getConnection());
+                        db.openConnection();
+                        com.ExecuteNonQuery();
+                        db.closeConnection();
+                        for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+                        {
+                            com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary)", db.getConnection());
+
+
+                            com.Parameters.AddWithValue("@id", idRequest);
+                            com.Parameters.AddWithValue("@data", dateTimePicker1.Value);
+                            com.Parameters.AddWithValue("@accept", dateTimePicker3.Value);
+                            string dtp4 = dateTimePicker4.Value.ToString();
+                            string[] sdtp4 = dtp4.Split(' ');
+                            string[] ssdtp4 = sdtp4[1].Split(':');
+                            dtp4 = ssdtp4[0] + ":" + ssdtp4[1];
+                            com.Parameters.AddWithValue("@timeAccept", dtp4);
+                            com.Parameters.AddWithValue("@deal", comboBox1.Text);
+                            //if(!comboBox2.Text.Equals(""))
+                            com.Parameters.AddWithValue("@ourFirms", comboBox2.Text);
+                            //else
+                            //   com.Parameters.AddWithValue("@ourFirms", " ");
+                            //if (!comboBox3.Text.Equals(""))
+                            com.Parameters.AddWithValue("@buyer", comboBox3.Text);
+                            //else
+                            //  com.Parameters.AddWithValue("@buyer", " ");
+                            //if (!comboBox4.Text.Equals(""))
+                            com.Parameters.AddWithValue("@sender", comboBox4.Text);
+                            //else
+                            //  com.Parameters.AddWithValue("@sender", " ");
+                            //if (!comboBox5.Text.Equals(""))
+                            com.Parameters.AddWithValue("@recipient", comboBox5.Text);
+                            //else
+                            // com.Parameters.AddWithValue("@recipient", " ");
+                            //if (!comboBox6.Text.Equals(""))
+                            com.Parameters.AddWithValue("@object", comboBox6.Text);
+                            //else
+                            //  com.Parameters.AddWithValue("@object", " ");
+                            com.Parameters.AddWithValue("@objectArrive", comboBox13.Text);
+                            com.Parameters.AddWithValue("@objectSend", comboBox12.Text);
+                            //com.Parameters.AddWithValue("@status", "Назначена");
+                            //com.Parameters.AddWithValue("@nameCargo", Cargo[i]);
+                            //com.Parameters.AddWithValue("@numberNomenclature", textBox2.Text);
+                            //if (!textBox3.Text.Equals(""))
+                            //else
+                            //  com.Parameters.AddWithValue("@numberTrip", " ");
+                            //if (!comboBox8.Text.Equals(""))
+                            //if(dataGridView1[""])
+
+                            if (cargoEmpty == false)
+                            {
+                                com.Parameters.AddWithValue("@cargo", Cargoo[i]);
+                                if (cargoNumEmpty == false)
+                                {
+                                    com.Parameters.AddWithValue("@nomenclature", numCargoo[i]);
+                                }
+                                else
+                                {
+                                    com.Parameters.AddWithValue("@nomenclature", 0);
+                                }
+                            }
+                            else
+                            {
+                                com.Parameters.AddWithValue("@cargo", "пусто");
+                                com.Parameters.AddWithValue("@nomenclature", 0);
+                            }
+
+                            com.Parameters.AddWithValue("@traffic", comboBox14.Text);
+                            if (!textBox2.Text.Equals("Добавьте комментарий"))
+                            {
+                                com.Parameters.AddWithValue("@coment", textBox2.Text);
+                            }
+                            else
+                            {
+                                com.Parameters.AddWithValue("@coment", "пусто");
+                            }
+                            if (!textBox1.Text.Equals(""))
+                            {
+                                com.Parameters.AddWithValue("@salary", textBox1.Text);
+                            }
+                            else
+                            {
+                                com.Parameters.AddWithValue("@salary", "пусто");
+                            }
+                            com.Parameters.AddWithValue("@contractor", comboBox7.Text);
+                            com.Parameters.AddWithValue("@cars", comboBox8.Text);
+                            //else
+                            //  com.Parameters.AddWithValue("@cars", " ");
+                            //if (!comboBox9.Text.Equals(""))
+                            com.Parameters.AddWithValue("@driveCont", comboBox11.Text);
+                            com.Parameters.AddWithValue("@drivers", comboBox9.Text);
+                            //else
+                            //  com.Parameters.AddWithValue("@drivers", " ");
+                            //if (!textBox5.Text.Equals(""))
+                            com.Parameters.AddWithValue("@numberDocDriver", dataGridView1[2, i].Value);
+                            //else
+                            //  com.Parameters.AddWithValue("@numberDocDriver", " ");
+                            string[] forDate = dataGridView1[3, i].Value.ToString().Split('.');
+                            //MessageBox.Show(dataGridView1[3, i].Value.ToString());
+                            //com.Parameters.Add("@dateDocDriver", MySqlDbType.Date).Value = new DateTime(int.Parse(forDate[2]), int.Parse(forDate[1]), int.Parse(forDate[0]));
+                            com.Parameters.AddWithValue("@dateDocDriver", new DateTime(int.Parse(forDate[2]), int.Parse(forDate[1]), int.Parse(forDate[0])));
+
+                            //if (!comboBox10.Text.Equals(""))
+                            com.Parameters.AddWithValue("@from", dataGridView1[1, i].Value);
+                            //else
+                            //  com.Parameters.AddWithValue("@fromCounterparty", " ");
+                            if (checkBox1.CheckState == CheckState.Checked)
+                            {
+                                com.Parameters.AddWithValue("@cash", "Да");
+                            }
+                            else
+                            {
+                                com.Parameters.AddWithValue("@cash", "Нет");
+                            }
+                            if (checkBox5.CheckState == CheckState.Checked)
+                            {
+                                com.Parameters.AddWithValue("@tax", "Да");
+                            }
+                            else
+                            {
+                                com.Parameters.AddWithValue("@tax", "Нет");
+                            }
+                            if (pointCheck)
+                            {
+                                if (paid)
+                                {
+                                    if (doneCheck)
+                                    {
+                                        com.Parameters.AddWithValue("@status", "Исполнена");
+                                        statusans = "исполнена";
+                                    }
+                                    else
+                                    {
+                                        com.Parameters.AddWithValue("@status", "Оплачена");
+                                    }
+                                }
+                                else
+                                {
+                                    if (doneCheck)
+                                    {
+                                        com.Parameters.AddWithValue("@status", "Исполнена");
+                                        statusans = "исполнена";
+                                    }
+                                    else
+                                    {
+                                        com.Parameters.AddWithValue("@status", "Назначена");
+                                        statusans = "назначена";
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                com.Parameters.AddWithValue("@status", "В работе");
+                                statusans = "в работе";
+                            }
+                            com.Parameters.AddWithValue("@ttn", dateTimePicker5.Value);
+                            if (!textBox6.Text.Equals("Введите номер"))
+                                com.Parameters.AddWithValue("@trip", textBox6.Text);
+                            else
+                                com.Parameters.AddWithValue("@trip", -1);
+                            if (checkBox2.CheckState == CheckState.Checked)
+                            {
+                                com.Parameters.AddWithValue("@paid", "Да");
+                                //com.Parameters.AddWithValue("@status", "Оплачена");
+                            }
+                            else
+                            {
+                                com.Parameters.AddWithValue("@paid", "Нет");
+                                //com.Parameters.AddWithValue("@status", "Исполнена");
+                            }
+                            db.openConnection();
+
+                            if (com.ExecuteNonQuery() >= 1)
+                            {
+                                //MessageBox.Show(idRequest);
+                                fstat = true;
+                                //MessageBox.Show("Заявка обновлена и " + statusans);
+                            }
+                            else
+                            {
+                                //MessageBox.Show(idRequest);
+                                fstat = false;
+                                //MessageBox.Show("Заявка не обновлена");
+                            }
+
+                        }
+                        MessageBox.Show("Заявка обновлена и " + statusans);
                     }
                     else
                     {
-                        com.Parameters.AddWithValue("nom", 0);
+                        MessageBox.Show("Заявка не обновлена");
                     }
+                    db.closeConnection();
                 }
-                else
+                catch
                 {
-                    com.Parameters.AddWithValue("nameCargo", "пусто");
-                    com.Parameters.AddWithValue("nom", 0);
+                    MessageBox.Show("Что-то пошло не так, заявка не обновлена. Попробуйте еще раз или свяжитесь с программистом");
                 }
 
-
-                if (!textBox2.Text.Equals("Добавьте комментарий"))
-                {
-                    com.Parameters.AddWithValue("@coment", textBox2.Text);
-                }
-                else
-                {
-                    com.Parameters.AddWithValue("@coment", "пусто");
-                }
-                if (!textBox1.Text.Equals(""))
-                {
-                    com.Parameters.AddWithValue("@salary", textBox1.Text);
-                }
-                else
-                {
-                    com.Parameters.AddWithValue("@salary", "пусто");
-                }
-                com.Parameters.AddWithValue("@traffic", comboBox14.Text);
-                com.Parameters.AddWithValue("@contractor", comboBox7.Text);
-                com.Parameters.AddWithValue("@cars", comboBox8.Text);
+                //}
                 //else
-                //  com.Parameters.AddWithValue("@cars", " ");
-                //if (!comboBox9.Text.Equals(""))
-                com.Parameters.AddWithValue("@driveCont", comboBox11.Text);
-                com.Parameters.AddWithValue("@drivers", comboBox9.Text);
-                //else
-                //  com.Parameters.AddWithValue("@drivers", " ");
-                //if (!textBox5.Text.Equals(""))
-                com.Parameters.AddWithValue("@numberDocDriver", textBox5.Text);
-                //else
-                //  com.Parameters.AddWithValue("@numberDocDriver", " ");
+                //{
+                /* DB db = new DB();
+                 MySqlCommand com = new MySqlCommand("UPDATE request SET id=@id, docDate=@docDate, dateAccept=@accept, timeAccept=@timeAccept, deal=@deal, ourFirms=@ourFirms, buyer=@buyer, sender=@sender, recipient=@recipient, object=@object, objectArrive=@arrive, objectSend=@objectSend, status=@status, nameCargo=@nameCargo, numberNomenclature=@nom, traffic=@traffic, coment=@coment, contractor=@contractor, cars=@cars, driveCont=@driveCont, drivers=@drivers, numberDocDriver=@numberDocDriver, dateDocDriver=@dateDocDriver, fromCounterparty=@fromCounterparty, cash=@cash, dateTTN=@ttn, paid=@paid, numberDocTrip=@trip, priceSalary=@salary WHERE id = '" + idRequest + "';", db.getConnection());
 
-                com.Parameters.AddWithValue("@dateDocDriver", dateTimePicker2.Value);
 
-                //if (!comboBox10.Text.Equals(""))
-                com.Parameters.AddWithValue("@fromCounterparty", comboBox10.Text);
-                //else
-                //  com.Parameters.AddWithValue("@fromCounterparty", " ");
-                if (checkBox1.CheckState == CheckState.Checked)
-                {
-                    com.Parameters.AddWithValue("@cash", "Да");
-                }
-                else
-                {
-                    com.Parameters.AddWithValue("@cash", "Нет");
-                }
-                if (pointCheck)
-                {
-                    if (paid)
-                    {
-                        if (doneCheck)
-                        {
-                            com.Parameters.AddWithValue("@status", "Исполнена");
-                            statusans = "исполнена";
-                        }
-                        else
-                        {
-                            com.Parameters.AddWithValue("@status", "Оплачена");
-                        }
-                    }
-                    else
-                    {
-                        if (doneCheck)
-                        {
-                            com.Parameters.AddWithValue("@status", "Исполнена");
-                            statusans = "исполнена";
-                        }
-                        else
-                        {
-                            com.Parameters.AddWithValue("@status", "Назначена");
-                            statusans = "назначена";
-                        }
-                    }
-                }
-                else
-                {
-                    com.Parameters.AddWithValue("@status", "В работе");
-                    statusans = "в работе";
-                }
-                com.Parameters.AddWithValue("@ttn", dateTimePicker5.Value);
-                if (!textBox6.Text.Equals("Введите номер"))
-                    com.Parameters.AddWithValue("@trip", textBox6.Text);
-                else
-                    com.Parameters.AddWithValue("@trip", 101);
-                if (checkBox2.CheckState == CheckState.Checked)
-                {
-                    com.Parameters.AddWithValue("@paid", "Да");
-                    //com.Parameters.AddWithValue("@status", "Оплачена");
-                }
-                else
-                {
-                    com.Parameters.AddWithValue("@paid", "Нет");
-                    //com.Parameters.AddWithValue("@status", "Исполнена");
-                }
-                db.openConnection();
+                 com.Parameters.AddWithValue("@id", idRequest);
+                 com.Parameters.AddWithValue("@docDate", dateTimePicker1.Value);
+                 com.Parameters.AddWithValue("@accept", dateTimePicker3.Value);
+                 string dtp4 = dateTimePicker4.Value.ToString();
+                 string[] sdtp4 = dtp4.Split(' ');
+                 string[] ssdtp4 = sdtp4[1].Split(':');
+                 dtp4 = ssdtp4[0] + ":" + ssdtp4[1];
+                 com.Parameters.AddWithValue("@timeAccept", dtp4);
+                 com.Parameters.AddWithValue("@deal", comboBox1.Text);
+                 //if(!comboBox2.Text.Equals(""))
+                 com.Parameters.AddWithValue("@ourFirms", comboBox2.Text);
+                 //else
+                 //   com.Parameters.AddWithValue("@ourFirms", " ");
+                 //if (!comboBox3.Text.Equals(""))
+                 com.Parameters.AddWithValue("@buyer", comboBox3.Text);
+                 //else
+                 //  com.Parameters.AddWithValue("@buyer", " ");
+                 //if (!comboBox4.Text.Equals(""))
+                 com.Parameters.AddWithValue("@sender", comboBox4.Text);
+                 //else
+                 //  com.Parameters.AddWithValue("@sender", " ");
+                 //if (!comboBox5.Text.Equals(""))
+                 com.Parameters.AddWithValue("@recipient", comboBox5.Text);
+                 //else
+                 // com.Parameters.AddWithValue("@recipient", " ");
+                 //if (!comboBox6.Text.Equals(""))
+                 com.Parameters.AddWithValue("@object", comboBox6.Text);
+                 //else
+                 //  com.Parameters.AddWithValue("@object", " ");
+                 com.Parameters.AddWithValue("@arrive", comboBox13.Text);
+                 com.Parameters.AddWithValue("@objectSend", comboBox12.Text);
+                 //com.Parameters.AddWithValue("@status", "Назначена");
+                 //com.Parameters.AddWithValue("@nameCargo", Cargo[i]);
+                 //com.Parameters.AddWithValue("@numberNomenclature", textBox2.Text);
+                 //if (!textBox3.Text.Equals(""))
+                 //else
+                 //  com.Parameters.AddWithValue("@numberTrip", " ");
+                 //if (!comboBox8.Text.Equals(""))
+                 if(dataGridView1["cargo", 0].Value != null)
+                 {
+                     if(dataGridView1["cargoNum", 0].Value != null)
+                     {
+                         com.Parameters.AddWithValue("nameCargo", dataGridView1["cargo", 0].Value.ToString());
+                         num = dataGridView1["cargoNum", 0].Value.ToString();
+                         for (int j = 0; j < num.Length; j++)
+                         {
+                             if (num[j] == '.')
+                             {
+                                 string[] ans = num.Split('.');
+                                 num = ans[0] + "," + ans[1];
+                                 break;
+                             }
+                         }
+                         double nom = double.Parse(num);
+                         com.Parameters.AddWithValue("nom", nom);
+                     }
+                     else
+                     {
+                         com.Parameters.AddWithValue("nom", 0);
+                     }
+                 }
+                 else
+                 {
+                     com.Parameters.AddWithValue("nameCargo", "пусто");
+                     com.Parameters.AddWithValue("nom", 0);
+                 }
 
-                if (com.ExecuteNonQuery() >= 1)
-                {
-                    //MessageBox.Show(idRequest);
-                    MessageBox.Show("Заявка обновлена и " + statusans);
-                }
-                else
-                {
-                    //MessageBox.Show(idRequest);
-                    MessageBox.Show("Заявка не обновлена");
-                }
 
-                db.closeConnection();*/
-            //}
-            /*Cargo = null;
-            CargoCount = 0;*/
-            this.Hide();
+                 if (!textBox2.Text.Equals("Добавьте комментарий"))
+                 {
+                     com.Parameters.AddWithValue("@coment", textBox2.Text);
+                 }
+                 else
+                 {
+                     com.Parameters.AddWithValue("@coment", "пусто");
+                 }
+                 if (!textBox1.Text.Equals(""))
+                 {
+                     com.Parameters.AddWithValue("@salary", textBox1.Text);
+                 }
+                 else
+                 {
+                     com.Parameters.AddWithValue("@salary", "пусто");
+                 }
+                 com.Parameters.AddWithValue("@traffic", comboBox14.Text);
+                 com.Parameters.AddWithValue("@contractor", comboBox7.Text);
+                 com.Parameters.AddWithValue("@cars", comboBox8.Text);
+                 //else
+                 //  com.Parameters.AddWithValue("@cars", " ");
+                 //if (!comboBox9.Text.Equals(""))
+                 com.Parameters.AddWithValue("@driveCont", comboBox11.Text);
+                 com.Parameters.AddWithValue("@drivers", comboBox9.Text);
+                 //else
+                 //  com.Parameters.AddWithValue("@drivers", " ");
+                 //if (!textBox5.Text.Equals(""))
+                 com.Parameters.AddWithValue("@numberDocDriver", textBox5.Text);
+                 //else
+                 //  com.Parameters.AddWithValue("@numberDocDriver", " ");
+
+                 com.Parameters.AddWithValue("@dateDocDriver", dateTimePicker2.Value);
+
+                 //if (!comboBox10.Text.Equals(""))
+                 com.Parameters.AddWithValue("@fromCounterparty", comboBox10.Text);
+                 //else
+                 //  com.Parameters.AddWithValue("@fromCounterparty", " ");
+                 if (checkBox1.CheckState == CheckState.Checked)
+                 {
+                     com.Parameters.AddWithValue("@cash", "Да");
+                 }
+                 else
+                 {
+                     com.Parameters.AddWithValue("@cash", "Нет");
+                 }
+                 if (pointCheck)
+                 {
+                     if (paid)
+                     {
+                         if (doneCheck)
+                         {
+                             com.Parameters.AddWithValue("@status", "Исполнена");
+                             statusans = "исполнена";
+                         }
+                         else
+                         {
+                             com.Parameters.AddWithValue("@status", "Оплачена");
+                         }
+                     }
+                     else
+                     {
+                         if (doneCheck)
+                         {
+                             com.Parameters.AddWithValue("@status", "Исполнена");
+                             statusans = "исполнена";
+                         }
+                         else
+                         {
+                             com.Parameters.AddWithValue("@status", "Назначена");
+                             statusans = "назначена";
+                         }
+                     }
+                 }
+                 else
+                 {
+                     com.Parameters.AddWithValue("@status", "В работе");
+                     statusans = "в работе";
+                 }
+                 com.Parameters.AddWithValue("@ttn", dateTimePicker5.Value);
+                 if (!textBox6.Text.Equals("Введите номер"))
+                     com.Parameters.AddWithValue("@trip", textBox6.Text);
+                 else
+                     com.Parameters.AddWithValue("@trip", 101);
+                 if (checkBox2.CheckState == CheckState.Checked)
+                 {
+                     com.Parameters.AddWithValue("@paid", "Да");
+                     //com.Parameters.AddWithValue("@status", "Оплачена");
+                 }
+                 else
+                 {
+                     com.Parameters.AddWithValue("@paid", "Нет");
+                     //com.Parameters.AddWithValue("@status", "Исполнена");
+                 }
+                 db.openConnection();
+
+                 if (com.ExecuteNonQuery() >= 1)
+                 {
+                     //MessageBox.Show(idRequest);
+                     MessageBox.Show("Заявка обновлена и " + statusans);
+                 }
+                 else
+                 {
+                     //MessageBox.Show(idRequest);
+                     MessageBox.Show("Заявка не обновлена");
+                 }
+
+                 db.closeConnection();*/
+                //}
+                /*Cargo = null;
+                CargoCount = 0;*/
+                this.Hide();
+            }
         }
 
         public string status = "nothing";
 
         private void button3_Click(object sender, EventArgs e)
         {
+            DialogResult result = MessageBox.Show(
+                       "Введенные данные верны?",
+                       "Сообщение",
+                       MessageBoxButtons.YesNo,
+                       MessageBoxIcon.Information,
+                       MessageBoxDefaultButton.Button1
+                       //MessageBoxOptions.DefaultDesktopOnly
+                       );
+
+            if (result == DialogResult.Yes)
+            {
                 DB db = new DB();
-            
+
                 for (int p = 0; p < size + 1; p++)
                 {
                     string[] forDatett = date[p].Split('.');
@@ -2108,7 +2156,7 @@ namespace applications
                 MySqlCommand com;
                 for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                 {
-                    com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @trip, @ttn, @paid, @salary);", db.getConnection());
+                    com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary);", db.getConnection());
 
                     com.Parameters.AddWithValue("@id", idRequest);
                     com.Parameters.AddWithValue("@data", dateTimePicker1.Value);
@@ -2223,6 +2271,14 @@ namespace applications
                     else
                     {
                         com.Parameters.AddWithValue("@cash", "Нет");
+                    }
+                    if (checkBox5.CheckState == CheckState.Checked)
+                    {
+                        com.Parameters.AddWithValue("@tax", "Да");
+                    }
+                    else
+                    {
+                        com.Parameters.AddWithValue("@tax", "Нет");
                     }
                     if (!textBox6.Text.Equals("Введите номер"))
                         com.Parameters.AddWithValue("@trip", textBox6.Text);
@@ -2274,244 +2330,252 @@ namespace applications
                 }
                 if (freq)
                 {
-                com = new MySqlCommand("DELETE FROM `request` WHERE `id` = '" + idRequest + "';", db.getConnection());
-                db.openConnection();
-                com.ExecuteNonQuery();
-                db.closeConnection();
-                for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
-                {
-                    com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @trip, @ttn, @paid, @salary);", db.getConnection());
-
-                    com.Parameters.AddWithValue("@id", idRequest);
-                    com.Parameters.AddWithValue("@data", dateTimePicker1.Value);
-                    com.Parameters.AddWithValue("@accept", dateTimePicker3.Value);
-                    string dtp4 = dateTimePicker4.Value.ToString();
-                    string[] sdtp4 = dtp4.Split(' ');
-                    string[] ssdtp4 = sdtp4[1].Split(':');
-                    dtp4 = ssdtp4[0] + ":" + ssdtp4[1];
-                    com.Parameters.AddWithValue("@timeAccept", dtp4);
-                    com.Parameters.AddWithValue("@deal", comboBox1.Text);
-                    //if (!comboBox2.Text.Equals(""))
-                    com.Parameters.AddWithValue("@ourFirms", comboBox2.Text);
-                    //else
-                    //   com.Parameters.AddWithValue("@ourFirms", " ");
-                    //if (!comboBox3.Text.Equals(""))
-                    com.Parameters.AddWithValue("@buyer", comboBox3.Text);
-                    //else
-                    //  com.Parameters.AddWithValue("@buyer", " ");
-                    //if (!comboBox4.Text.Equals(""))
-                    com.Parameters.AddWithValue("@sender", comboBox4.Text);
-                    //else
-                    //  com.Parameters.AddWithValue("@sender", " ");
-                    //if (!comboBox5.Text.Equals(""))
-                    com.Parameters.AddWithValue("@recipient", comboBox5.Text);
-                    //else
-                    //  com.Parameters.AddWithValue("@recipient", " ");
-                    //if (!comboBox6.Text.Equals(""))
-                    com.Parameters.AddWithValue("@object", comboBox6.Text);
-                    //else
-                    //  com.Parameters.AddWithValue("@object", " ");
-
-                    com.Parameters.AddWithValue("@objectArrive", comboBox13.Text);
-                    com.Parameters.AddWithValue("@objectSend", comboBox12.Text);
-                    //com.Parameters.AddWithValue("@nameCargo", Cargo[i]);
-                    //com.Parameters.AddWithValue("@numberNomenclature", textBox2.Text);
-                    //if (!textBox3.Text.Equals(""))
-                    //else
-                    //  com.Parameters.AddWithValue("@numberTrip", " ");
-                    //if (!comboBox8.Text.Equals(""))
-
-                    if (cargoEmpty == false)
+                    com = new MySqlCommand("DELETE FROM `request` WHERE `id` = '" + idRequest + "';", db.getConnection());
+                    db.openConnection();
+                    com.ExecuteNonQuery();
+                    db.closeConnection();
+                    for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                     {
-                        com.Parameters.AddWithValue("@cargo", Cargoo[i]);
-                        if (cargoNumEmpty == false)
+                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary);", db.getConnection());
+
+                        com.Parameters.AddWithValue("@id", idRequest);
+                        com.Parameters.AddWithValue("@data", dateTimePicker1.Value);
+                        com.Parameters.AddWithValue("@accept", dateTimePicker3.Value);
+                        string dtp4 = dateTimePicker4.Value.ToString();
+                        string[] sdtp4 = dtp4.Split(' ');
+                        string[] ssdtp4 = sdtp4[1].Split(':');
+                        dtp4 = ssdtp4[0] + ":" + ssdtp4[1];
+                        com.Parameters.AddWithValue("@timeAccept", dtp4);
+                        com.Parameters.AddWithValue("@deal", comboBox1.Text);
+                        //if (!comboBox2.Text.Equals(""))
+                        com.Parameters.AddWithValue("@ourFirms", comboBox2.Text);
+                        //else
+                        //   com.Parameters.AddWithValue("@ourFirms", " ");
+                        //if (!comboBox3.Text.Equals(""))
+                        com.Parameters.AddWithValue("@buyer", comboBox3.Text);
+                        //else
+                        //  com.Parameters.AddWithValue("@buyer", " ");
+                        //if (!comboBox4.Text.Equals(""))
+                        com.Parameters.AddWithValue("@sender", comboBox4.Text);
+                        //else
+                        //  com.Parameters.AddWithValue("@sender", " ");
+                        //if (!comboBox5.Text.Equals(""))
+                        com.Parameters.AddWithValue("@recipient", comboBox5.Text);
+                        //else
+                        //  com.Parameters.AddWithValue("@recipient", " ");
+                        //if (!comboBox6.Text.Equals(""))
+                        com.Parameters.AddWithValue("@object", comboBox6.Text);
+                        //else
+                        //  com.Parameters.AddWithValue("@object", " ");
+
+                        com.Parameters.AddWithValue("@objectArrive", comboBox13.Text);
+                        com.Parameters.AddWithValue("@objectSend", comboBox12.Text);
+                        //com.Parameters.AddWithValue("@nameCargo", Cargo[i]);
+                        //com.Parameters.AddWithValue("@numberNomenclature", textBox2.Text);
+                        //if (!textBox3.Text.Equals(""))
+                        //else
+                        //  com.Parameters.AddWithValue("@numberTrip", " ");
+                        //if (!comboBox8.Text.Equals(""))
+
+                        if (cargoEmpty == false)
                         {
-                            com.Parameters.AddWithValue("@nomenclature", numCargoo[i]);
+                            com.Parameters.AddWithValue("@cargo", Cargoo[i]);
+                            if (cargoNumEmpty == false)
+                            {
+                                com.Parameters.AddWithValue("@nomenclature", numCargoo[i]);
+                            }
+                            else
+                            {
+                                com.Parameters.AddWithValue("@nomenclature", 0);
+                            }
                         }
                         else
                         {
+                            com.Parameters.AddWithValue("@cargo", "пусто");
                             com.Parameters.AddWithValue("@nomenclature", 0);
                         }
-                    }
-                    else
-                    {
-                        com.Parameters.AddWithValue("@cargo", "пусто");
-                        com.Parameters.AddWithValue("@nomenclature", 0);
-                    }
 
-                    com.Parameters.AddWithValue("@traffic", comboBox14.Text);
-                    if (!textBox2.Text.Equals("Добавьте комментарий"))
-                    {
-                        com.Parameters.AddWithValue("@coment", textBox2.Text);
-                    }
-                    else
-                    {
-                        com.Parameters.AddWithValue("@coment", "пусто");
-                    }
-                    if (!textBox1.Text.Equals(""))
-                    {
-                        com.Parameters.AddWithValue("@salary", textBox1.Text);
-                    }
-                    else
-                    {
-                        com.Parameters.AddWithValue("@salary", "пусто");
-                    }
-                    com.Parameters.AddWithValue("@contractor", comboBox7.Text);
-                    com.Parameters.AddWithValue("@cars", comboBox8.Text);
-                    //else
-                    //  com.Parameters.AddWithValue("@cars", " ");
-                    //if (!comboBox9.Text.Equals(""))
-                    com.Parameters.AddWithValue("@driveCont", comboBox11.Text);
-                    com.Parameters.AddWithValue("@drivers", comboBox9.Text);
-                    //else
-                    //  com.Parameters.AddWithValue("@drivers", " ");
-                    //if (!textBox5.Text.Equals(""))
-                    com.Parameters.AddWithValue("@numberDocDriver", dataGridView1[2, i].Value);
-                    //else
-                    //  com.Parameters.AddWithValue("@numberDocDriver", " ");
-
-                    string[] forDate = dataGridView1[3, i].Value.ToString().Split('.');
-                    //command.Parameters.Add("@dateDocDriver", MySqlDbType.Date).Value = new DateTime(int.Parse(forDate[2]), int.Parse(forDate[1]), int.Parse(forDate[0]));
-                    com.Parameters.AddWithValue("@dateDocDriver", new DateTime(int.Parse(forDate[2]), int.Parse(forDate[1]), int.Parse(forDate[0])));
-
-                    //if (!comboBox10.Text.Equals(""))
-                    com.Parameters.AddWithValue("@from", dataGridView1[1, i].Value);
-
-                    //else
-                    //  com.Parameters.AddWithValue("@fromCounterparty", " ");
-                    /*if (!textBox1.Text.Equals(""))
-                    {
-                        com.Parameters.AddWithValue("@salary", textBox1.Text);
-                    }
-                    else
-                    {
-                        com.Parameters.AddWithValue("@salary", "пусто");
-                    }*/
-                    com.Parameters.AddWithValue("@ttn", dateTimePicker5.Value);
-                    string statusans = "";
-                    if (checkBox1.CheckState == CheckState.Checked)
-                    {
-                        com.Parameters.AddWithValue("@cash", "Да");
-                    }
-                    else
-                    {
-                        com.Parameters.AddWithValue("@cash", "Нет");
-                    }
-                    if (!textBox6.Text.Equals("Введите номер"))
-                        com.Parameters.AddWithValue("@trip", textBox6.Text);
-                    else
-                        com.Parameters.AddWithValue("@trip", -1);
-                    if (checkBox2.CheckState == CheckState.Checked)
-                    {
-                        com.Parameters.AddWithValue("@paid", "Да");
-                        //com.Parameters.AddWithValue("@status", "Оплачена");
-                    }
-                    else
-                    {
-                        com.Parameters.AddWithValue("@paid", "Нет");
-                    }
-                    if (!textBox6.Text.Equals("Введите номер"))
-                    {
-                        com.Parameters.AddWithValue("@status", "Исполнена");
-                        statusans = "исполнена";
-                    }
-                    else
-                    {
-                        if (!comboBox8.Text.Equals("") && !comboBox9.Text.Equals(""))
+                        com.Parameters.AddWithValue("@traffic", comboBox14.Text);
+                        if (!textBox2.Text.Equals("Добавьте комментарий"))
                         {
-                            com.Parameters.AddWithValue("@status", "Назначена");
+                            com.Parameters.AddWithValue("@coment", textBox2.Text);
                         }
                         else
                         {
-                            com.Parameters.AddWithValue("@status", "В работе");
+                            com.Parameters.AddWithValue("@coment", "пусто");
                         }
-                    }
-                    if (statusans.Equals("исполнена"))
-                    {
-                        if (comboBox1.Text.Equals("Поставка"))
+                        if (!textBox1.Text.Equals(""))
                         {
-                            if (status.Equals("nothing") || status.Equals("Назначена") || status.Equals("В работе"))
+                            com.Parameters.AddWithValue("@salary", textBox1.Text);
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@salary", "пусто");
+                        }
+                        com.Parameters.AddWithValue("@contractor", comboBox7.Text);
+                        com.Parameters.AddWithValue("@cars", comboBox8.Text);
+                        //else
+                        //  com.Parameters.AddWithValue("@cars", " ");
+                        //if (!comboBox9.Text.Equals(""))
+                        com.Parameters.AddWithValue("@driveCont", comboBox11.Text);
+                        com.Parameters.AddWithValue("@drivers", comboBox9.Text);
+                        //else
+                        //  com.Parameters.AddWithValue("@drivers", " ");
+                        //if (!textBox5.Text.Equals(""))
+                        com.Parameters.AddWithValue("@numberDocDriver", dataGridView1[2, i].Value);
+                        //else
+                        //  com.Parameters.AddWithValue("@numberDocDriver", " ");
+
+                        string[] forDate = dataGridView1[3, i].Value.ToString().Split('.');
+                        //command.Parameters.Add("@dateDocDriver", MySqlDbType.Date).Value = new DateTime(int.Parse(forDate[2]), int.Parse(forDate[1]), int.Parse(forDate[0]));
+                        com.Parameters.AddWithValue("@dateDocDriver", new DateTime(int.Parse(forDate[2]), int.Parse(forDate[1]), int.Parse(forDate[0])));
+
+                        //if (!comboBox10.Text.Equals(""))
+                        com.Parameters.AddWithValue("@from", dataGridView1[1, i].Value);
+
+                        //else
+                        //  com.Parameters.AddWithValue("@fromCounterparty", " ");
+                        /*if (!textBox1.Text.Equals(""))
+                        {
+                            com.Parameters.AddWithValue("@salary", textBox1.Text);
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@salary", "пусто");
+                        }*/
+                        com.Parameters.AddWithValue("@ttn", dateTimePicker5.Value);
+                        string statusans = "";
+                        if (checkBox1.CheckState == CheckState.Checked)
+                        {
+                            com.Parameters.AddWithValue("@cash", "Да");
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@cash", "Нет");
+                        }
+                        if (checkBox5.CheckState == CheckState.Checked)
+                        {
+                            com.Parameters.AddWithValue("@tax", "Да");
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@tax", "Нет");
+                        }
+                        if (!textBox6.Text.Equals("Введите номер"))
+                            com.Parameters.AddWithValue("@trip", textBox6.Text);
+                        else
+                            com.Parameters.AddWithValue("@trip", -1);
+                        if (checkBox2.CheckState == CheckState.Checked)
+                        {
+                            com.Parameters.AddWithValue("@paid", "Да");
+                            //com.Parameters.AddWithValue("@status", "Оплачена");
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@paid", "Нет");
+                        }
+                        if (!textBox6.Text.Equals("Введите номер"))
+                        {
+                            com.Parameters.AddWithValue("@status", "Исполнена");
+                            statusans = "исполнена";
+                        }
+                        else
+                        {
+                            if (!comboBox8.Text.Equals("") && !comboBox9.Text.Equals(""))
                             {
-                                for (int p = 0; p < dataGridView1.Rows.Count - 1; p++)
+                                com.Parameters.AddWithValue("@status", "Назначена");
+                            }
+                            else
+                            {
+                                com.Parameters.AddWithValue("@status", "В работе");
+                            }
+                        }
+                        if (statusans.Equals("исполнена"))
+                        {
+                            if (comboBox1.Text.Equals("Поставка"))
+                            {
+                                if (status.Equals("nothing") || status.Equals("Назначена") || status.Equals("В работе"))
                                 {
-                                    MySqlCommand comand = new MySqlCommand("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
-                                    //MessageBox.Show("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';");
-                                    MySqlDataReader myReader;
-                                    double change = 0;
-                                    try
+                                    for (int p = 0; p < dataGridView1.Rows.Count - 1; p++)
                                     {
+                                        MySqlCommand comand = new MySqlCommand("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
+                                        //MessageBox.Show("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';");
+                                        MySqlDataReader myReader;
+                                        double change = 0;
+                                        try
+                                        {
+                                            db.openConnection();
+                                            myReader = comand.ExecuteReader();
+
+                                            while (myReader.Read())
+                                            {
+                                                change = double.Parse(myReader.GetString("count"));
+                                                change -= double.Parse(dataGridView1[4, p].Value.ToString());
+                                            }
+                                            myReader.Close();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            MessageBox.Show(ex.Message);
+                                        }
+                                        db.closeConnection();
+
+                                        comand = new MySqlCommand("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
+                                        //MessageBox.Show("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';");
                                         db.openConnection();
-                                        myReader = comand.ExecuteReader();
 
-                                        while (myReader.Read())
+                                        comand.ExecuteNonQuery();
+
+                                        db.closeConnection();
+
+                                        comand = new MySqlCommand("INSERT INTO `operations` (`date`, `operation`, `product`, `count`) VALUES (@date, @ope, @product, @count)", db.getConnection());
+
+                                        //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
+                                        comand.Parameters.Add("@date", MySqlDbType.Date).Value = dateTimePicker1.Value;
+                                        //int idtemp = int.Parse(idRequest) - 1;
+                                        comand.Parameters.Add("@ope", MySqlDbType.VarChar).Value = "Заявка №" + idRequest;
+                                        comand.Parameters.Add("@product", MySqlDbType.VarChar).Value = dataGridView1[0, p].Value;
+                                        string numm = dataGridView1[4, p].Value.ToString();
+                                        for (int c = 0; c < numm.Length; c++)
                                         {
-                                            change = double.Parse(myReader.GetString("count"));
-                                            change -= double.Parse(dataGridView1[4, p].Value.ToString());
+                                            if (numm[c] == '.')
+                                            {
+                                                string[] ans = numm.Split('.');
+                                                numm = ans[0] + "," + ans[1];
+                                                break;
+                                            }
                                         }
-                                        myReader.Close();
+                                        comand.Parameters.Add("@count", MySqlDbType.VarChar).Value = numm;
+                                        db.openConnection();
+
+                                        comand.ExecuteNonQuery();
+
+                                        db.closeConnection();
                                     }
-                                    catch (Exception ex)
-                                    {
-                                        MessageBox.Show(ex.Message);
-                                    }
-                                    db.closeConnection();
-
-                                    comand = new MySqlCommand("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
-                                    //MessageBox.Show("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';");
-                                    db.openConnection();
-
-                                    comand.ExecuteNonQuery();
-
-                                    db.closeConnection();
-
-                                    comand = new MySqlCommand("INSERT INTO `operations` (`date`, `operation`, `product`, `count`) VALUES (@date, @ope, @product, @count)", db.getConnection());
-
-                                    //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
-                                    comand.Parameters.Add("@date", MySqlDbType.Date).Value = dateTimePicker1.Value;
-                                    //int idtemp = int.Parse(idRequest) - 1;
-                                    comand.Parameters.Add("@ope", MySqlDbType.VarChar).Value = "Заявка №" + idRequest;
-                                    comand.Parameters.Add("@product", MySqlDbType.VarChar).Value = dataGridView1[0, p].Value;
-                                    string numm = dataGridView1[4, p].Value.ToString();
-                                    for (int c = 0; c < numm.Length; c++)
-                                    {
-                                        if (numm[c] == '.')
-                                        {
-                                            string[] ans = numm.Split('.');
-                                            numm = ans[0] + "," + ans[1];
-                                            break;
-                                        }
-                                    }
-                                    comand.Parameters.Add("@count", MySqlDbType.VarChar).Value = numm;
-                                    db.openConnection();
-
-                                    comand.ExecuteNonQuery();
-
-                                    db.closeConnection();
                                 }
                             }
                         }
-                    }
 
-                    db.openConnection();
-                    //com.ExecuteNonQuery();
+                        db.openConnection();
+                        //com.ExecuteNonQuery();
 
-                    if (com.ExecuteNonQuery() >= 1)
-                    {
-                        /*if (!textBox6.Text.Equals("Введите номер"))
-                            MessageBox.Show("Заявка обновлена и исполнена");
+                        if (com.ExecuteNonQuery() >= 1)
+                        {
+                            /*if (!textBox6.Text.Equals("Введите номер"))
+                                MessageBox.Show("Заявка обновлена и исполнена");
+                            else
+                                MessageBox.Show("Заявка обновлена");*/
+                            freq = true;
+                        }
                         else
-                            MessageBox.Show("Заявка обновлена");*/
-                        freq = true;
-                    }
-                    else
-                    {
-                        freq = false;
-                        //MessageBox.Show("Заявка не обновлена");
-                    }
+                        {
+                            freq = false;
+                            //MessageBox.Show("Заявка не обновлена");
+                        }
 
-                    db.closeConnection();
-                }
-                if (!textBox6.Text.Equals("Введите номер"))
+                        db.closeConnection();
+                    }
+                    if (!textBox6.Text.Equals("Введите номер"))
                         MessageBox.Show("Заявка обновлена и исполнена");
                     else
                         MessageBox.Show("Заявка обновлена");
@@ -2520,7 +2584,7 @@ namespace applications
                 {
                     MessageBox.Show("Заявка не обновлена");
                 }
-            
+
                 //}
                 //else
                 //{
@@ -2685,9 +2749,10 @@ namespace applications
 
                  db.closeConnection();*/
                 //}
-            
 
-            this.Hide();
+
+                this.Hide();
+            }
         }
 
         Color colorButton;

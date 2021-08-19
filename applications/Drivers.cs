@@ -110,7 +110,9 @@ namespace applications
 
         private void closeButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            Dictionaries dictionaries = new Dictionaries();
+            dictionaries.Show();
+            this.Close();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -150,8 +152,8 @@ namespace applications
                         names[j] = objName;
                         j++;
                         dataGridView1.Rows.Add();
-                        dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[1, k].Value = objName;
+                        //dataGridView1[0, k].Value = k + 1;
+                        dataGridView1[0, k].Value = objName;
                         k++;
                     }
                 }
@@ -196,8 +198,8 @@ namespace applications
                         continue;
                     }
                     dataGridView1.Rows.Add();
-                    dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[1, k].Value = objName;
+                    //dataGridView1[0, k].Value = k + 1;
+                    dataGridView1[0, k].Value = objName;
                     k++;
                 }
             }
@@ -245,8 +247,8 @@ namespace applications
                         continue;
                     }
                     dataGridView1.Rows.Add();
-                    dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[1, k].Value = objName;
+                    //dataGridView1[0, k].Value = k + 1;
+                    dataGridView1[0, k].Value = objName;
                     k++;
                 }
             }
@@ -287,8 +289,8 @@ namespace applications
                         continue;
                     }
                     dataGridView1.Rows.Add();
-                    dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[1, k].Value = objName;
+                    //dataGridView1[0, k].Value = k + 1;
+                    dataGridView1[0, k].Value = objName;
                     k++;
                 }
             }
@@ -302,7 +304,8 @@ namespace applications
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int idx = dataGridView1.CurrentRow.Index;
-            val = dataGridView1[1, idx].Value.ToString();
+            val = dataGridView1[0, idx].Value.ToString();
+            textBox1.Text = dataGridView1[0, idx].Value.ToString();
         }
     }
 }

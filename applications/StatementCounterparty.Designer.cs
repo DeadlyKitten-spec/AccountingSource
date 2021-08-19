@@ -113,7 +113,7 @@
             // pictureBox2
             // 
             this.pictureBox2.Image = global::applications.Properties.Resources.clearTrash;
-            this.pictureBox2.Location = new System.Drawing.Point(443, 134);
+            this.pictureBox2.Location = new System.Drawing.Point(520, 134);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(33, 29);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -124,7 +124,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::applications.Properties.Resources.clearTrash;
-            this.pictureBox1.Location = new System.Drawing.Point(443, 86);
+            this.pictureBox1.Location = new System.Drawing.Point(520, 86);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(33, 29);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -138,7 +138,7 @@
             this.button3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.ForeColor = System.Drawing.Color.Black;
-            this.button3.Location = new System.Drawing.Point(724, 90);
+            this.button3.Location = new System.Drawing.Point(770, 90);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(134, 73);
             this.button3.TabIndex = 47;
@@ -152,7 +152,7 @@
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Location = new System.Drawing.Point(243, 87);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(200, 28);
+            this.comboBox2.Size = new System.Drawing.Size(275, 28);
             this.comboBox2.TabIndex = 46;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
@@ -240,7 +240,7 @@
             this.button6.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button6.ForeColor = System.Drawing.Color.Black;
-            this.button6.Location = new System.Drawing.Point(550, 90);
+            this.button6.Location = new System.Drawing.Point(596, 90);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(134, 73);
             this.button6.TabIndex = 26;
@@ -273,7 +273,7 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(243, 135);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(200, 28);
+            this.comboBox1.Size = new System.Drawing.Size(275, 28);
             this.comboBox1.TabIndex = 11;
             // 
             // label2

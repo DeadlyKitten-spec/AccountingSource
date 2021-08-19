@@ -38,7 +38,9 @@ namespace applications
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
-            this.Hide();
+            Dictionaries dictionaries = new Dictionaries();
+            dictionaries.Show();
+            this.Close();
         }
 
         void FillCombo1()
@@ -179,11 +181,11 @@ namespace applications
                 {
                     //MessageBox.Show("таблица");
                     dataGridView1.Rows.Add();
-                    dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[1, k].Value = frprice[i].counterparty;
-                    dataGridView1[2, k].Value = frprice[i].objectt;
-                    dataGridView1[3, k].Value = frprice[i].price;
-                    dataGridView1[4, k].Value = frprice[i].pricebuy;
+                    //dataGridView1[0, k].Value = k + 1;
+                    dataGridView1[0, k].Value = frprice[i].counterparty;
+                    dataGridView1[1, k].Value = frprice[i].objectt;
+                    dataGridView1[2, k].Value = frprice[i].price;
+                    dataGridView1[3, k].Value = frprice[i].pricebuy;
                     k++;
                 }
                 else
@@ -331,11 +333,11 @@ namespace applications
                 {
                     //MessageBox.Show("таблица");
                     dataGridView1.Rows.Add();
-                    dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[1, k].Value = frprice[i].counterparty;
-                    dataGridView1[2, k].Value = frprice[i].objectt;
-                    dataGridView1[3, k].Value = frprice[i].price;
-                    dataGridView1[4, k].Value = frprice[i].pricebuy;
+                    //dataGridView1[0, k].Value = k + 1;
+                    dataGridView1[0, k].Value = frprice[i].counterparty;
+                    dataGridView1[1, k].Value = frprice[i].objectt;
+                    dataGridView1[2, k].Value = frprice[i].price;
+                    dataGridView1[3, k].Value = frprice[i].pricebuy;
                     k++;
                 }
                 else
@@ -377,7 +379,7 @@ namespace applications
                 pricecbuy = "priceBuyer" + priceBuyerCount;
                 dbuy = true;
             }
-            string num = dataGridView1[3, dataGridView1.CurrentRow.Index].Value.ToString();
+            string num = dataGridView1[2, dataGridView1.CurrentRow.Index].Value.ToString();
             if (!textBox1.Text.Equals(""))
             {
                 num = textBox1.Text;
@@ -391,7 +393,7 @@ namespace applications
                     }
                 }
             }
-            string numbuy = dataGridView1[4, dataGridView1.CurrentRow.Index].Value.ToString();
+            string numbuy = dataGridView1[3, dataGridView1.CurrentRow.Index].Value.ToString();
             if (!textBox3.Text.Equals(""))
             {
                 numbuy = textBox3.Text;
@@ -408,7 +410,7 @@ namespace applications
             string objectName = "";
             if (textBox2.Text.Equals(""))
             {
-                objectName = dataGridView1[2, dataGridView1.CurrentRow.Index].Value.ToString();
+                objectName = dataGridView1[1, dataGridView1.CurrentRow.Index].Value.ToString();
             }
             else
             {
@@ -459,6 +461,7 @@ namespace applications
                     }
                 }
             }*/
+            //MessageBox.Show("UPDATE `counterparty` SET `objectName` = '" + objectName + "' , `" + pricec + "` = '" + num + "', `" + pricecbuy + "` = '" + numbuy + "' WHERE `objectName` = '" + val + "'");
             command = new MySqlCommand("UPDATE `counterparty` SET `objectName` = '" + objectName + "' , `" + pricec + "` = '" + num + "', `" + pricecbuy + "` = '" + numbuy + "' WHERE `objectName` = '" + val + "'", db.getConnection());
             db.openConnection();
 
@@ -578,11 +581,11 @@ namespace applications
                 {
                     //MessageBox.Show("таблица");
                     dataGridView1.Rows.Add();
-                    dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[1, k].Value = frprice[i].counterparty;
-                    dataGridView1[2, k].Value = frprice[i].objectt;
-                    dataGridView1[3, k].Value = frprice[i].price;
-                    dataGridView1[4, k].Value = frprice[i].pricebuy;
+                    //dataGridView1[0, k].Value = k + 1;
+                    dataGridView1[0, k].Value = frprice[i].counterparty;
+                    dataGridView1[1, k].Value = frprice[i].objectt;
+                    dataGridView1[2, k].Value = frprice[i].price;
+                    dataGridView1[3, k].Value = frprice[i].pricebuy;
                     k++;
                 }
                 else
@@ -602,10 +605,10 @@ namespace applications
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int idx = dataGridView1.CurrentRow.Index;
-            val = dataGridView1[2, idx].Value.ToString();
-            /*textBox1.Text = dataGridView1[3, dataGridView1.CurrentRow.Index].Value.ToString();
-            textBox2.Text = dataGridView1[2, dataGridView1.CurrentRow.Index].Value.ToString();
-            textBox3.Text = dataGridView1[4, dataGridView1.CurrentRow.Index].Value.ToString();*/
+            val = dataGridView1[1, idx].Value.ToString();
+            textBox2.Text = dataGridView1[1, dataGridView1.CurrentRow.Index].Value.ToString();
+            textBox1.Text = dataGridView1[2, dataGridView1.CurrentRow.Index].Value.ToString();
+            textBox3.Text = dataGridView1[3, dataGridView1.CurrentRow.Index].Value.ToString();
         }
 
         private void pictureBox4_Click(object sender, EventArgs e)
@@ -710,11 +713,11 @@ namespace applications
                 {
                     //MessageBox.Show("таблица");
                     dataGridView1.Rows.Add();
-                    dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[1, k].Value = frprice[i].counterparty;
-                    dataGridView1[2, k].Value = frprice[i].objectt;
-                    dataGridView1[3, k].Value = frprice[i].price;
-                    dataGridView1[4, k].Value = frprice[i].pricebuy;
+                    //dataGridView1[0, k].Value = k + 1;
+                    dataGridView1[0, k].Value = frprice[i].counterparty;
+                    dataGridView1[1, k].Value = frprice[i].objectt;
+                    dataGridView1[2, k].Value = frprice[i].price;
+                    dataGridView1[3, k].Value = frprice[i].pricebuy;
                     k++;
                 }
                 else

@@ -72,7 +72,7 @@ namespace applications
             this.Close();
         }
 
-        public int table = 0;
+        public int table;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -86,13 +86,14 @@ namespace applications
                 vault.dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                 this.Close();
             }
-            /*else
-            {   if (table == 1)
+            else
+            {
+                if (table == 1)
                 {
                     Vault vault = this.Owner as Vault;
                     vault.dataGridView1.Rows.Add();
                     vault.dataGridView1[0, vault.dataGridView1.Rows.Count - 2].Value = comboBox6.Text;
-                    vault.dataGridView1[1, vault.dataGridView1.Rows.Count - 2].Value = textBox1.Text;
+                    vault.dataGridView1[1, vault.dataGridView1.Rows.Count - 2].Value = textBox2.Text;
                     vault.dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                     this.Close();
                 }
@@ -101,11 +102,13 @@ namespace applications
                     Vault vault = this.Owner as Vault;
                     vault.dataGridView3.Rows.Add();
                     vault.dataGridView3[0, vault.dataGridView3.Rows.Count - 2].Value = comboBox6.Text;
-                    vault.dataGridView3[1, vault.dataGridView3.Rows.Count - 2].Value = textBox1.Text;
+                    vault.dataGridView3[1, vault.dataGridView3.Rows.Count - 2].Value = textBox2.Text;
+                    vault.dataGridView3[2, vault.dataGridView3.Rows.Count - 2].Value = textBox1.Text;
+                    vault.dataGridView3[3, vault.dataGridView3.Rows.Count - 2].Value = "Брак " + comboBox1.Text + " смена";
                     vault.dataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                     this.Close();
                 }
-            }*/
+            }
         }
 
         private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
