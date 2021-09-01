@@ -1,6 +1,6 @@
 ﻿namespace applications
 {
-    partial class StatementCounterparty
+    partial class Missions
     {
         /// <summary>
         /// Required designer variable.
@@ -83,7 +83,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1924, 1061);
-            this.panel1.TabIndex = 1;
+            this.panel1.TabIndex = 2;
             // 
             // pictureBox3
             // 
@@ -108,12 +108,12 @@
             this.button4.TabIndex = 50;
             this.button4.Text = "Печать ";
             this.button4.UseVisualStyleBackColor = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Visible = false;
             // 
             // pictureBox2
             // 
             this.pictureBox2.Image = global::applications.Properties.Resources.clearTrash;
-            this.pictureBox2.Location = new System.Drawing.Point(520, 134);
+            this.pictureBox2.Location = new System.Drawing.Point(562, 134);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(33, 29);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -124,7 +124,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::applications.Properties.Resources.clearTrash;
-            this.pictureBox1.Location = new System.Drawing.Point(520, 86);
+            this.pictureBox1.Location = new System.Drawing.Point(562, 86);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(33, 29);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -138,7 +138,7 @@
             this.button3.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.ForeColor = System.Drawing.Color.Black;
-            this.button3.Location = new System.Drawing.Point(770, 90);
+            this.button3.Location = new System.Drawing.Point(812, 90);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(134, 73);
             this.button3.TabIndex = 47;
@@ -150,7 +150,7 @@
             // 
             this.comboBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(243, 87);
+            this.comboBox2.Location = new System.Drawing.Point(285, 87);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(275, 28);
             this.comboBox2.TabIndex = 46;
@@ -163,13 +163,13 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label3.Location = new System.Drawing.Point(42, 90);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(131, 25);
+            this.label3.Size = new System.Drawing.Size(241, 25);
             this.label3.TabIndex = 45;
-            this.label3.Text = "Перевозчик";
+            this.label3.Text = "Водитель перевозчика";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(755, 41);
+            this.button1.Location = new System.Drawing.Point(797, 39);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(19, 22);
             this.button1.TabIndex = 44;
@@ -179,7 +179,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(536, 41);
+            this.button2.Location = new System.Drawing.Point(578, 39);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(19, 22);
             this.button2.TabIndex = 43;
@@ -190,14 +190,14 @@
             // dateTimePicker3
             // 
             this.dateTimePicker3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dateTimePicker3.Location = new System.Drawing.Point(555, 39);
+            this.dateTimePicker3.Location = new System.Drawing.Point(597, 37);
             this.dateTimePicker3.Name = "dateTimePicker3";
             this.dateTimePicker3.Size = new System.Drawing.Size(200, 26);
             this.dateTimePicker3.TabIndex = 41;
             // 
             // button14
             // 
-            this.button14.Location = new System.Drawing.Point(443, 41);
+            this.button14.Location = new System.Drawing.Point(485, 39);
             this.button14.Name = "button14";
             this.button14.Size = new System.Drawing.Size(19, 22);
             this.button14.TabIndex = 40;
@@ -207,7 +207,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(224, 41);
+            this.button5.Location = new System.Drawing.Point(266, 39);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(19, 22);
             this.button5.TabIndex = 39;
@@ -220,7 +220,7 @@
             this.label4.AutoSize = true;
             this.label4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(199, 38);
+            this.label4.Location = new System.Drawing.Point(241, 36);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(23, 25);
             this.label4.TabIndex = 38;
@@ -229,7 +229,7 @@
             // dateTimePicker1
             // 
             this.dateTimePicker1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.dateTimePicker1.Location = new System.Drawing.Point(243, 39);
+            this.dateTimePicker1.Location = new System.Drawing.Point(285, 37);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(200, 26);
             this.dateTimePicker1.TabIndex = 37;
@@ -240,7 +240,7 @@
             this.button6.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button6.ForeColor = System.Drawing.Color.Black;
-            this.button6.Location = new System.Drawing.Point(596, 90);
+            this.button6.Location = new System.Drawing.Point(638, 90);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(134, 73);
             this.button6.TabIndex = 26;
@@ -253,7 +253,7 @@
             this.label5.AutoSize = true;
             this.label5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(482, 39);
+            this.label5.Location = new System.Drawing.Point(524, 37);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(36, 25);
             this.label5.TabIndex = 24;
@@ -271,7 +271,7 @@
             // 
             this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(243, 135);
+            this.comboBox1.Location = new System.Drawing.Point(285, 135);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(275, 28);
             this.comboBox1.TabIndex = 11;
@@ -283,9 +283,9 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label2.Location = new System.Drawing.Point(42, 138);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(167, 25);
+            this.label2.Size = new System.Drawing.Size(107, 25);
             this.label2.TabIndex = 9;
-            this.label2.Text = "Номер машины";
+            this.label2.Text = "Водитель";
             // 
             // label1
             // 
@@ -298,14 +298,14 @@
             this.label1.TabIndex = 8;
             this.label1.Text = "Дата";
             // 
-            // StatementCounterparty
+            // Missions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1924, 1061);
             this.Controls.Add(this.panel1);
-            this.Name = "StatementCounterparty";
-            this.Text = "Аналитика по машинам";
+            this.Name = "Missions";
+            this.Text = "Командировки";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();

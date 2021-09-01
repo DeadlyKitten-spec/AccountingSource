@@ -48,7 +48,7 @@ namespace applications
             button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button1.FlatAppearance.BorderColor = FlatColor;
 
-            /*button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button6.FlatAppearance.BorderColor = FlatColor;
 
             button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -57,7 +57,7 @@ namespace applications
             button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button8.FlatAppearance.BorderColor = FlatColor;
 
-            button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            /*button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button9.FlatAppearance.BorderColor = FlatColor;
 
             button10.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1427,6 +1427,22 @@ namespace applications
                                 {
                                     write.checkBox5.CheckState = CheckState.Unchecked;
                                 }
+                                if (myReader.GetString("mission").Equals("Да"))
+                                {
+                                    write.checkBox6.CheckState = CheckState.Checked;
+                                }
+                                else
+                                {
+                                    write.checkBox6.CheckState = CheckState.Unchecked;
+                                }
+                                if (myReader.GetString("missionPaid").Equals("Да"))
+                                {
+                                    write.checkBox7.CheckState = CheckState.Checked;
+                                }
+                                else
+                                {
+                                    write.checkBox7.CheckState = CheckState.Unchecked;
+                                }
                                 if (myReader.GetString("paid").Equals("Да"))
                                 {
                                     write.checkBox2.CheckState = CheckState.Checked;
@@ -1528,6 +1544,22 @@ namespace applications
                                 else
                                 {
                                     write.checkBox2.CheckState = CheckState.Unchecked;
+                                }
+                                if (myReader.GetString("mission").Equals("Да"))
+                                {
+                                    write.checkBox6.CheckState = CheckState.Checked;
+                                }
+                                else
+                                {
+                                    write.checkBox6.CheckState = CheckState.Unchecked;
+                                }
+                                if (myReader.GetString("missionPaid").Equals("Да"))
+                                {
+                                    write.checkBox7.CheckState = CheckState.Checked;
+                                }
+                                else
+                                {
+                                    write.checkBox7.CheckState = CheckState.Unchecked;
                                 }
                                 if (!myReader.GetString("numberDocTrip").Equals("-1"))
                                 {
@@ -4083,6 +4115,312 @@ namespace applications
             Dictionaries dictionaries = new Dictionaries();
             dictionaries.Show();
             dictionaries.Owner = this;
+        }
+
+        private void button22_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button6_Click_1(object sender, EventArgs e)
+        {
+            Analytics analytics = new Analytics();
+            analytics.Show();
+            analytics.Owner = this;
+        }
+
+        private void pictureBox10_Click(object sender, EventArgs e)
+        {
+            button16.Hide();
+            textBox1.Hide();
+            label7.Hide();
+            dgv.Rows.Clear();
+            dgv.Columns.Clear();
+            string time = dateTimePicker1.Value.ToString();
+            string[] asd = time.Split(' ');
+            string[] zxc = asd[0].Split('.');
+            string answer1 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
+
+            time = dateTimePicker2.Value.ToString();
+            asd = null;
+            asd = time.Split(' ');
+            zxc = null;
+            zxc = asd[0].Split('.');
+            string answer2 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
+            string Line = "SELECT * FROM `request` WHERE `id` = '" + textBox3.Text + "';";
+
+            backLine = Line;
+
+            DB db = new DB();
+            MySqlCommand command = new MySqlCommand(Line, db.getConnection());
+            db.openConnection();
+            object obj = command.ExecuteScalar();
+            /*DataTable tbl = new DataTable();
+            DataSet ds = new DataSet();
+            MySqlDataAdapter adapter = new MySqlDataAdapter(command);
+            adapter.Fill(ds);
+            dgv.DataSource = ds.Tables[0];*/
+            int idlast = 0;
+            int idmorelast = 0;
+
+            if (obj != null)
+            {
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                MySqlDataReader myReader;
+                Work[] works = new Work[100000];
+                for (int i = 0; i < works.Length; i++)
+                {
+                    works[i] = new Work();
+                    works[i].hour = 23;
+                    works[i].minute = 59;
+                    works[i].traffic = "пусто";
+                }
+                int itter = 0;
+                bool f = false;
+                try
+                {
+                    //db.openConnection();
+                    myReader = command.ExecuteReader();
+
+                    while (myReader.Read())
+                    {
+                        idlast = int.Parse(myReader.GetString("id"));
+                        idCupter = myReader.GetString("id");
+                        idCupterBool = true;
+                        if (idlast == idmorelast)
+                        {
+                            idmorelast = idlast;
+                            continue;
+                        }
+                        for (int i = 0; i < itter; i++)
+                        {
+                            f = false;
+                            if (myReader.GetString("buyer").Equals(works[i].buyer) && myReader.GetString("sender").Equals(works[i].sender) && myReader.GetString("object").Equals(works[i].objectBuyer))
+                            {
+                                if (myReader.GetString("status").Equals("В работе"))
+                                {
+                                    works[i].inWork++;
+                                }
+                                if (myReader.GetString("status").Equals("Назначена"))
+                                {
+                                    works[i].point++;
+                                }
+                                if (myReader.GetString("status").Equals("Исполнена") || myReader.GetString("status").Equals("Оплачена"))
+                                {
+                                    works[i].done++;
+                                }
+                                f = true;
+                                idmorelast = idlast;
+                                string timeAccept = myReader.GetString("timeAccept");
+                                string[] timeAcceptt = timeAccept.Split(':');
+                                if (myReader.GetString("status").Equals("В работе"))
+                                {
+                                    if (works[i].hour > int.Parse(timeAcceptt[0]))
+                                    {
+                                        works[i].hour = int.Parse(timeAcceptt[0]);
+                                        works[i].minute = int.Parse(timeAcceptt[1]);
+                                    }
+                                    else
+                                    {
+                                        if (works[i].minute > int.Parse(timeAcceptt[1]))
+                                        {
+                                            works[i].hour = int.Parse(timeAcceptt[0]);
+                                            works[i].minute = int.Parse(timeAcceptt[1]);
+                                        }
+                                    }
+                                }
+                                if (works[i].traffic.Equals("пусто"))
+                                {
+                                    if (!myReader.GetString("traffic").Equals("пусто"))
+                                    {
+                                        works[i].traffic = myReader.GetString("traffic");
+                                    }
+                                }
+                                break;
+                            }
+                            idmorelast = idlast;
+                        }
+                        if (!f)
+                        {
+                            works[itter].traffic = myReader.GetString("traffic");
+                            works[itter].buyer = myReader.GetString("buyer");
+                            works[itter].sender = myReader.GetString("sender");
+                            works[itter].objectBuyer = myReader.GetString("object");
+                            if (myReader.GetString("status").Equals("В работе"))
+                            {
+                                works[itter].inWork++;
+                            }
+                            if (myReader.GetString("status").Equals("Назначена"))
+                            {
+                                works[itter].point++;
+                            }
+                            if (myReader.GetString("status").Equals("Исполнена") || myReader.GetString("status").Equals("Оплачена"))
+                            {
+                                works[itter].done++;
+                            }
+                            idmorelast = idlast;
+                            string timeAccept = myReader.GetString("timeAccept");
+                            string[] timeAcceptt = timeAccept.Split(':');
+                            //MessageBox.Show(timeAcceptt[0]);
+                            if (myReader.GetString("status").Equals("В работе"))
+                            {
+                                if (works[itter].hour > int.Parse(timeAcceptt[0]))
+                                {
+                                    works[itter].hour = int.Parse(timeAcceptt[0]);
+                                    works[itter].minute = int.Parse(timeAcceptt[1]);
+                                }
+                                else
+                                {
+                                    if (works[itter].minute > int.Parse(timeAcceptt[1]))
+                                    {
+                                        works[itter].hour = int.Parse(timeAcceptt[0]);
+                                        works[itter].minute = int.Parse(timeAcceptt[1]);
+                                    }
+                                }
+                            }
+                            itter++;
+                        }
+                    }
+                    for (int i = 0; i < itter; i++)
+                    {
+                        works[i].accept = works[i].inWork + works[i].point + works[i].done;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                db.closeConnection();
+
+
+
+                dgv.Columns.AddRange(
+                new DataGridViewTextBoxColumn() { Name = "timeAccept", HeaderText = "Время поставки на объект" },
+                new DataGridViewTextBoxColumn() { Name = "traffic", HeaderText = "Вид транспорта" },
+                new DataGridViewTextBoxColumn() { Name = "buyeer", HeaderText = "Покупатель/заказчик" },
+                new DataGridViewTextBoxColumn() { Name = "sendeerr", HeaderText = "Грузоотправитель" },
+                new DataGridViewTextBoxColumn() { Name = "objectBuyeer", HeaderText = "Объект поставки" },
+                new DataGridViewTextBoxColumn() { Name = "accept", HeaderText = "Принятые заявки" },
+                new DataGridViewTextBoxColumn() { Name = "inWork", HeaderText = "Неназначенные заявки" },
+                new DataGridViewTextBoxColumn() { Name = "point", HeaderText = "Назначенные заявки" },
+                new DataGridViewTextBoxColumn() { Name = "done", HeaderText = "Выпоненные" });
+                dgv.Rows.Clear();
+                int sumAccept = 0;
+                int sumInWork = 0;
+                int sumPoint = 0;
+                int sumDone = 0;
+                int it = 0;
+                for (int i = 0; i < itter; i++)
+                {
+                    dgv.Rows.Add();
+                    if (works[i].hour == 23 && works[i].minute == 59)
+                    {
+                        if (works[i].accept == works[i].done)
+                        {
+                            dgv["timeAccept", i].Value = "Все исполнены";
+                        }
+                        else
+                        {
+                            dgv["timeAccept", i].Value = "Все назначены";
+                        }
+                    }
+                    else
+                    {
+                        if (works[i].minute >= 0 && works[i].minute < 10)
+                        {
+                            dgv["timeAccept", i].Value = works[i].hour.ToString() + ":0" + works[i].minute.ToString();
+                        }
+                        else
+                        {
+                            dgv["timeAccept", i].Value = works[i].hour.ToString() + ":" + works[i].minute.ToString();
+                        }
+                    }
+                    dgv["traffic", i].Value = works[i].traffic.ToString();
+                    dgv["buyeer", i].Value = works[i].buyer.ToString();
+                    dgv["sendeerr", i].Value = works[i].sender.ToString();
+                    dgv["objectBuyeer", i].Value = works[i].objectBuyer.ToString();
+                    dgv["accept", i].Value = works[i].accept.ToString();
+                    dgv["inWork", i].Value = works[i].inWork.ToString();
+                    dgv["point", i].Value = works[i].point.ToString();
+                    dgv["done", i].Value = works[i].done.ToString();
+                    if (works[i].point != 0)
+                    {
+                        for (int j = 0; j < dgv.ColumnCount; j++)
+                        {
+                            dgv[j, i].Style.BackColor = Color.Khaki;
+                        }
+                        //dgv.Rows[i].DefaultCellStyle.BackColor = Color.LightPink;
+                    }
+                    if (works[i].inWork != 0)
+                    {
+                        for (int j = 0; j < dgv.ColumnCount; j++)
+                        {
+                            dgv[j, i].Style.BackColor = Color.LightPink;
+                        }
+                        //dgv.Rows[i].DefaultCellStyle.BackColor = Color.LightPink;
+                    }
+                    if (works[i].accept == works[i].point)
+                    {
+                        for (int j = 0; j < dgv.ColumnCount; j++)
+                        {
+                            dgv[j, i].Style.BackColor = Color.Khaki;
+                        }
+                        //dgv.Rows[i].DefaultCellStyle.BackColor = Color.Khaki;
+                    }
+                    if (works[i].point != 0)
+                    {
+                        dgv["point", i].Style.BackColor = Color.Khaki;
+                    }
+                    if (works[i].accept == works[i].done)
+                    {
+                        for (int j = 0; j < dgv.ColumnCount; j++)
+                        {
+                            dgv[j, i].Style.BackColor = Color.PaleGreen;
+                        }
+                        //dgv.Rows[i].DefaultCellStyle.BackColor = Color.PaleGreen;
+                    }
+                    if (works[i].done != 0)
+                    {
+                        dgv["done", i].Style.BackColor = Color.PaleGreen;
+                    }
+                    sumAccept = sumAccept + works[i].accept;
+                    sumInWork = sumInWork + works[i].inWork;
+                    sumPoint = sumPoint + works[i].point;
+                    sumDone = sumDone + works[i].done;
+                    it = i;
+                }
+                dgv[0, it + 1].Value = "Всего";
+                dgv["accept", it + 1].Value = sumAccept;
+                dgv["inWork", it + 1].Value = sumInWork;
+                dgv["point", it + 1].Value = sumPoint;
+                dgv["done", it + 1].Value = sumDone;
+                dgv.Rows[it + 1].DefaultCellStyle.BackColor = Color.LightGray;
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+                /*for(int i = 0; i < itter; i++)
+                {
+                    MessageBox.Show(works[i].buyer + works[i].sender + works[i].objectBuyer + works[i].accept + works[i].point + works[i].done);
+                }*/
+                g = false;
+            }
+        }
+
+        private void pictureBox9_Click(object sender, EventArgs e)
+        {
+            textBox3.Text = "";
+        }
+
+        private void button8_Click_1(object sender, EventArgs e)
+        {
+            Missions missions = new Missions();
+            missions.Show();
+        }
+
+        private void button7_Click_1(object sender, EventArgs e)
+        {
+            Paid paid = new Paid();
+            paid.Show();
         }
     }
 }

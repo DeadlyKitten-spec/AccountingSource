@@ -267,7 +267,7 @@ namespace applications
             {
                 for (int i = 0; i < WriteRequest.CargoCount; i++)
                 {
-                    MySqlCommand command = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary)", db.getConnection());
+                    MySqlCommand command = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @mission, @missionPaid)", db.getConnection());
 
                     command.Parameters.Add("@id", MySqlDbType.Int32).Value = idRequest;
                     command.Parameters.Add("@data", MySqlDbType.Date).Value = dateTimePicker1.Value;
@@ -441,6 +441,22 @@ namespace applications
                     else
                     {
                         command.Parameters.Add("@tax", MySqlDbType.VarChar).Value = "Нет";
+                    }
+                    if (checkBox6.CheckState == CheckState.Checked)
+                    {
+                        command.Parameters.Add("@mission", MySqlDbType.VarChar).Value = "Да";
+                    }
+                    else
+                    {
+                        command.Parameters.Add("@mission", MySqlDbType.VarChar).Value = "Нет";
+                    }
+                    if (checkBox7.CheckState == CheckState.Checked)
+                    {
+                        command.Parameters.Add("@missionPaid", MySqlDbType.VarChar).Value = "Да";
+                    }
+                    else
+                    {
+                        command.Parameters.Add("@missionPaid", MySqlDbType.VarChar).Value = "Нет";
                     }
                     if (!textBox6.Text.Equals("Введите номер"))
                     {
@@ -636,6 +652,8 @@ namespace applications
             checkBox1.CheckState = CheckState.Unchecked;
             checkBox2.CheckState = CheckState.Unchecked;
             checkBox5.CheckState = CheckState.Unchecked;
+            checkBox6.CheckState = CheckState.Unchecked;
+            checkBox7.CheckState = CheckState.Unchecked;
             textBox1.Text = "";
             textBox4.Text = "";
             label13.Hide();
@@ -1356,7 +1374,7 @@ namespace applications
                     bool fstat = false;
                     for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                     {
-                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary)", db.getConnection());
+                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @mission, @missionPaid)", db.getConnection());
 
 
                         com.Parameters.AddWithValue("@id", idRequest);
@@ -1471,6 +1489,22 @@ namespace applications
                         else
                         {
                             com.Parameters.AddWithValue("@tax", "Нет");
+                        }
+                        if (checkBox6.CheckState == CheckState.Checked)
+                        {
+                            com.Parameters.AddWithValue("@mission", "Да");
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@mission", "Нет");
+                        }
+                        if (checkBox7.CheckState == CheckState.Checked)
+                        {
+                            com.Parameters.AddWithValue("@missionPaid", "Да");
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@missionPaid", "Нет");
                         }
                         if (pointCheck)
                         {
@@ -1646,7 +1680,7 @@ namespace applications
                         db.closeConnection();
                         for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                         {
-                            com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary)", db.getConnection());
+                            com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @mission, @missionPaid)", db.getConnection());
 
 
                             com.Parameters.AddWithValue("@id", idRequest);
@@ -1761,6 +1795,22 @@ namespace applications
                             else
                             {
                                 com.Parameters.AddWithValue("@tax", "Нет");
+                            }
+                            if (checkBox6.CheckState == CheckState.Checked)
+                            {
+                                com.Parameters.AddWithValue("@mission", "Да");
+                            }
+                            else
+                            {
+                                com.Parameters.AddWithValue("@mission", "Нет");
+                            }
+                            if (checkBox7.CheckState == CheckState.Checked)
+                            {
+                                com.Parameters.AddWithValue("@missionPaid", "Да");
+                            }
+                            else
+                            {
+                                com.Parameters.AddWithValue("@missionPaid", "Нет");
                             }
                             if (pointCheck)
                             {
@@ -2156,7 +2206,7 @@ namespace applications
                 MySqlCommand com;
                 for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                 {
-                    com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary);", db.getConnection());
+                    com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @mission, @missionPaid);", db.getConnection());
 
                     com.Parameters.AddWithValue("@id", idRequest);
                     com.Parameters.AddWithValue("@data", dateTimePicker1.Value);
@@ -2280,6 +2330,22 @@ namespace applications
                     {
                         com.Parameters.AddWithValue("@tax", "Нет");
                     }
+                    if (checkBox6.CheckState == CheckState.Checked)
+                    {
+                        com.Parameters.AddWithValue("@mission", "Да");
+                    }
+                    else
+                    {
+                        com.Parameters.AddWithValue("@mission", "Нет");
+                    }
+                    if (checkBox7.CheckState == CheckState.Checked)
+                    {
+                        com.Parameters.AddWithValue("@missionPaid", "Да");
+                    }
+                    else
+                    {
+                        com.Parameters.AddWithValue("@missionPaid", "Нет");
+                    }
                     if (!textBox6.Text.Equals("Введите номер"))
                         com.Parameters.AddWithValue("@trip", textBox6.Text);
                     else
@@ -2336,7 +2402,7 @@ namespace applications
                     db.closeConnection();
                     for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                     {
-                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary);", db.getConnection());
+                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @mission, @missionPaid);", db.getConnection());
 
                         com.Parameters.AddWithValue("@id", idRequest);
                         com.Parameters.AddWithValue("@data", dateTimePicker1.Value);
@@ -2460,6 +2526,22 @@ namespace applications
                         else
                         {
                             com.Parameters.AddWithValue("@tax", "Нет");
+                        }
+                        if (checkBox6.CheckState == CheckState.Checked)
+                        {
+                            com.Parameters.AddWithValue("@mission", "Да");
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@mission", "Нет");
+                        }
+                        if (checkBox7.CheckState == CheckState.Checked)
+                        {
+                            com.Parameters.AddWithValue("@missionPaid", "Да");
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@missionPaid", "Нет");
                         }
                         if (!textBox6.Text.Equals("Введите номер"))
                             com.Parameters.AddWithValue("@trip", textBox6.Text);
@@ -3336,6 +3418,20 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+        }
+
+        private void checkBox6_CheckedChanged(object sender, EventArgs e)
+        {
+            if(checkBox6.CheckState == CheckState.Checked)
+            {
+                label20.Show();
+                checkBox7.Show();
+            }
+            else
+            {
+                label20.Hide();
+                checkBox7.Hide();
+            }
         }
 
 

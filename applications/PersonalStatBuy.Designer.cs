@@ -338,7 +338,7 @@
             this.ClientSize = new System.Drawing.Size(1924, 1061);
             this.Controls.Add(this.panel1);
             this.Name = "PersonalStatBuy";
-            this.Text = "Ведомость ";
+            this.Text = "Аналитика покупатель-грузоотправитель";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
