@@ -1393,6 +1393,7 @@ namespace applications
                                 write.dateTimePicker5.Text = myReader.GetString("dateTTN");
                                 write.textBox3.Text = myReader.GetString("numberTrip");
                                 write.textBox1.Text = myReader.GetString("priceSalary");
+                                write.textBox4.Text = myReader.GetString("price");
                                 write.comboBox7.Text = myReader.GetString("contractor");
                                 write.comboBox8.Text = myReader.GetString("cars");
                                 write.comboBox11.Text = myReader.GetString("driveCont");
@@ -1517,6 +1518,7 @@ namespace applications
                                 write.comboBox14.Text = myReader.GetString("traffic");
                                 write.dateTimePicker5.Text = myReader.GetString("dateTTN");
                                 write.textBox1.Text = myReader.GetString("priceSalary");
+                                write.textBox4.Text = myReader.GetString("price");
                                 write.comboBox7.Text = myReader.GetString("contractor");
                                 write.comboBox8.Text = myReader.GetString("cars");
                                 write.comboBox11.Text = myReader.GetString("driveCont");
@@ -3976,7 +3978,7 @@ namespace applications
                 db.closeConnection();
             }*/
 
-            DB db = new DB();
+            /*DB db = new DB();
             MySqlCommand command = new MySqlCommand("SELECT * FROM `request` WHERE `deal` = 'Поставка' AND `docDate` > '2020-12-01' AND `status` = 'Исполнена';", db.getConnection());
             MySqlDataReader myReader;
             string[] t = new string[48];
@@ -4018,7 +4020,65 @@ namespace applications
                 command.ExecuteNonQuery();
 
                 db.closeConnection();
+            }*/
+
+            string priceNow = "";
+            string priceNowCount = "";
+            string priceNowCountBuy = "";
+            string priceNowBuy = "";
+
+        string Query = "(SELECT * FROM `counterparty` ORDER BY `name` ASC) ORDER BY `count` desc;";
+            DB db = new DB();
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+            MySqlDataReader myReader;
+
+            List<string> names = new List<string>();
+            List<string> price = new List<string>();
+
+            try
+            {
+                db.openConnection();
+                myReader = cmdDataBase.ExecuteReader();
+
+                while (myReader.Read())
+                {
+
+                    string priceCount = myReader.GetString("priceCount");
+                    string objName = "price" + priceCount;
+                    string pricec = myReader.GetString(objName);
+                    priceNow = pricec;
+                    priceNowCount = priceCount;
+                    string priceCountBuy = myReader.GetString("priceBuyerCount");
+                    string objNameBuy = "priceBuyer" + priceCountBuy;
+                    string pricecBuy = myReader.GetString(objNameBuy);
+                    priceNowBuy = pricecBuy;
+                    priceNowCountBuy = priceCountBuy;
+                    //textBox4.Text = pricecBuy;
+                    names.Add(myReader.GetString("objectName"));
+                    price.Add(pricecBuy);
+                }
+                myReader.Close();
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            db.closeConnection();
+
+            //MessageBox.Show(price.Count.ToString() + " " + names.Count.ToString());
+
+            for (int count = 0; count < names.Count; count++)
+            {
+                Query = "UPDATE `request` SET `price` = '" + price[count] + "' WHERE `object` = '" + names[count] + "' AND `price` = 'пусто';";
+                //MessageBox.Show(price[count] + " " + names[count]);
+                MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
+                db.openConnection();
+                cmdDataBase2.ExecuteNonQuery();
+                db.closeConnection();
+                //MessageBox.Show(price.Count.ToString() + " " + names.Count.ToString());
+            }
+            
         }
 
         private void pictureBox6_Click(object sender, EventArgs e)

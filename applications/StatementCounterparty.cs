@@ -223,7 +223,7 @@ namespace applications
                                 idmorelast = idlast;
                                 continue;
                             }
-                            if (myReader.GetString("priceSalary").Equals("пусто"))
+                            if (myReader.GetString("price").Equals("пусто"))
                             {
                                 continue;
                             }
@@ -238,17 +238,17 @@ namespace applications
                                     salary[i].countTrip++;
                                     if (myReader.GetString("tax").Equals("Да"))
                                     {
-                                        salary[i].wotax += double.Parse(myReader.GetString("priceSalary"));
+                                        salary[i].wotax += double.Parse(myReader.GetString("price"));
                                     }
                                     else
                                     {
                                         if (myReader.GetString("cash").Equals("Да"))
                                         {
-                                            salary[i].cash += double.Parse(myReader.GetString("priceSalary"));
+                                            salary[i].cash += double.Parse(myReader.GetString("price"));
                                         }
                                         else
                                         {
-                                            salary[i].tax += double.Parse(myReader.GetString("priceSalary"));
+                                            salary[i].tax += double.Parse(myReader.GetString("price"));
                                         }
                                     }
                                     break;
@@ -294,21 +294,21 @@ namespace applications
                                 //MessageBox.Show("asd");
                                 //MessageBox.Show(salary[itter].ToString());
                                 //MessageBox.Show(myReader.GetString("priceSalary"));
-                                salary[itter].price = double.Parse(myReader.GetString("priceSalary"));
+                                salary[itter].price = double.Parse(myReader.GetString("price"));
                                 salary[itter].countTrip = 1;
                                 if (myReader.GetString("tax").Equals("Да"))
                                 {
-                                    salary[itter].wotax += double.Parse(myReader.GetString("priceSalary"));
+                                    salary[itter].wotax += double.Parse(myReader.GetString("price"));
                                 }
                                 else
                                 {
                                     if (myReader.GetString("cash").Equals("Да"))
                                     {
-                                        salary[itter].cash += double.Parse(myReader.GetString("priceSalary"));
+                                        salary[itter].cash += double.Parse(myReader.GetString("price"));
                                     }
                                     else
                                     {
-                                        salary[itter].tax += double.Parse(myReader.GetString("priceSalary"));
+                                        salary[itter].tax += double.Parse(myReader.GetString("price"));
                                     }
                                 }
                                 fobj = false;
@@ -457,7 +457,7 @@ namespace applications
                                 idmorelast = idlast;
                                 continue;
                             }
-                            if (myReader.GetString("priceSalary").Equals("пусто"))
+                            if (myReader.GetString("price").Equals("пусто"))
                             {
                                 continue;
                             }
@@ -472,17 +472,17 @@ namespace applications
                                     salary[i].countTrip++;
                                     if (myReader.GetString("tax").Equals("Да"))
                                     {
-                                        salary[i].wotax += double.Parse(myReader.GetString("priceSalary"));
+                                        salary[i].wotax += double.Parse(myReader.GetString("price"));
                                     }
                                     else
                                     {
                                         if (myReader.GetString("cash").Equals("Да"))
                                         {
-                                            salary[i].cash += double.Parse(myReader.GetString("priceSalary"));
+                                            salary[i].cash += double.Parse(myReader.GetString("price"));
                                         }
                                         else
                                         {
-                                            salary[i].tax += double.Parse(myReader.GetString("priceSalary"));
+                                            salary[i].tax += double.Parse(myReader.GetString("price"));
                                         }
                                     }
                                     break;
@@ -528,21 +528,21 @@ namespace applications
                                 //MessageBox.Show("asd");
                                 //MessageBox.Show(salary[itter].ToString());
                                 //MessageBox.Show(myReader.GetString("priceSalary"));
-                                salary[itter].price = double.Parse(myReader.GetString("priceSalary"));
+                                salary[itter].price = double.Parse(myReader.GetString("price"));
                                 salary[itter].countTrip = 1;
                                 if (myReader.GetString("tax").Equals("Да"))
                                 {
-                                    salary[itter].wotax += double.Parse(myReader.GetString("priceSalary"));
+                                    salary[itter].wotax += double.Parse(myReader.GetString("price"));
                                 }
                                 else
                                 {
                                     if (myReader.GetString("cash").Equals("Да"))
                                     {
-                                        salary[itter].cash += double.Parse(myReader.GetString("priceSalary"));
+                                        salary[itter].cash += double.Parse(myReader.GetString("price"));
                                     }
                                     else
                                     {
-                                        salary[itter].tax += double.Parse(myReader.GetString("priceSalary"));
+                                        salary[itter].tax += double.Parse(myReader.GetString("price"));
                                     }
                                 }
                                 fobj = false;

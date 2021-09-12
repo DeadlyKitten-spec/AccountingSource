@@ -24,8 +24,8 @@ namespace applications
         public string idRequest = "";
         public bool comboName = false;
         public string priceNow = "";
-        public int priceNowCount = 0;
-        public int priceNowCountBuy = 0;
+        public string priceNowCount = "";
+        public string priceNowCountBuy = "";
         public string priceNowBuy = "";
         public bool severalCargo = false;
 
@@ -267,7 +267,7 @@ namespace applications
             {
                 for (int i = 0; i < WriteRequest.CargoCount; i++)
                 {
-                    MySqlCommand command = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @mission, @missionPaid)", db.getConnection());
+                    MySqlCommand command = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid)", db.getConnection());
 
                     command.Parameters.Add("@id", MySqlDbType.Int32).Value = idRequest;
                     command.Parameters.Add("@data", MySqlDbType.Date).Value = dateTimePicker1.Value;
@@ -482,6 +482,14 @@ namespace applications
                     else
                     {
                         command.Parameters.Add("@salary", MySqlDbType.VarChar).Value = "пусто";
+                    }
+                    if (!textBox4.Text.Equals(""))
+                    {
+                        command.Parameters.Add("@cp", MySqlDbType.VarChar).Value = textBox4.Text;
+                    }
+                    else
+                    {
+                        command.Parameters.Add("@cp", MySqlDbType.VarChar).Value = "пусто";
                     }
                     //MessageBox.Show(dataGridView1[3, i].Value.ToString());
                     db.openConnection();
@@ -1374,7 +1382,7 @@ namespace applications
                     bool fstat = false;
                     for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                     {
-                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @mission, @missionPaid)", db.getConnection());
+                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid)", db.getConnection());
 
 
                         com.Parameters.AddWithValue("@id", idRequest);
@@ -1451,6 +1459,14 @@ namespace applications
                         else
                         {
                             com.Parameters.AddWithValue("@salary", "пусто");
+                        }
+                        if (!textBox4.Text.Equals(""))
+                        {
+                            com.Parameters.AddWithValue("@cp", textBox4.Text);
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@cp", "пусто");
                         }
                         com.Parameters.AddWithValue("@contractor", comboBox7.Text);
                         com.Parameters.AddWithValue("@cars", comboBox8.Text);
@@ -1680,7 +1696,7 @@ namespace applications
                         db.closeConnection();
                         for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                         {
-                            com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @mission, @missionPaid)", db.getConnection());
+                            com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid)", db.getConnection());
 
 
                             com.Parameters.AddWithValue("@id", idRequest);
@@ -1757,6 +1773,14 @@ namespace applications
                             else
                             {
                                 com.Parameters.AddWithValue("@salary", "пусто");
+                            }
+                            if (!textBox4.Text.Equals(""))
+                            {
+                                com.Parameters.AddWithValue("@cp", textBox4.Text);
+                            }
+                            else
+                            {
+                                com.Parameters.AddWithValue("@cp", "пусто");
                             }
                             com.Parameters.AddWithValue("@contractor", comboBox7.Text);
                             com.Parameters.AddWithValue("@cars", comboBox8.Text);
@@ -2206,7 +2230,7 @@ namespace applications
                 MySqlCommand com;
                 for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                 {
-                    com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @mission, @missionPaid);", db.getConnection());
+                    com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid);", db.getConnection());
 
                     com.Parameters.AddWithValue("@id", idRequest);
                     com.Parameters.AddWithValue("@data", dateTimePicker1.Value);
@@ -2281,6 +2305,14 @@ namespace applications
                     else
                     {
                         com.Parameters.AddWithValue("@salary", "пусто");
+                    }
+                    if (!textBox4.Text.Equals(""))
+                    {
+                        com.Parameters.AddWithValue("@cp", textBox4.Text);
+                    }
+                    else
+                    {
+                        com.Parameters.AddWithValue("@cp", "пусто");
                     }
                     com.Parameters.AddWithValue("@contractor", comboBox7.Text);
                     com.Parameters.AddWithValue("@cars", comboBox8.Text);
@@ -2402,7 +2434,7 @@ namespace applications
                     db.closeConnection();
                     for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                     {
-                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @mission, @missionPaid);", db.getConnection());
+                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid);", db.getConnection());
 
                         com.Parameters.AddWithValue("@id", idRequest);
                         com.Parameters.AddWithValue("@data", dateTimePicker1.Value);
@@ -2477,6 +2509,14 @@ namespace applications
                         else
                         {
                             com.Parameters.AddWithValue("@salary", "пусто");
+                        }
+                        if (!textBox4.Text.Equals(""))
+                        {
+                            com.Parameters.AddWithValue("@cp", textBox4.Text);
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@cp", "пусто");
                         }
                         com.Parameters.AddWithValue("@contractor", comboBox7.Text);
                         com.Parameters.AddWithValue("@cars", comboBox8.Text);
@@ -3032,7 +3072,7 @@ namespace applications
             textBox4.Show();
 
             //string Query = "SELECT * FROM `counterparty` WHERE `objectName` = '" + comboBox6.Text.ToString() + "';";
-            string Query = "(SELECT * FROM `counterparty` WHERE `objectName` = '" + comboBox6.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+            string Query = "SELECT * FROM `counterparty` WHERE `objectName` = '" + comboBox6.Text.ToString() + "' ORDER BY `name` ASC;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
@@ -3045,13 +3085,13 @@ namespace applications
 
                 while (myReader.Read())
                 {
-                    int priceCount = myReader.GetInt32("priceCount");
+                    string priceCount = myReader.GetString("priceCount");
                     string objName = "price" + priceCount;
                     string pricec = myReader.GetString(objName);
                     priceNow = pricec;
                     priceNowCount = priceCount;
                     textBox1.Text = pricec;
-                    int priceCountBuy = myReader.GetInt32("priceBuyerCount");
+                    string priceCountBuy = myReader.GetString("priceBuyerCount");
                     string objNameBuy = "priceBuyer" + priceCountBuy;
                     string pricecBuy = myReader.GetString(objNameBuy);
                     priceNowBuy = pricecBuy;
@@ -3074,12 +3114,16 @@ namespace applications
             string placePriceBuy = "";
             if (!priceNow.Equals(textBox1.Text)) {
                 priceNow = textBox1.Text;
-                priceNowCount++;
+                int a = Int32.Parse(priceNowCount);
+                a++;
+                priceNowCount = a.ToString();
             }
             if (!priceNowBuy.Equals(textBox4.Text))
             {
                 priceNowBuy = textBox4.Text;
-                priceNowCountBuy++;
+                int b = Int32.Parse(priceNowCountBuy);
+                b++;
+                priceNowCountBuy = b.ToString();
             }
             placePrice = "price" + priceNowCount;
             placePriceBuy = "priceBuyer" + priceNowCountBuy;

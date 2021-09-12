@@ -364,7 +364,7 @@ namespace applications
             int priceCountt = myReader2.GetInt32("priceCount");
             int priceBuyerCount = myReader2.GetInt32("priceBuyerCount");
             string pricec = "price" + priceCountt;
-            string pricecbuy = "priceBuyer" + priceCountt;
+            string pricecbuy = "priceBuyer" + priceBuyerCount;
             bool d = false;
             bool dbuy = false;
             if (!myReader2.GetString(pricec).Equals("0"))
