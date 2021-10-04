@@ -355,27 +355,31 @@ namespace applications
         {
             DB db = new DB();
 
-            string Query2 = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' ORDER BY `name` ASC;";
+            string Query2 = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' and `objectName` = '" + dataGridView1["objectt", dataGridView1.CurrentRow.Index].Value.ToString() + "' ORDER BY `name` ASC;";
             MySqlCommand cmdDataBase2 = new MySqlCommand(Query2, db.getConnection());
             MySqlDataReader myReader2;
             db.openConnection();
             myReader2 = cmdDataBase2.ExecuteReader();
             myReader2.Read();
-            int priceCountt = myReader2.GetInt32("priceCount");
-            int priceBuyerCount = myReader2.GetInt32("priceBuyerCount");
+            string priceCountt = myReader2.GetString("priceCount");
+            string priceBuyerCount = myReader2.GetString("priceBuyerCount");
             string pricec = "price" + priceCountt;
             string pricecbuy = "priceBuyer" + priceBuyerCount;
             bool d = false;
             bool dbuy = false;
             if (!myReader2.GetString(pricec).Equals("0"))
             {
-                priceCountt++;
+                int a = int.Parse(priceCountt);
+                a++;
+                priceCountt = a.ToString();
                 pricec = "price" + priceCountt;
                 d = true;
             }
             if (!myReader2.GetString(pricecbuy).Equals("0"))
             {
-                priceBuyerCount++;
+                int a = int.Parse(priceBuyerCount);
+                a++;
+                priceBuyerCount = a.ToString();
                 pricecbuy = "priceBuyer" + priceBuyerCount;
                 dbuy = true;
             }
@@ -462,21 +466,22 @@ namespace applications
                 }
             }*/
             //MessageBox.Show("UPDATE `counterparty` SET `objectName` = '" + objectName + "' , `" + pricec + "` = '" + num + "', `" + pricecbuy + "` = '" + numbuy + "' WHERE `objectName` = '" + val + "'");
-            command = new MySqlCommand("UPDATE `counterparty` SET `objectName` = '" + objectName + "' , `" + pricec + "` = '" + num + "', `" + pricecbuy + "` = '" + numbuy + "' WHERE `objectName` = '" + val + "'", db.getConnection());
+            //MessageBox.Show("UPDATE `counterparty` SET `objectName` = '" + objectName + "', `" + pricec + "` = '" + num + "', `" + pricecbuy + "` = '" + numbuy + "' WHERE `objectName` = '" + val + "' and `name` = '" + dataGridView1["name", dataGridView1.CurrentRow.Index].Value.ToString() + "'");
+            command = new MySqlCommand("UPDATE `counterparty` SET `objectName` = '" + objectName + "' , `" + pricec + "` = '" + num + "', `" + pricecbuy + "` = '" + numbuy + "', `priceCount` = '" + priceCountt + "', `priceBuyerCount` = '" + priceBuyerCount + "' WHERE `objectName` = '" + val + "' and `name` = '" + dataGridView1["name", dataGridView1.CurrentRow.Index].Value.ToString() + "'", db.getConnection());
             db.openConnection();
 
             command.ExecuteNonQuery();
 
             db.closeConnection();
 
-            MySqlCommand command2 = new MySqlCommand("UPDATE `request` SET `object` = '" + objectName + "' WHERE `object` = '" + val + "'", db.getConnection());
+            MySqlCommand command2 = new MySqlCommand("UPDATE `request` SET `object` = '" + objectName + "' WHERE `object` = '" + val + "' and `buyer` = '" + dataGridView1["name", dataGridView1.CurrentRow.Index].Value.ToString() + "'", db.getConnection());
             db.openConnection();
 
             command2.ExecuteNonQuery();
 
             db.closeConnection();
 
-            command2 = new MySqlCommand("UPDATE `request` SET `objectArrive` = '" + objectName + "' WHERE `objectArrive` = '" + val + "'", db.getConnection());
+            command2 = new MySqlCommand("UPDATE `request` SET `objectArrive` = '" + objectName + "' WHERE `objectArrive` = '" + val + "' and `recipient` = '" + dataGridView1["name", dataGridView1.CurrentRow.Index].Value.ToString() + "'", db.getConnection());
             db.openConnection();
 
             command2.ExecuteNonQuery();
@@ -614,7 +619,7 @@ namespace applications
         private void pictureBox4_Click(object sender, EventArgs e)
         {
             DB db = new DB();
-            MySqlCommand command = new MySqlCommand("DELETE FROM `counterparty` WHERE `objectName` = '" + val + "'", db.getConnection());
+            MySqlCommand command = new MySqlCommand("DELETE FROM `counterparty` WHERE `objectName` = '" + val + "' and `name` = '" + dataGridView1["name", dataGridView1.CurrentRow.Index].Value.ToString() + "'", db.getConnection());
 
             db.openConnection();
 
@@ -728,6 +733,9 @@ namespace applications
 
 
             db.closeConnection();
+            textBox2.Text = "";
+            textBox1.Text = "";
+            textBox3.Text = "";
         }
     }
 }

@@ -30,10 +30,10 @@
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.button24 = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -61,6 +61,20 @@
             this.panel2.Size = new System.Drawing.Size(651, 136);
             this.panel2.TabIndex = 0;
             // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(237)))), ((int)(((byte)(147)))));
+            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.ForeColor = System.Drawing.Color.Black;
+            this.button1.Location = new System.Drawing.Point(379, 23);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(148, 62);
+            this.button1.TabIndex = 84;
+            this.button1.Text = "Аналитика по оплате";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Visible = false;
+            // 
             // button24
             // 
             this.button24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(237)))), ((int)(((byte)(147)))));
@@ -69,7 +83,7 @@
             this.button24.ForeColor = System.Drawing.Color.Black;
             this.button24.Location = new System.Drawing.Point(198, 23);
             this.button24.Name = "button24";
-            this.button24.Size = new System.Drawing.Size(148, 53);
+            this.button24.Size = new System.Drawing.Size(148, 62);
             this.button24.TabIndex = 83;
             this.button24.Text = "Аналитика покупатель-грузоотправитель";
             this.button24.UseVisualStyleBackColor = false;
@@ -83,7 +97,7 @@
             this.button15.ForeColor = System.Drawing.Color.Black;
             this.button15.Location = new System.Drawing.Point(22, 23);
             this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(148, 52);
+            this.button15.Size = new System.Drawing.Size(148, 62);
             this.button15.TabIndex = 81;
             this.button15.Text = "Аналитика по машинам";
             this.button15.UseVisualStyleBackColor = false;
@@ -98,20 +112,6 @@
             this.pictureBox1.TabIndex = 75;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(237)))), ((int)(((byte)(147)))));
-            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.Location = new System.Drawing.Point(379, 23);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(148, 53);
-            this.button1.TabIndex = 84;
-            this.button1.Text = "Аналитика по оплате";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Visible = false;
             // 
             // Analytics
             // 

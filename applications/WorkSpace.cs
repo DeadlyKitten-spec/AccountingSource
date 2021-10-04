@@ -899,214 +899,18 @@ namespace applications
 
         private void dgv_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            //MessageBox.Show("asd");
-            if (idCupterBool)
+            //MessageBox.Show(dgv.CurrentCell.RowIndex.ToString());
+            //MessageBox.Show(dgv.RowCount.ToString());
+            if (dgv.CurrentCell.RowIndex + 1 == dgv.RowCount)
             {
-                for (int i = 0; i < dgv.ColumnCount; i++)
-                {
-                    dgv.Columns.RemoveAt(i);
-                }
-                dgv.Columns.Clear();
-                dgv.Rows.Clear();
-
-                DB db = new DB();
-                MySqlCommand command = new MySqlCommand("SELECT * FROM `request` WHERE `id` = '" + idCupter + "';", db.getConnection());
-                MySqlDataReader myReader;
-
-                dgv.Columns.AddRange(
-                new DataGridViewTextBoxColumn() { Name = "status", HeaderText = "Статус" },
-                new DataGridViewTextBoxColumn() { Name = "deal", HeaderText = "Деятельность"},
-                new DataGridViewTextBoxColumn() { Name = "id", HeaderText = "№" },
-                new DataGridViewTextBoxColumn() { Name = "docDate", HeaderText = "Дата" },
-                new DataGridViewTextBoxColumn() { Name = "timeAccept", HeaderText = "Время поставки" },
-                //new DataGridViewTextBoxColumn() { Name = "buyer", HeaderText = "Покупатель/заказчик" },
-                //new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Объект" },
-                new DataGridViewTextBoxColumn() { Name = "recipient", HeaderText = "Грузополучатель" },
-                new DataGridViewTextBoxColumn() { Name = "numberDocDriver", HeaderText = "Номер доверенности" },
-                new DataGridViewTextBoxColumn() { Name = "dateDocDriver", HeaderText = "Дата доверенности" },
-                new DataGridViewTextBoxColumn() { Name = "fromDounterparty", HeaderText = "От кого доверенность" },
-                new DataGridViewTextBoxColumn() { Name = "nameCargo", HeaderText = "Наименование" },
-                new DataGridViewTextBoxColumn() { Name = "numberNom", HeaderText = "Кол-во номенклатуры" },
-                new DataGridViewTextBoxColumn() { Name = "traffic", HeaderText = "Вид транспорта" },
-                new DataGridViewTextBoxColumn() { Name = "сars", HeaderText = "Автомобиль" },
-                new DataGridViewTextBoxColumn() { Name = "driver", HeaderText = "Водитель" },
-                new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Расчет наличными" },
-                new DataGridViewTextBoxColumn() { Name = "tax", HeaderText = "Без НДС" },
-                new DataGridViewTextBoxColumn() { Name = "numberDocTrip", HeaderText = "Номер ТТН" },
-                new DataGridViewTextBoxColumn() { Name = "paid", HeaderText = "Оплачено" });
-                dgv.Rows.Clear();
-                try
-                {
-                    db.openConnection();
-                    myReader = command.ExecuteReader();
-                    int i = 0;
-                    while (myReader.Read())
-                    {
-                        dgv.Rows.Add();
-                        if (!myReader.GetString("status").Equals("пусто"))
-                        {
-                            dgv[0, i].Value = myReader.GetString("status");
-                            if (dgv[0, i].Value.Equals("В работе"))
-                            {
-                                dgv[0, i].Style.BackColor = Color.LightPink;
-                            }
-                            if (dgv[0, i].Value.Equals("Назначена") || dgv[0, i].Value.Equals("Оплачена"))
-                            {
-                                dgv[0, i].Style.BackColor = Color.Khaki;
-                            }
-                            if (dgv[0, i].Value.Equals("Исполнена"))
-                            {
-                                dgv[0, i].Style.BackColor = Color.PaleGreen;
-                            }
-                        }
-                        else
-                            dgv[0, i].Value = " ";
-                        dgv[1, i].Value = myReader.GetString("deal");
-                        if (i != 0)
-                        {
-                            if (myReader.GetString("id").Equals(dgv[2, i - 1].Value))
-                            {
-                                dgv[2, i].Value = myReader.GetString("id");
-                                /*dgv.Rows[i].DefaultCellStyle.BackColor = Color.MistyRose;
-                                dgv.Rows[i - 1].DefaultCellStyle.BackColor = Color.MistyRose;*/
-                            }
-                            else
-                            {
-                                dgv[2, i].Value = myReader.GetString("id");
-                            }
-                        }
-                        else
-                        {
-                            dgv[2, i].Value = myReader.GetString("id");
-                        }
-                        string datefirst = myReader.GetString("docDate");
-                        string[] datesplit = datefirst.Split(' ');
-                        dgv[3, i].Value = datesplit[0];
-                        dgv[4, i].Value = myReader.GetString("timeAccept");
-                        if (!myReader.GetString("buyer").Equals("пусто"))
-                        {
-                            //dgv[3, i].Value = myReader.GetString("buyer");
-                            comboBox2.Text = myReader.GetString("buyer");
-                        }
-                        else
-                        {
-                            //dgv[3, i].Value = " ";
-                            comboBox2.Text = " ";
-                        }
-                        if (!myReader.GetString("object").Equals("пусто"))
-                        {
-                            //dgv[4, i].Value = myReader.GetString("object");
-                            comboBox3.Text = myReader.GetString("object");
-                        }
-                        else
-                        {
-                            //dgv[4, i].Value = " ";
-                            comboBox3.Text = " ";
-                        }
-                        if (!myReader.GetString("recipient").Equals("пусто"))
-                            dgv[5, i].Value = myReader.GetString("recipient");
-                        else
-                            dgv[5, i].Value = " ";
-                        if (!myReader.GetString("sender").Equals("пусто"))
-                        {
-                            //dgv[4, i].Value = myReader.GetString("sender");
-                            textBox1.Show();
-                            label7.Show();
-                            textBox1.Text = myReader.GetString("sender");
-                        }
-                        //dgv[4, i].Value = " ";
-                        if (!myReader.GetString("numberDocDriver").Equals("пусто"))
-                            dgv[6, i].Value = myReader.GetString("numberDocDriver");
-                        else
-                            dgv[6, i].Value = " ";
-                        string dateDocDriver = myReader.GetString("dateDocDriver");
-                        string[] datesplitt = dateDocDriver.Split(' ');
-                        if (!myReader.GetString("dateDocDriver").Equals("пусто"))
-                            dgv[7, i].Value = datesplitt[0];
-                        else
-                            dgv[7, i].Value = " ";
-                        if (!myReader.GetString("fromCounterparty").Equals("пусто"))
-                            dgv[8, i].Value = myReader.GetString("fromCounterparty");
-                        else
-                            dgv[8, i].Value = " ";
-                        if (!myReader.GetString("nameCargo").Equals("пусто"))
-                            dgv[9, i].Value = myReader.GetString("nameCargo");
-                        else
-                            dgv[9, i].Value = " ";
-                        if (!myReader.GetString("numberNomenclature").Equals("0"))
-                            dgv[10, i].Value = myReader.GetString("numberNomenclature");
-                        else
-                            dgv[10, i].Value = " ";
-                        if (!myReader.GetString("traffic").Equals("пусто"))
-                            dgv[11, i].Value = myReader.GetString("traffic");
-                        else
-                            dgv[11, i].Value = " ";
-                        if (!myReader.GetString("cars").Equals("пусто"))
-                            dgv[12, i].Value = myReader.GetString("cars");
-                        else
-                            dgv[12, i].Value = " ";
-                        if (!myReader.GetString("drivers").Equals("пусто"))
-                            dgv[13, i].Value = myReader.GetString("drivers");
-                        else
-                            dgv[13, i].Value = " ";
-                        if (!myReader.GetString("cash").Equals("пусто"))
-                            dgv[14, i].Value = myReader.GetString("cash");
-                        else
-                            dgv[14, i].Value = " ";
-                        if (!myReader.GetString("tax").Equals("пусто"))
-                            dgv[15, i].Value = myReader.GetString("tax");
-                        else
-                            dgv[15, i].Value = " ";
-                        if (!myReader.GetString("numberDocTrip").Equals("-1"))
-                            dgv[16, i].Value = myReader.GetString("numberDocTrip");
-                        else
-                            dgv[16, i].Value = " ";
-                        if (!myReader.GetString("paid").Equals("пусто"))
-                            dgv[17, i].Value = myReader.GetString("paid");
-                        else
-                            dgv[17, i].Value = " ";
-                        i++;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-                g = true;
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-
-                db.closeConnection();
-                idCupterBool = false;
+                //MessageBox.Show("Вы нажали не туда");
+                
             }
             else
             {
-                if (!g)
+                //MessageBox.Show("asd");
+                if (idCupterBool)
                 {
-                    button16.Show();
-                    click = false;
-                    int idx = dgv.CurrentRow.Index;
-                    string buyer = dgv["buyeer", idx].Value.ToString();
-                    string senderr = dgv["sendeerr", idx].Value.ToString();
-                    string objectBuyer = dgv["objectBuyeer", idx].Value.ToString();
-                    string time = dateTimePicker1.Value.ToString();
-                    string[] asd = time.Split(' ');
-                    string[] zxc = asd[0].Split('.');
-                    string answer1 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
-
-                    time = dateTimePicker2.Value.ToString();
-                    asd = null;
-                    asd = time.Split(' ');
-                    zxc = null;
-                    zxc = asd[0].Split('.');
-                    string answer2 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
-
-                    /*dgv.Columns.Remove(buyeerr);
-                    dgv.Columns.Remove(sendeerr);
-                    dgv.Columns.Remove(objectBuyeer);
-                    dgv.Columns.Remove(accept);
-                    dgv.Columns.Remove(inWork);
-                    dgv.Columns.Remove(point); 
-                    dgv.Columns.Remove(done);*/
                     for (int i = 0; i < dgv.ColumnCount; i++)
                     {
                         dgv.Columns.RemoveAt(i);
@@ -1115,16 +919,8 @@ namespace applications
                     dgv.Rows.Clear();
 
                     DB db = new DB();
-                    MySqlCommand command = new MySqlCommand();
-                    if (comboBox5.Text.Equals(""))
-                    {
-                        command = new MySqlCommand("SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `buyer` = '" + buyer + "'AND `sender` = '" + senderr + "' AND `object` = '" + objectBuyer + "';", db.getConnection());
-                    }
-                    else
-                    {
-                        command = new MySqlCommand("SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `buyer` = '" + buyer + "'AND `sender` = '" + senderr + "' AND `object` = '" + objectBuyer + "' AND `cars` = '" + comboBox5.Text + "';", db.getConnection());
-                    }
-                        MySqlDataReader myReader;
+                    MySqlCommand command = new MySqlCommand("SELECT * FROM `request` WHERE `id` = '" + idCupter + "';", db.getConnection());
+                    MySqlDataReader myReader;
 
                     dgv.Columns.AddRange(
                     new DataGridViewTextBoxColumn() { Name = "status", HeaderText = "Статус" },
@@ -1289,327 +1085,541 @@ namespace applications
                     dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
                     db.closeConnection();
+                    idCupterBool = false;
                 }
                 else
                 {
-                    /*try
-                    {*/
-                    comboBox1.Text = "";
-                    comboBox2.Text = "";
-                    comboBox3.Text = "";
-                    int idx = dgv.CurrentRow.Index;
-                    string idTar = dgv[2, idx].Value.ToString();
+                    if (!g)
+                    {
+                        button16.Show();
+                        click = false;
+                        int idx = dgv.CurrentRow.Index;
+                        string buyer = dgv["buyeer", idx].Value.ToString();
+                        string senderr = dgv["sendeerr", idx].Value.ToString();
+                        string objectBuyer = dgv["objectBuyeer", idx].Value.ToString();
+                        string time = dateTimePicker1.Value.ToString();
+                        string[] asd = time.Split(' ');
+                        string[] zxc = asd[0].Split('.');
+                        string answer1 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
 
-                    WriteRequest write = new WriteRequest();
-                    DB db = new DB();
-                    MySqlCommand command = new MySqlCommand("SELECT * FROM `request` WHERE `id` = '" + idTar + "';", db.getConnection());
-                    MySqlDataReader myReader;
-                    write.Show();
-                    write.label12.Hide();
-                    write.button14.Hide();
-                    write.textBox3.Hide();
-                    write.button5.Hide();
-                    int i = 0;
-                    int ittercargo = 0;
-                    int tripCount = 0;
-                    bool size = false;
-                    write.dataGridView1.Rows.Clear();
-                    for (int kkk = 0; kkk < nameCargo.Length; kkk++)
-                    {
-                        nameCargo[kkk] = " ";
-                        cargoCount[kkk] = " ";
-                    }
-                    /*}
-                    catch
-                    {
-                        MessageBox.Show("asd");
-                    }*/
-                    try
-                    {
-                        db.openConnection();
-                        myReader = command.ExecuteReader();
+                        time = dateTimePicker2.Value.ToString();
+                        asd = null;
+                        asd = time.Split(' ');
+                        zxc = null;
+                        zxc = asd[0].Split('.');
+                        string answer2 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
 
-                        while (myReader.Read())
+                        /*dgv.Columns.Remove(buyeerr);
+                        dgv.Columns.Remove(sendeerr);
+                        dgv.Columns.Remove(objectBuyeer);
+                        dgv.Columns.Remove(accept);
+                        dgv.Columns.Remove(inWork);
+                        dgv.Columns.Remove(point); 
+                        dgv.Columns.Remove(done);*/
+                        for (int i = 0; i < dgv.ColumnCount; i++)
                         {
-                            write.status = myReader.GetString("status");
-                            if (myReader.GetString("status").Equals("В работе"))
-                            {
-                                tripCount++;
-                                write.idRequest = myReader.GetString("id");
-                                write.label14.Text = "Назначение заявки № " + myReader.GetString("id");
-                                write.dateTimePicker1.Value = myReader.GetDateTime("docDate");
-                                write.dateTimePicker3.Value = myReader.GetDateTime("dateAccept");
-                                string[] time = myReader.GetString("timeAccept").Split(':');
-                                int hour = int.Parse(time[0]);
-                                int minute = int.Parse(time[1]);
-                                write.dateTimePicker4.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
-                                write.comboBox1.Text = myReader.GetString("deal");
-                                write.comboBox2.Text = myReader.GetString("ourFirms");
-                                write.comboBox3.Text = myReader.GetString("buyer");
-                                write.comboBox4.Text = myReader.GetString("sender");
-                                write.comboBox5.Text = myReader.GetString("recipient");
-                                write.comboBox6.Text = myReader.GetString("object");
-                                write.comboBox13.Text = myReader.GetString("objectArrive");
-                                write.comboBox12.Text = myReader.GetString("objectSend");
-                                if (!myReader.GetString("nameCargo").Equals("пусто"))
-                                {
-                                    size = false;
-                                    for (int j = 0; j < ittercargo; j++)
-                                    {
-                                        if (nameCargo[j].Equals(myReader.GetString("nameCargo")) && cargoCount[j].Equals(myReader.GetString("numberNomenclature")))
-                                        {
-                                            size = true;
-                                        }
-                                    }
-                                    if (size == false)
-                                    {   
-                                        //MessageBox.Show("asd");
-                                        write.dataGridView1.Rows.Add();
-                                        nameCargo[i] = myReader.GetString("nameCargo");
-                                        cargoCount[i] = myReader.GetString("numberNomenclature");
-                                        write.dataGridView1[0, i].Value = myReader.GetString("nameCargo");
-                                        write.dataGridView1[1, i].Value = myReader.GetString("fromCounterparty");
-                                        write.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver");
-                                        string[] asddd = myReader.GetString("dateDocDriver").Split(' ');
-                                        write.dataGridView1[3, i].Value = asddd[0];
-                                        write.dataGridView1[4, i].Value = myReader.GetString("numberNomenclature");
-
-                                        write.nom[i] = myReader.GetString("nameCargo");
-                                        write.from[i] = myReader.GetString("fromCounterparty");
-                                        write.numm[i] = myReader.GetString("numberDocDriver");
-                                        write.date[i] = asddd[0];
-                                        write.numOfNom[i] = myReader.GetString("numberNomenclature");
-                                        write.size = i;
-
-                                        ittercargo++;
-                                        //i++;
-                                    }
-                                    if(ittercargo > 1)
-                                    {
-                                        write.severalCargo = true;
-                                    }
-                                }
-                                write.comboBox14.Text = myReader.GetString("traffic");
-                                write.dateTimePicker5.Text = myReader.GetString("dateTTN");
-                                write.textBox3.Text = myReader.GetString("numberTrip");
-                                write.textBox1.Text = myReader.GetString("priceSalary");
-                                write.textBox4.Text = myReader.GetString("price");
-                                write.comboBox7.Text = myReader.GetString("contractor");
-                                write.comboBox8.Text = myReader.GetString("cars");
-                                write.comboBox11.Text = myReader.GetString("driveCont");
-                                write.comboBox9.Text = myReader.GetString("drivers");
-                                //write.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver"); 
-                                //string[] asddd = myReader.GetString("dateDocDriver").Split(' ');
-                                //write.dataGridView1[3, i].Value = asddd[0];
-                                //write.dataGridView1[1, i].Value = myReader.GetString("fromCounterparty");
-                                //write.textBox3.Text = tripCount.ToString();
-                                if (myReader.GetString("coment").Equals("пусто"))
-                                {
-                                    write.textBox2.Text = "Добавьте комментарий";
-                                    write.textBox2.ForeColor = Color.Gray;
-                                }
-                                else
-                                {
-                                    write.textBox2.Text = myReader.GetString("coment");
-                                }
-                                if (myReader.GetString("cash").Equals("Да"))
-                                {
-                                    write.checkBox1.CheckState = CheckState.Checked;
-                                }
-                                else
-                                {
-                                    write.checkBox1.CheckState = CheckState.Unchecked;
-                                }
-                                if (myReader.GetString("tax").Equals("Да"))
-                                {
-                                    write.checkBox5.CheckState = CheckState.Checked;
-                                }
-                                else
-                                {
-                                    write.checkBox5.CheckState = CheckState.Unchecked;
-                                }
-                                if (myReader.GetString("mission").Equals("Да"))
-                                {
-                                    write.checkBox6.CheckState = CheckState.Checked;
-                                }
-                                else
-                                {
-                                    write.checkBox6.CheckState = CheckState.Unchecked;
-                                }
-                                if (myReader.GetString("missionPaid").Equals("Да"))
-                                {
-                                    write.checkBox7.CheckState = CheckState.Checked;
-                                }
-                                else
-                                {
-                                    write.checkBox7.CheckState = CheckState.Unchecked;
-                                }
-                                if (myReader.GetString("paid").Equals("Да"))
-                                {
-                                    write.checkBox2.CheckState = CheckState.Checked;
-                                }
-                                else
-                                {
-                                    write.checkBox2.CheckState = CheckState.Unchecked;
-                                }
-                                i++;
-                                write.buttonAdd.Hide();
-                                write.button2.Show();
-                                write.button3.Hide();
-                            }
-                            if (myReader.GetString("status").Equals("Назначена") || myReader.GetString("status").Equals("Исполнена") || myReader.GetString("status").Equals("Оплачена"))
-                            {
-                                //MessageBox.Show("ads");
-                                tripCount++;
-                                write.idRequest = myReader.GetString("id");
-                                write.label21.Text = "Исполнение заявки № " + myReader.GetString("id");
-                                write.dateTimePicker1.Value = myReader.GetDateTime("docDate");
-                                write.dateTimePicker3.Value = myReader.GetDateTime("dateAccept");
-                                string[] time = myReader.GetString("timeAccept").Split(':');
-                                int hour = int.Parse(time[0]);
-                                int minute = int.Parse(time[1]);
-                                write.dateTimePicker4.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
-                                write.comboBox1.Text = myReader.GetString("deal");
-                                write.comboBox2.Text = myReader.GetString("ourFirms");
-                                write.comboBox3.Text = myReader.GetString("buyer");
-                                write.comboBox4.Text = myReader.GetString("sender");
-                                write.comboBox5.Text = myReader.GetString("recipient");
-                                write.comboBox6.Text = myReader.GetString("object");
-                                write.comboBox13.Text = myReader.GetString("objectArrive");
-                                write.comboBox12.Text = myReader.GetString("objectSend");
-                                if (!myReader.GetString("nameCargo").Equals("пусто"))
-                                {
-                                    size = false;
-                                    for (int j = 0; j < ittercargo; j++)
-                                    {
-                                        if (nameCargo[j].Equals(myReader.GetString("nameCargo")) && cargoCount[j].Equals(myReader.GetString("numberNomenclature")))
-                                        {
-                                            size = true;
-                                        }
-                                    }
-                                    if (size == false)
-                                    {
-                                        write.dataGridView1.Rows.Add();
-                                        nameCargo[i] = myReader.GetString("nameCargo");
-                                        cargoCount[i] = myReader.GetString("numberNomenclature");
-                                        write.dataGridView1[0, i].Value = myReader.GetString("nameCargo");
-                                        write.dataGridView1[1, i].Value = myReader.GetString("fromCounterparty");
-                                        write.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver");
-                                        string[] asddd = myReader.GetString("dateDocDriver").Split(' ');
-                                        write.dataGridView1[3, i].Value = asddd[0];
-                                        write.dataGridView1[4, i].Value = myReader.GetString("numberNomenclature");
-
-                                        write.nom[i] = myReader.GetString("nameCargo");
-                                        write.from[i] = myReader.GetString("fromCounterparty");
-                                        write.numm[i] = myReader.GetString("numberDocDriver");
-                                        write.date[i] = asddd[0];
-                                        write.numOfNom[i] = myReader.GetString("numberNomenclature");
-                                        write.size = i;
-
-                                        ittercargo++;
-                                        //i++;
-                                    }
-                                    if (ittercargo > 1)
-                                    {
-                                        write.severalCargo = true;
-                                    }
-                                }
-                                //write.textBox3.Text = myReader.GetString("numberTrip");
-                                write.comboBox14.Text = myReader.GetString("traffic");
-                                write.dateTimePicker5.Text = myReader.GetString("dateTTN");
-                                write.textBox1.Text = myReader.GetString("priceSalary");
-                                write.textBox4.Text = myReader.GetString("price");
-                                write.comboBox7.Text = myReader.GetString("contractor");
-                                write.comboBox8.Text = myReader.GetString("cars");
-                                write.comboBox11.Text = myReader.GetString("driveCont");
-                                write.comboBox9.Text = myReader.GetString("drivers");
-                                //write.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver");
-                                //string[] asddd = myReader.GetString("dateDocDriver").Split(' ');
-                                //write.dataGridView1[3, i].Value = asddd[0];
-                                //write.dataGridView1[1, i].Value = myReader.GetString("fromCounterparty");
-                                //write.textBox3.Text = tripCount.ToString();
-                                if (myReader.GetString("coment").Equals("пусто"))
-                                {
-                                    write.textBox2.Text = "Добавьте комментарий";
-                                    write.textBox2.ForeColor = Color.Gray;
-                                }
-                                else
-                                {
-                                    write.textBox2.Text = myReader.GetString("coment");
-                                }
-                                if (myReader.GetString("cash").Equals("Да"))
-                                {
-                                    write.checkBox1.CheckState = CheckState.Checked;
-                                    write.checkBox2.Show();
-                                    write.label11.Show();
-                                }
-                                else
-                                {
-                                    write.checkBox2.CheckState = CheckState.Unchecked;
-                                }
-                                if (myReader.GetString("mission").Equals("Да"))
-                                {
-                                    write.checkBox6.CheckState = CheckState.Checked;
-                                }
-                                else
-                                {
-                                    write.checkBox6.CheckState = CheckState.Unchecked;
-                                }
-                                if (myReader.GetString("missionPaid").Equals("Да"))
-                                {
-                                    write.checkBox7.CheckState = CheckState.Checked;
-                                }
-                                else
-                                {
-                                    write.checkBox7.CheckState = CheckState.Unchecked;
-                                }
-                                if (!myReader.GetString("numberDocTrip").Equals("-1"))
-                                {
-                                    write.textBox6.Text = myReader.GetString("numberDocTrip");
-                                    write.textBox6.ForeColor = Color.Black;
-                                }
-                                //write.textBox6.Text = myReader.GetString("numberDocTrip");
-                                if (myReader.GetString("cash").Equals("Да"))
-                                {
-                                    write.checkBox1.CheckState = CheckState.Checked;
-                                }
-                                else
-                                {
-                                    write.checkBox1.CheckState = CheckState.Unchecked;
-                                }
-                                if (myReader.GetString("tax").Equals("Да"))
-                                {
-                                    write.checkBox5.CheckState = CheckState.Checked;
-                                }
-                                else
-                                {
-                                    write.checkBox5.CheckState = CheckState.Unchecked;
-                                }
-                                if (myReader.GetString("paid").Equals("Да"))
-                                {
-                                    write.checkBox2.CheckState = CheckState.Checked;
-                                }
-                                else
-                                {
-                                    write.checkBox2.CheckState = CheckState.Unchecked;
-                                }
-                                i++;
-                                write.buttonAdd.Hide();
-                                write.button2.Hide();
-                                write.button3.Show();
-                            }
-                            /*WriteRequest.Cargo[WriteRequest.CargoCount] = myReader.GetString("nameCargo");
-                            WriteRequest.CargoCount++;*/
+                            dgv.Columns.RemoveAt(i);
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                    }
-                    //dgv.Rows.Clear();
+                        dgv.Columns.Clear();
+                        dgv.Rows.Clear();
 
-                    db.closeConnection();
-                    write.dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                        DB db = new DB();
+                        MySqlCommand command = new MySqlCommand();
+                        if (comboBox5.Text.Equals(""))
+                        {
+                            command = new MySqlCommand("SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `buyer` = '" + buyer + "'AND `sender` = '" + senderr + "' AND `object` = '" + objectBuyer + "';", db.getConnection());
+                        }
+                        else
+                        {
+                            command = new MySqlCommand("SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `buyer` = '" + buyer + "'AND `sender` = '" + senderr + "' AND `object` = '" + objectBuyer + "' AND `cars` = '" + comboBox5.Text + "';", db.getConnection());
+                        }
+                        MySqlDataReader myReader;
+
+                        dgv.Columns.AddRange(
+                        new DataGridViewTextBoxColumn() { Name = "status", HeaderText = "Статус" },
+                        new DataGridViewTextBoxColumn() { Name = "deal", HeaderText = "Деятельность" },
+                        new DataGridViewTextBoxColumn() { Name = "id", HeaderText = "№" },
+                        new DataGridViewTextBoxColumn() { Name = "docDate", HeaderText = "Дата" },
+                        new DataGridViewTextBoxColumn() { Name = "timeAccept", HeaderText = "Время поставки" },
+                        //new DataGridViewTextBoxColumn() { Name = "buyer", HeaderText = "Покупатель/заказчик" },
+                        //new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Объект" },
+                        new DataGridViewTextBoxColumn() { Name = "recipient", HeaderText = "Грузополучатель" },
+                        new DataGridViewTextBoxColumn() { Name = "numberDocDriver", HeaderText = "Номер доверенности" },
+                        new DataGridViewTextBoxColumn() { Name = "dateDocDriver", HeaderText = "Дата доверенности" },
+                        new DataGridViewTextBoxColumn() { Name = "fromDounterparty", HeaderText = "От кого доверенность" },
+                        new DataGridViewTextBoxColumn() { Name = "nameCargo", HeaderText = "Наименование" },
+                        new DataGridViewTextBoxColumn() { Name = "numberNom", HeaderText = "Кол-во номенклатуры" },
+                        new DataGridViewTextBoxColumn() { Name = "traffic", HeaderText = "Вид транспорта" },
+                        new DataGridViewTextBoxColumn() { Name = "сars", HeaderText = "Автомобиль" },
+                        new DataGridViewTextBoxColumn() { Name = "driver", HeaderText = "Водитель" },
+                        new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Расчет наличными" },
+                        new DataGridViewTextBoxColumn() { Name = "tax", HeaderText = "Без НДС" },
+                        new DataGridViewTextBoxColumn() { Name = "numberDocTrip", HeaderText = "Номер ТТН" },
+                        new DataGridViewTextBoxColumn() { Name = "paid", HeaderText = "Оплачено" });
+                        dgv.Rows.Clear();
+                        try
+                        {
+                            db.openConnection();
+                            myReader = command.ExecuteReader();
+                            int i = 0;
+                            while (myReader.Read())
+                            {
+                                dgv.Rows.Add();
+                                if (!myReader.GetString("status").Equals("пусто"))
+                                {
+                                    dgv[0, i].Value = myReader.GetString("status");
+                                    if (dgv[0, i].Value.Equals("В работе"))
+                                    {
+                                        dgv[0, i].Style.BackColor = Color.LightPink;
+                                    }
+                                    if (dgv[0, i].Value.Equals("Назначена") || dgv[0, i].Value.Equals("Оплачена"))
+                                    {
+                                        dgv[0, i].Style.BackColor = Color.Khaki;
+                                    }
+                                    if (dgv[0, i].Value.Equals("Исполнена"))
+                                    {
+                                        dgv[0, i].Style.BackColor = Color.PaleGreen;
+                                    }
+                                }
+                                else
+                                    dgv[0, i].Value = " ";
+                                dgv[1, i].Value = myReader.GetString("deal");
+                                if (i != 0)
+                                {
+                                    if (myReader.GetString("id").Equals(dgv[2, i - 1].Value))
+                                    {
+                                        dgv[2, i].Value = myReader.GetString("id");
+                                        /*dgv.Rows[i].DefaultCellStyle.BackColor = Color.MistyRose;
+                                        dgv.Rows[i - 1].DefaultCellStyle.BackColor = Color.MistyRose;*/
+                                    }
+                                    else
+                                    {
+                                        dgv[2, i].Value = myReader.GetString("id");
+                                    }
+                                }
+                                else
+                                {
+                                    dgv[2, i].Value = myReader.GetString("id");
+                                }
+                                string datefirst = myReader.GetString("docDate");
+                                string[] datesplit = datefirst.Split(' ');
+                                dgv[3, i].Value = datesplit[0];
+                                dgv[4, i].Value = myReader.GetString("timeAccept");
+                                if (!myReader.GetString("buyer").Equals("пусто"))
+                                {
+                                    //dgv[3, i].Value = myReader.GetString("buyer");
+                                    comboBox2.Text = myReader.GetString("buyer");
+                                }
+                                else
+                                {
+                                    //dgv[3, i].Value = " ";
+                                    comboBox2.Text = " ";
+                                }
+                                if (!myReader.GetString("object").Equals("пусто"))
+                                {
+                                    //dgv[4, i].Value = myReader.GetString("object");
+                                    comboBox3.Text = myReader.GetString("object");
+                                }
+                                else
+                                {
+                                    //dgv[4, i].Value = " ";
+                                    comboBox3.Text = " ";
+                                }
+                                if (!myReader.GetString("recipient").Equals("пусто"))
+                                    dgv[5, i].Value = myReader.GetString("recipient");
+                                else
+                                    dgv[5, i].Value = " ";
+                                if (!myReader.GetString("sender").Equals("пусто"))
+                                {
+                                    //dgv[4, i].Value = myReader.GetString("sender");
+                                    textBox1.Show();
+                                    label7.Show();
+                                    textBox1.Text = myReader.GetString("sender");
+                                }
+                                //dgv[4, i].Value = " ";
+                                if (!myReader.GetString("numberDocDriver").Equals("пусто"))
+                                    dgv[6, i].Value = myReader.GetString("numberDocDriver");
+                                else
+                                    dgv[6, i].Value = " ";
+                                string dateDocDriver = myReader.GetString("dateDocDriver");
+                                string[] datesplitt = dateDocDriver.Split(' ');
+                                if (!myReader.GetString("dateDocDriver").Equals("пусто"))
+                                    dgv[7, i].Value = datesplitt[0];
+                                else
+                                    dgv[7, i].Value = " ";
+                                if (!myReader.GetString("fromCounterparty").Equals("пусто"))
+                                    dgv[8, i].Value = myReader.GetString("fromCounterparty");
+                                else
+                                    dgv[8, i].Value = " ";
+                                if (!myReader.GetString("nameCargo").Equals("пусто"))
+                                    dgv[9, i].Value = myReader.GetString("nameCargo");
+                                else
+                                    dgv[9, i].Value = " ";
+                                if (!myReader.GetString("numberNomenclature").Equals("0"))
+                                    dgv[10, i].Value = myReader.GetString("numberNomenclature");
+                                else
+                                    dgv[10, i].Value = " ";
+                                if (!myReader.GetString("traffic").Equals("пусто"))
+                                    dgv[11, i].Value = myReader.GetString("traffic");
+                                else
+                                    dgv[11, i].Value = " ";
+                                if (!myReader.GetString("cars").Equals("пусто"))
+                                    dgv[12, i].Value = myReader.GetString("cars");
+                                else
+                                    dgv[12, i].Value = " ";
+                                if (!myReader.GetString("drivers").Equals("пусто"))
+                                    dgv[13, i].Value = myReader.GetString("drivers");
+                                else
+                                    dgv[13, i].Value = " ";
+                                if (!myReader.GetString("cash").Equals("пусто"))
+                                    dgv[14, i].Value = myReader.GetString("cash");
+                                else
+                                    dgv[14, i].Value = " ";
+                                if (!myReader.GetString("tax").Equals("пусто"))
+                                    dgv[15, i].Value = myReader.GetString("tax");
+                                else
+                                    dgv[15, i].Value = " ";
+                                if (!myReader.GetString("numberDocTrip").Equals("-1"))
+                                    dgv[16, i].Value = myReader.GetString("numberDocTrip");
+                                else
+                                    dgv[16, i].Value = " ";
+                                if (!myReader.GetString("paid").Equals("пусто"))
+                                    dgv[17, i].Value = myReader.GetString("paid");
+                                else
+                                    dgv[17, i].Value = " ";
+                                i++;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                        g = true;
+                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+                        db.closeConnection();
+                    }
+                    else
+                    {
+                        /*try
+                        {*/
+                        comboBox1.Text = "";
+                        comboBox2.Text = "";
+                        comboBox3.Text = "";
+                        int idx = dgv.CurrentRow.Index;
+                        string idTar = dgv[2, idx].Value.ToString();
+
+                        WriteRequest write = new WriteRequest();
+                        DB db = new DB();
+                        MySqlCommand command = new MySqlCommand("SELECT * FROM `request` WHERE `id` = '" + idTar + "';", db.getConnection());
+                        MySqlDataReader myReader;
+                        write.Show();
+                        write.label12.Hide();
+                        write.button14.Hide();
+                        write.textBox3.Hide();
+                        write.button5.Hide();
+                        int i = 0;
+                        int ittercargo = 0;
+                        int tripCount = 0;
+                        bool size = false;
+                        write.dataGridView1.Rows.Clear();
+                        for (int kkk = 0; kkk < nameCargo.Length; kkk++)
+                        {
+                            nameCargo[kkk] = " ";
+                            cargoCount[kkk] = " ";
+                        }
+                        /*}
+                        catch
+                        {
+                            MessageBox.Show("asd");
+                        }*/
+                        try
+                        {
+                            db.openConnection();
+                            myReader = command.ExecuteReader();
+
+                            while (myReader.Read())
+                            {
+                                write.status = myReader.GetString("status");
+                                if (myReader.GetString("status").Equals("В работе"))
+                                {
+                                    tripCount++;
+                                    write.idRequest = myReader.GetString("id");
+                                    write.label14.Text = "Назначение заявки № " + myReader.GetString("id");
+                                    write.dateTimePicker1.Value = myReader.GetDateTime("docDate");
+                                    write.dateTimePicker3.Value = myReader.GetDateTime("dateAccept");
+                                    string[] time = myReader.GetString("timeAccept").Split(':');
+                                    int hour = int.Parse(time[0]);
+                                    int minute = int.Parse(time[1]);
+                                    write.dateTimePicker4.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
+                                    write.comboBox1.Text = myReader.GetString("deal");
+                                    write.comboBox2.Text = myReader.GetString("ourFirms");
+                                    write.comboBox3.Text = myReader.GetString("buyer");
+                                    write.comboBox4.Text = myReader.GetString("sender");
+                                    write.comboBox5.Text = myReader.GetString("recipient");
+                                    write.comboBox6.Text = myReader.GetString("object");
+                                    write.comboBox13.Text = myReader.GetString("objectArrive");
+                                    write.comboBox12.Text = myReader.GetString("objectSend");
+                                    if (!myReader.GetString("nameCargo").Equals("пусто"))
+                                    {
+                                        size = false;
+                                        for (int j = 0; j < ittercargo; j++)
+                                        {
+                                            if (nameCargo[j].Equals(myReader.GetString("nameCargo")) && cargoCount[j].Equals(myReader.GetString("numberNomenclature")))
+                                            {
+                                                size = true;
+                                            }
+                                        }
+                                        if (size == false)
+                                        {
+                                            //MessageBox.Show("asd");
+                                            write.dataGridView1.Rows.Add();
+                                            nameCargo[i] = myReader.GetString("nameCargo");
+                                            cargoCount[i] = myReader.GetString("numberNomenclature");
+                                            write.dataGridView1[0, i].Value = myReader.GetString("nameCargo");
+                                            write.dataGridView1[1, i].Value = myReader.GetString("fromCounterparty");
+                                            write.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver");
+                                            string[] asddd = myReader.GetString("dateDocDriver").Split(' ');
+                                            write.dataGridView1[3, i].Value = asddd[0];
+                                            write.dataGridView1[4, i].Value = myReader.GetString("numberNomenclature");
+
+                                            write.nom[i] = myReader.GetString("nameCargo");
+                                            write.from[i] = myReader.GetString("fromCounterparty");
+                                            write.numm[i] = myReader.GetString("numberDocDriver");
+                                            write.date[i] = asddd[0];
+                                            write.numOfNom[i] = myReader.GetString("numberNomenclature");
+                                            write.size = i;
+
+                                            ittercargo++;
+                                            //i++;
+                                        }
+                                        if (ittercargo > 1)
+                                        {
+                                            write.severalCargo = true;
+                                        }
+                                    }
+                                    write.comboBox14.Text = myReader.GetString("traffic");
+                                    write.dateTimePicker5.Text = myReader.GetString("dateTTN");
+                                    write.textBox3.Text = myReader.GetString("numberTrip");
+                                    write.textBox1.Text = myReader.GetString("priceSalary");
+                                    write.textBox4.Text = myReader.GetString("price");
+                                    write.comboBox7.Text = myReader.GetString("contractor");
+                                    write.comboBox8.Text = myReader.GetString("cars");
+                                    write.comboBox11.Text = myReader.GetString("driveCont");
+                                    write.comboBox9.Text = myReader.GetString("drivers");
+                                    //write.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver"); 
+                                    //string[] asddd = myReader.GetString("dateDocDriver").Split(' ');
+                                    //write.dataGridView1[3, i].Value = asddd[0];
+                                    //write.dataGridView1[1, i].Value = myReader.GetString("fromCounterparty");
+                                    //write.textBox3.Text = tripCount.ToString();
+                                    if (myReader.GetString("coment").Equals("пусто"))
+                                    {
+                                        write.textBox2.Text = "Добавьте комментарий";
+                                        write.textBox2.ForeColor = Color.Gray;
+                                    }
+                                    else
+                                    {
+                                        write.textBox2.Text = myReader.GetString("coment");
+                                    }
+                                    if (myReader.GetString("cash").Equals("Да"))
+                                    {
+                                        write.checkBox1.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox1.CheckState = CheckState.Unchecked;
+                                    }
+                                    if (myReader.GetString("tax").Equals("Да"))
+                                    {
+                                        write.checkBox5.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox5.CheckState = CheckState.Unchecked;
+                                    }
+                                    if (myReader.GetString("mission").Equals("Да"))
+                                    {
+                                        write.checkBox6.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox6.CheckState = CheckState.Unchecked;
+                                    }
+                                    if (myReader.GetString("missionPaid").Equals("Да"))
+                                    {
+                                        write.checkBox7.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox7.CheckState = CheckState.Unchecked;
+                                    }
+                                    if (myReader.GetString("paid").Equals("Да"))
+                                    {
+                                        write.checkBox2.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox2.CheckState = CheckState.Unchecked;
+                                    }
+                                    i++;
+                                    write.buttonAdd.Hide();
+                                    write.button2.Show();
+                                    write.button3.Hide();
+                                }
+                                if (myReader.GetString("status").Equals("Назначена") || myReader.GetString("status").Equals("Исполнена") || myReader.GetString("status").Equals("Оплачена"))
+                                {
+                                    //MessageBox.Show("ads");
+                                    tripCount++;
+                                    write.idRequest = myReader.GetString("id");
+                                    write.label21.Text = "Исполнение заявки № " + myReader.GetString("id");
+                                    write.dateTimePicker1.Value = myReader.GetDateTime("docDate");
+                                    write.dateTimePicker3.Value = myReader.GetDateTime("dateAccept");
+                                    string[] time = myReader.GetString("timeAccept").Split(':');
+                                    int hour = int.Parse(time[0]);
+                                    int minute = int.Parse(time[1]);
+                                    write.dateTimePicker4.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
+                                    write.comboBox1.Text = myReader.GetString("deal");
+                                    write.comboBox2.Text = myReader.GetString("ourFirms");
+                                    write.comboBox3.Text = myReader.GetString("buyer");
+                                    write.comboBox4.Text = myReader.GetString("sender");
+                                    write.comboBox5.Text = myReader.GetString("recipient");
+                                    write.comboBox6.Text = myReader.GetString("object");
+                                    write.comboBox13.Text = myReader.GetString("objectArrive");
+                                    write.comboBox12.Text = myReader.GetString("objectSend");
+                                    if (!myReader.GetString("nameCargo").Equals("пусто"))
+                                    {
+                                        size = false;
+                                        for (int j = 0; j < ittercargo; j++)
+                                        {
+                                            if (nameCargo[j].Equals(myReader.GetString("nameCargo")) && cargoCount[j].Equals(myReader.GetString("numberNomenclature")))
+                                            {
+                                                size = true;
+                                            }
+                                        }
+                                        if (size == false)
+                                        {
+                                            write.dataGridView1.Rows.Add();
+                                            nameCargo[i] = myReader.GetString("nameCargo");
+                                            cargoCount[i] = myReader.GetString("numberNomenclature");
+                                            write.dataGridView1[0, i].Value = myReader.GetString("nameCargo");
+                                            write.dataGridView1[1, i].Value = myReader.GetString("fromCounterparty");
+                                            write.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver");
+                                            string[] asddd = myReader.GetString("dateDocDriver").Split(' ');
+                                            write.dataGridView1[3, i].Value = asddd[0];
+                                            write.dataGridView1[4, i].Value = myReader.GetString("numberNomenclature");
+
+                                            write.nom[i] = myReader.GetString("nameCargo");
+                                            write.from[i] = myReader.GetString("fromCounterparty");
+                                            write.numm[i] = myReader.GetString("numberDocDriver");
+                                            write.date[i] = asddd[0];
+                                            write.numOfNom[i] = myReader.GetString("numberNomenclature");
+                                            write.size = i;
+
+                                            ittercargo++;
+                                            //i++;
+                                        }
+                                        if (ittercargo > 1)
+                                        {
+                                            write.severalCargo = true;
+                                        }
+                                    }
+                                    //write.textBox3.Text = myReader.GetString("numberTrip");
+                                    write.comboBox14.Text = myReader.GetString("traffic");
+                                    write.dateTimePicker5.Text = myReader.GetString("dateTTN");
+                                    write.textBox1.Text = myReader.GetString("priceSalary");
+                                    write.textBox4.Text = myReader.GetString("price");
+                                    write.comboBox7.Text = myReader.GetString("contractor");
+                                    write.comboBox8.Text = myReader.GetString("cars");
+                                    write.comboBox11.Text = myReader.GetString("driveCont");
+                                    write.comboBox9.Text = myReader.GetString("drivers");
+                                    //write.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver");
+                                    //string[] asddd = myReader.GetString("dateDocDriver").Split(' ');
+                                    //write.dataGridView1[3, i].Value = asddd[0];
+                                    //write.dataGridView1[1, i].Value = myReader.GetString("fromCounterparty");
+                                    //write.textBox3.Text = tripCount.ToString();
+                                    if (myReader.GetString("coment").Equals("пусто"))
+                                    {
+                                        write.textBox2.Text = "Добавьте комментарий";
+                                        write.textBox2.ForeColor = Color.Gray;
+                                    }
+                                    else
+                                    {
+                                        write.textBox2.Text = myReader.GetString("coment");
+                                    }
+                                    if (myReader.GetString("cash").Equals("Да"))
+                                    {
+                                        write.checkBox1.CheckState = CheckState.Checked;
+                                        write.checkBox2.Show();
+                                        write.label11.Show();
+                                    }
+                                    else
+                                    {
+                                        write.checkBox2.CheckState = CheckState.Unchecked;
+                                    }
+                                    if (myReader.GetString("mission").Equals("Да"))
+                                    {
+                                        write.checkBox6.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox6.CheckState = CheckState.Unchecked;
+                                    }
+                                    if (myReader.GetString("missionPaid").Equals("Да"))
+                                    {
+                                        write.checkBox7.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox7.CheckState = CheckState.Unchecked;
+                                    }
+                                    if (!myReader.GetString("numberDocTrip").Equals("-1"))
+                                    {
+                                        write.textBox6.Text = myReader.GetString("numberDocTrip");
+                                        write.textBox6.ForeColor = Color.Black;
+                                    }
+                                    //write.textBox6.Text = myReader.GetString("numberDocTrip");
+                                    if (myReader.GetString("cash").Equals("Да"))
+                                    {
+                                        write.checkBox1.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox1.CheckState = CheckState.Unchecked;
+                                    }
+                                    if (myReader.GetString("tax").Equals("Да"))
+                                    {
+                                        write.checkBox5.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox5.CheckState = CheckState.Unchecked;
+                                    }
+                                    if (myReader.GetString("paid").Equals("Да"))
+                                    {
+                                        write.checkBox2.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox2.CheckState = CheckState.Unchecked;
+                                    }
+                                    i++;
+                                    write.buttonAdd.Hide();
+                                    write.button2.Hide();
+                                    write.button3.Show();
+                                }
+                                /*WriteRequest.Cargo[WriteRequest.CargoCount] = myReader.GetString("nameCargo");
+                                WriteRequest.CargoCount++;*/
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                        //dgv.Rows.Clear();
+
+                        db.closeConnection();
+                        write.dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    }
                 }
             }
         }

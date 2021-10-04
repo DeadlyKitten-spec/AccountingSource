@@ -609,10 +609,10 @@ namespace applications
                     }
                 }
             }
-            if (!comboBox6.Text.Equals(""))
+            /*if (!comboBox6.Text.Equals(""))
             {
                 CheckPrices();
-            }
+            }*/
             if (f)
             {
                 MessageBox.Show("Заявка " + statusans);
@@ -3072,7 +3072,7 @@ namespace applications
             textBox4.Show();
 
             //string Query = "SELECT * FROM `counterparty` WHERE `objectName` = '" + comboBox6.Text.ToString() + "';";
-            string Query = "SELECT * FROM `counterparty` WHERE `objectName` = '" + comboBox6.Text.ToString() + "' ORDER BY `name` ASC;";
+            string Query = "SELECT * FROM `counterparty` WHERE `objectName` = '" + comboBox6.Text.ToString() + "' and `name` = '" + comboBox3.Text.ToString() + "' ORDER BY `name` ASC;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
@@ -3107,7 +3107,7 @@ namespace applications
             db.closeConnection();
         }
         
-        public void CheckPrices()
+        /*public void CheckPrices()
         {
             DB db = new DB();
             string placePrice = "";
@@ -3132,7 +3132,7 @@ namespace applications
             db.openConnection();
             cmdDataBase.ExecuteNonQuery();
             db.closeConnection();
-        }
+        }*/
 
         private void textBox2_Enter(object sender, EventArgs e)
         {   

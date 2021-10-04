@@ -868,9 +868,13 @@ namespace applications
             dt.Columns.Add("countTrip", typeof(string));
             dt.Columns.Add("price", typeof(string));
             dt.Columns.Add("sum", typeof(string));
-            foreach (DataGridViewRow dgv in dgv.Rows)
+            dt.Columns.Add("tax", typeof(string));
+            dt.Columns.Add("wtax", typeof(string));
+            dt.Columns.Add("cash", typeof(string));
+            //foreach (DataGridViewRow dgv in dgv.Rows)
+            for (int i = 0; i < dgv.Rows.Count - 1; i++)
             {
-                dt.Rows.Add(dgv.Cells[0].Value, dgv.Cells[1].Value, dgv.Cells[2].Value, dgv.Cells[3].Value, dgv.Cells[4].Value);
+                dt.Rows.Add(dgv[0, i].Value, dgv[1, i].Value, dgv[2, i].Value, dgv[3, i].Value, dgv[4, i].Value, dgv[5, i].Value, dgv[6, i].Value, dgv[7, i].Value);
             }
             ds.Tables.Add(dt);
             ds.WriteXmlSchema("SampleAnC.xml");

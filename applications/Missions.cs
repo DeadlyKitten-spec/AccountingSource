@@ -158,7 +158,7 @@ namespace applications
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
-
+            comboBox1.Text = "";
         }
 
         public void FillCombo2()
@@ -267,7 +267,7 @@ namespace applications
             if (fdriver)
             {
                 //(SELECT * FROM main.request order by `id` asc) order by `object` asc;
-                Line = "(SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `drivers` = '" + comboBox1.Text + "' AND `status` = 'Исполнена' ORDER BY `id` ASC) ORDER BY `object` ASC;";
+                Line = "(SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `drivers` = '" + comboBox1.Text + "' AND `status` = 'Исполнена' AND `mission` = 'Да' ORDER BY `id` ASC) ORDER BY `object` ASC;";
                 DB db = new DB();
                 MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                 bool g = true;
@@ -317,7 +317,60 @@ namespace applications
                 }
                 dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             }
+            else
+            {
+                Line = "(SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `driveCont` = '" + comboBox2.Text + "' AND `status` = 'Исполнена' AND `mission` = 'Да' ORDER BY `id` ASC) ORDER BY `object` ASC;";
+                DB db = new DB();
+                MySqlCommand command = new MySqlCommand(Line, db.getConnection());
+                bool g = true;
+                db.openConnection();
+                object obj = command.ExecuteScalar();
+                db.closeConnection();
+                dgv.Columns.Clear();
+                dgv.Rows.Clear();
+                dgv.Columns.AddRange(
+                new DataGridViewTextBoxColumn() { Name = "id", HeaderText = "Номер заявки" },
+                new DataGridViewTextBoxColumn() { Name = "name", HeaderText = "Водитель"},
+                new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Название Объекта" },
+                new DataGridViewTextBoxColumn() { Name = "mission", HeaderText = "Командировка" });
+                MySqlDataReader myReader;
+                try
+                {
+                    db.openConnection();
+                    myReader = command.ExecuteReader();
+                    int itter = 0;
+                    while (myReader.Read())
+                    {
+                        if (itter != 0)
+                        {
+                            //MessageBox.Show("asd");
+                            if (myReader.GetString("id").Equals(dgv[0, itter - 1].Value))
+                            {
+                                continue;
+                            }
+                        }
+                        dgv.Rows.Add();
+                        dgv[0, itter].Value = myReader.GetString("id");
+                        dgv[1, itter].Value = myReader.GetString("drivers");
+                        dgv[2, itter].Value = myReader.GetString("object");
+                        if (myReader.GetString("missionPaid").Equals("Да"))
+                        {
+                            dgv[3, itter].Value = "Оплачено";
+                        }
+                        else
+                        {
 
+                            dgv[3, itter].Value = "Не оплачено";
+                        }
+                        itter++;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            }
         }
     }
 }
