@@ -1089,6 +1089,7 @@ namespace applications
                 }
                 else
                 {
+                    //MessageBox.Show("jj");
                     if (!g)
                     {
                         button16.Show();
@@ -1301,13 +1302,22 @@ namespace applications
                     }
                     else
                     {
+                        //MessageBox.Show("kk");
                         /*try
                         {*/
                         comboBox1.Text = "";
                         comboBox2.Text = "";
                         comboBox3.Text = "";
                         int idx = dgv.CurrentRow.Index;
-                        string idTar = dgv[2, idx].Value.ToString();
+                        string idTar = "";
+                        if (idCupterBool)
+                        {
+                            idTar = dgv[2, idx].Value.ToString();
+                        }
+                        else
+                        {
+                            idTar = dgv[1, idx].Value.ToString();
+                        }
 
                         WriteRequest write = new WriteRequest();
                         DB db = new DB();
