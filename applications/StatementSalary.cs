@@ -92,6 +92,7 @@ namespace applications
                         myReader = command.ExecuteReader();
                         while (myReader.Read())
                         {
+                            //MessageBox.Show(myReader.GetString("id"));
                             idlast = int.Parse(myReader.GetString("id"));
                             if(idlast == idmorelast)
                             {

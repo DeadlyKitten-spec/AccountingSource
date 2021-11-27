@@ -31,6 +31,7 @@ namespace applications
         public string backLine = "пусто";
         public string idCupter = "";
         public bool idCupterBool = false;
+        public bool commonList = false;
 
         public WorkSpace()
         {
@@ -509,6 +510,7 @@ namespace applications
 
         private void button3_Click_1(object sender, EventArgs e)
         {
+            commonList = false;
             idCupterBool = false;
             button16.Hide();
             textBox1.Hide();
@@ -1310,13 +1312,13 @@ namespace applications
                         comboBox3.Text = "";
                         int idx = dgv.CurrentRow.Index;
                         string idTar = "";
-                        if (idCupterBool)
+                        if (commonList)
                         {
-                            idTar = dgv[2, idx].Value.ToString();
+                            idTar = dgv[1, idx].Value.ToString();
                         }
                         else
                         {
-                            idTar = dgv[1, idx].Value.ToString();
+                            idTar = dgv[2, idx].Value.ToString();
                         }
 
                         WriteRequest write = new WriteRequest();
@@ -3714,6 +3716,7 @@ namespace applications
 
         private void button18_Click(object sender, EventArgs e)
         {
+            commonList = true;
             idCupterBool = false;
             button16.Hide();
             textBox1.Hide();

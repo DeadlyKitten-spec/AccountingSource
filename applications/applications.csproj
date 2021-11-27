@@ -301,6 +301,12 @@
     <Compile Include="StatementBuyer.Designer.cs">
       <DependentUpon>StatementBuyer.cs</DependentUpon>
     </Compile>
+    <Compile Include="StatementClient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatementClient.Designer.cs">
+      <DependentUpon>StatementClient.cs</DependentUpon>
+    </Compile>
     <Compile Include="StatementCounterparty.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -465,6 +471,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StatementBuyer.resx">
       <DependentUpon>StatementBuyer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatementClient.resx">
+      <DependentUpon>StatementClient.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatementCounterparty.resx">
       <DependentUpon>StatementCounterparty.cs</DependentUpon>

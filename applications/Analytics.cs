@@ -24,6 +24,9 @@ namespace applications
 
             button15.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button15.FlatAppearance.BorderColor = FlatColor;
+
+            button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            button2.FlatAppearance.BorderColor = FlatColor;
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -41,6 +44,17 @@ namespace applications
         {
             StatementCounterparty stc = new StatementCounterparty();
             stc.Show();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            StatementClient stcl = new StatementClient();
+            stcl.Show();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
