@@ -382,29 +382,63 @@ namespace applications
                         db.closeConnection();
 
 
-                        command = new MySqlCommand("INSERT INTO `operations` (`date`, `operation`, `product`, `count`) VALUES (@date, @ope, @product, @count)", db.getConnection());
-
-                        //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
-                        command.Parameters.Add("@date", MySqlDbType.Date).Value = dateTimePicker1.Value;
-                        command.Parameters.Add("@ope", MySqlDbType.VarChar).Value = "Поступление от производства";
-                        command.Parameters.Add("@product", MySqlDbType.VarChar).Value = dataGridView2[0, i].Value;
-                        string numm = dataGridView2[1, i].Value.ToString();
-                        for (int p = 0; p < numm.Length; p++)
+                        String[] dates = dateTimePicker1.Value.ToString().Split(' ');
+                        String[] rightDate = dates[0].Split('.');
+                        String right = rightDate[2] + "-" + rightDate[1] + "-" + rightDate[0];
+                        MySqlCommand comand = new MySqlCommand("SELECT * FROM `operations` WHERE `product` = '" + dataGridView2[0, i].Value + "' and `date` <= '" + right + "' order by `dateWrite` desc;", db.getConnection());
+                        //MessageBox.Show("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';");
+                        double change = 0;
+                        //MessageBox.Show("SELECT * FROM `operations` WHERE `product` = '" + dataGridView1[0, p].Value + "' and `date` <= '" + right + "' order by `dateWrite` desc;");
+                        try
                         {
-                            if (numm[p] == '.')
+                            db.openConnection();
+                            myReader = comand.ExecuteReader();
+
+                            while (myReader.Read())
+                            {
+                                //MessageBox.Show(myReader.GetString("countNow"));
+                                change = double.Parse(myReader.GetString("countNow"));
+                                change += double.Parse(dataGridView2[2, i].Value.ToString());
+                                break;
+                            }
+                            myReader.Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+                        db.closeConnection();
+
+                        //comand = new MySqlCommand("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
+                        //MessageBox.Show("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';");
+                        //db.openConnection();
+
+                        //.ExecuteNonQuery();
+
+                        //db.closeConnection();
+
+                        comand = new MySqlCommand("INSERT INTO `operations` (`date`, `operation`, `product`, `count`, `countNow`) VALUES (@date, @ope, @product, @count, @countNow)", db.getConnection());
+                        //MessageBox.Show(dateTimePicker1.Value.ToString() + " "  + dataGridView2[0, i].Value.ToString() + " " + dataGridView2[1, i].Value.ToString() + " " + change.ToString());
+                        //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
+                        comand.Parameters.Add("@date", MySqlDbType.Date).Value = dateTimePicker1.Value;
+                        //int idtemp = int.Parse(idRequest) - 1;
+                        comand.Parameters.Add("@ope", MySqlDbType.VarChar).Value = "Поступление от производства";
+                        comand.Parameters.Add("@product", MySqlDbType.VarChar).Value = dataGridView2[0, i].Value;
+                        string numm = dataGridView2[2, i].Value.ToString();
+                        for (int c = 0; c < numm.Length; c++)
+                        {
+                            if (numm[c] == '.')
                             {
                                 string[] ans = numm.Split('.');
                                 numm = ans[0] + "," + ans[1];
                                 break;
                             }
                         }
-                        command.Parameters.Add("@count", MySqlDbType.VarChar).Value = numm;
-
-                        //MessageBox.Show("INSERT INTO `operations` (`date`, `operation`, `product`, `count`) VALUES (" + fordate[0] + ", Поступление от производства, " + dataGridView2[0, i].Value + ", " + numm + ")");
+                        comand.Parameters.Add("@count", MySqlDbType.VarChar).Value = numm;
+                        comand.Parameters.Add("@countNow", MySqlDbType.VarChar).Value = change;
                         db.openConnection();
 
-                        command.ExecuteNonQuery();
-
+                        comand.ExecuteNonQuery();
 
                         db.closeConnection();
 
@@ -606,29 +640,63 @@ namespace applications
 
                     db.closeConnection();
 
-                    command = new MySqlCommand("INSERT INTO `operations` (`date`, `operation`, `product`, `count`) VALUES (@date, @ope, @product, @count)", db.getConnection());
-
-                    //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
-                    command.Parameters.Add("@date", MySqlDbType.Date).Value = dateTimePicker2.Value;
-                    command.Parameters.Add("@ope", MySqlDbType.VarChar).Value = dataGridView3[3, i].Value;
-                    command.Parameters.Add("@product", MySqlDbType.VarChar).Value = dataGridView3[0, i].Value;
-                    string numm = dataGridView3[1, i].Value.ToString();
-                    for (int p = 0; p < numm.Length; p++)
+                    String[] dates = dateTimePicker2.Value.ToString().Split(' ');
+                    String[] rightDate = dates[0].Split('.');
+                    String right = rightDate[2] + "-" + rightDate[1] + "-" + rightDate[0];
+                    MySqlCommand comand = new MySqlCommand("SELECT * FROM `operations` WHERE `product` = '" + dataGridView3[0, i].Value + "' and `date` <= '" + right + "' order by `dateWrite` desc;", db.getConnection());
+                    //MessageBox.Show("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';");
+                    double change = 0;
+                    //MessageBox.Show("SELECT * FROM `operations` WHERE `product` = '" + dataGridView1[0, p].Value + "' and `date` <= '" + right + "' order by `dateWrite` desc;");
+                    try
                     {
-                        if (numm[p] == '.')
+                        db.openConnection();
+                        myReader = comand.ExecuteReader();
+
+                        while (myReader.Read())
+                        {
+                            //MessageBox.Show(myReader.GetString("countNow"));
+                            change = double.Parse(myReader.GetString("countNow"));
+                            change -= double.Parse(dataGridView3[2, i].Value.ToString());
+                            break;
+                        }
+                        myReader.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    db.closeConnection();
+
+                    //comand = new MySqlCommand("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
+                    //MessageBox.Show("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';");
+                    //db.openConnection();
+
+                    //.ExecuteNonQuery();
+
+                    //db.closeConnection();
+
+                    comand = new MySqlCommand("INSERT INTO `operations` (`date`, `operation`, `product`, `count`, `countNow`) VALUES (@date, @ope, @product, @count, @countNow)", db.getConnection());
+                    //MessageBox.Show(dateTimePicker1.Value.ToString() + " "  + dataGridView2[0, i].Value.ToString() + " " + dataGridView2[1, i].Value.ToString() + " " + change.ToString());
+                    //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
+                    comand.Parameters.Add("@date", MySqlDbType.Date).Value = dateTimePicker2.Value;
+                    //int idtemp = int.Parse(idRequest) - 1;
+                    comand.Parameters.Add("@ope", MySqlDbType.VarChar).Value = dataGridView3[3, i].Value;
+                    comand.Parameters.Add("@product", MySqlDbType.VarChar).Value = dataGridView3[0, i].Value;
+                    string numm = dataGridView3[2, i].Value.ToString();
+                    for (int c = 0; c < numm.Length; c++)
+                    {
+                        if (numm[c] == '.')
                         {
                             string[] ans = numm.Split('.');
                             numm = ans[0] + "," + ans[1];
                             break;
                         }
                     }
-                    command.Parameters.Add("@count", MySqlDbType.VarChar).Value = numm;
-
-                    //MessageBox.Show("INSERT INTO `operations` (`date`, `operation`, `product`, `count`) VALUES (" + fordate[0] + ", Поступление от производства, " + dataGridView2[0, i].Value + ", " + numm + ")");
+                    comand.Parameters.Add("@count", MySqlDbType.VarChar).Value = numm;
+                    comand.Parameters.Add("@countNow", MySqlDbType.VarChar).Value = change;
                     db.openConnection();
 
-                    command.ExecuteNonQuery();
-
+                    comand.ExecuteNonQuery();
 
                     db.closeConnection();
                 }

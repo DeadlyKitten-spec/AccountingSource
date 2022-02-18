@@ -2270,21 +2270,25 @@ namespace applications
                                 {
                                     if (dgv[1, p].Value.Equals("Поставка"))
                                     {
-                                        MySqlCommand comand = new MySqlCommand("SELECT * FROM `product` WHERE `name` = '" + dgv[9, p].Value + "';", db.getConnection());
+                                        String[] dates = dgv[3, p].Value.ToString().Split('.');
+                                        String right = dates[2] + "-" + dates[1] + "-" + dates[0];
+                                        MySqlCommand comand = new MySqlCommand("SELECT * FROM `operations` WHERE `product` = '" + dgv[9, p].Value + "' and `date` <= '" + right + "' order by `dateWrite` desc;", db.getConnection());
                                         //MessageBox.Show("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';");
-                                        MySqlDataReader myReader2;
                                         double change = 0;
+                                        //MessageBox.Show("SELECT * FROM `operations` WHERE `product` = '" + dataGridView1[0, p].Value + "' and `date` <= '" + right + "' order by `dateWrite` desc;");
                                         try
                                         {
                                             db.openConnection();
-                                            myReader2 = comand.ExecuteReader();
+                                            myReader = comand.ExecuteReader();
 
-                                            while (myReader2.Read())
+                                            while (myReader.Read())
                                             {
-                                                change = double.Parse(myReader2.GetString("count"));
+                                                //MessageBox.Show(myReader.GetString("countNow"));
+                                                change = double.Parse(myReader.GetString("countNow"));
                                                 change += double.Parse(dgv[10, p].Value.ToString());
+                                                break;
                                             }
-                                            myReader2.Close();
+                                            myReader.Close();
                                         }
                                         catch (Exception ex)
                                         {
@@ -2292,8 +2296,23 @@ namespace applications
                                         }
                                         db.closeConnection();
 
-                                        comand = new MySqlCommand("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dgv[9, p].Value + "';", db.getConnection());
+                                        //comand = new MySqlCommand("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
                                         //MessageBox.Show("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';");
+                                        //db.openConnection();
+
+                                        //.ExecuteNonQuery();
+
+                                        //db.closeConnection();
+
+                                        comand = new MySqlCommand("INSERT INTO `operations` (`date`, `operation`, `product`, `count`, `countNow`) VALUES (@date, @ope, @product, @count, @countNow)", db.getConnection());
+
+                                        //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
+                                        comand.Parameters.Add("@date", MySqlDbType.Date).Value = dateTimePicker1.Value;
+                                        //int idtemp = int.Parse(idRequest) - 1;
+                                        comand.Parameters.Add("@ope", MySqlDbType.VarChar).Value = "Заявка №" + dgv[2, p].Value;
+                                        comand.Parameters.Add("@product", MySqlDbType.VarChar).Value = dgv[9, p].Value;
+                                        comand.Parameters.Add("@count", MySqlDbType.VarChar).Value = dgv[10, p].Value;
+                                        comand.Parameters.Add("@countNow", MySqlDbType.VarChar).Value = change;
                                         db.openConnection();
 
                                         comand.ExecuteNonQuery();
@@ -2308,12 +2327,13 @@ namespace applications
                         cmd.ExecuteNonQuery();
                         db.closeConnection();
                         del = true;
-                        MySqlCommand com = new MySqlCommand("DELETE FROM `operations` WHERE `operation` = 'Заявка №" + id + "';", db.getConnection());
+
+                        //MySqlCommand com = new MySqlCommand("DELETE FROM `operations` WHERE `operation` = 'Заявка №" + id + "';", db.getConnection());
 
                         //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
                         db.openConnection();
 
-                        com.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
 
                         db.closeConnection();
                     }
@@ -2326,14 +2346,14 @@ namespace applications
                             cmd.ExecuteNonQuery();
                             db.closeConnection();
 
-                            MySqlCommand com = new MySqlCommand("DELETE FROM `operations` WHERE `operation` = 'Заявка №" + id + "' AND `product` = '" + nom + "';", db.getConnection());
+                            //MySqlCommand com = new MySqlCommand("DELETE FROM `operations` WHERE `operation` = 'Заявка №" + id + "' AND `product` = '" + nom + "';", db.getConnection());
 
                             //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
-                            db.openConnection();
+                            /*db.openConnection();
 
                             com.ExecuteNonQuery();
 
-                            db.closeConnection();
+                            db.closeConnection();*/
 
                             del = true;
                             //&& (status.Equals("Назначена") || status.Equals("Исполнена"))
@@ -2369,21 +2389,25 @@ namespace applications
                             {
                                 if (dgv[1, dgv.CurrentRow.Index].Value.Equals("Поставка"))
                                 {
-                                    MySqlCommand comand = new MySqlCommand("SELECT * FROM `product` WHERE `name` = '" + dgv[9, dgv.CurrentRow.Index].Value + "';", db.getConnection());
+                                    String[] dates = dgv["date", dgv.CurrentRow.Index].Value.ToString().Split('.');
+                                    String right = dates[2] + "-" + dates[1] + "-" + dates[0];
+                                    MySqlCommand comand = new MySqlCommand("SELECT * FROM `operations` WHERE `product` = '" + nom + "' and `date` <= '" + right + "' order by `dateWrite` desc;", db.getConnection());
                                     //MessageBox.Show("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';");
-                                    MySqlDataReader myReader2;
                                     double change = 0;
+                                    //MessageBox.Show("SELECT * FROM `operations` WHERE `product` = '" + dataGridView1[0, p].Value + "' and `date` <= '" + right + "' order by `dateWrite` desc;");
                                     try
                                     {
                                         db.openConnection();
-                                        myReader2 = comand.ExecuteReader();
+                                        myReader = comand.ExecuteReader();
 
-                                        while (myReader2.Read())
+                                        while (myReader.Read())
                                         {
-                                            change = double.Parse(myReader2.GetString("count"));
-                                            change += double.Parse(dgv[10, dgv.CurrentRow.Index].Value.ToString());
+                                            //MessageBox.Show(myReader.GetString("countNow"));
+                                            change = double.Parse(myReader.GetString("countNow"));
+                                            change += double.Parse(cargoCount);
+                                            break;
                                         }
-                                        myReader2.Close();
+                                        myReader.Close();
                                     }
                                     catch (Exception ex)
                                     {
@@ -2391,8 +2415,23 @@ namespace applications
                                     }
                                     db.closeConnection();
 
-                                    comand = new MySqlCommand("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dgv[9, dgv.CurrentRow.Index].Value + "';", db.getConnection());
+                                    //comand = new MySqlCommand("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
                                     //MessageBox.Show("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';");
+                                    //db.openConnection();
+
+                                    //.ExecuteNonQuery();
+
+                                    //db.closeConnection();
+
+                                    comand = new MySqlCommand("INSERT INTO `operations` (`date`, `operation`, `product`, `count`, `countNow`) VALUES (@date, @ope, @product, @count, @countNow)", db.getConnection());
+
+                                    //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
+                                    comand.Parameters.Add("@date", MySqlDbType.Date).Value = dateTimePicker1.Value;
+                                    //int idtemp = int.Parse(idRequest) - 1;
+                                    comand.Parameters.Add("@ope", MySqlDbType.VarChar).Value = "Заявка №" + id;
+                                    comand.Parameters.Add("@product", MySqlDbType.VarChar).Value = nom;
+                                    comand.Parameters.Add("@count", MySqlDbType.VarChar).Value = cargoCount;
+                                    comand.Parameters.Add("@countNow", MySqlDbType.VarChar).Value = change;
                                     db.openConnection();
 
                                     comand.ExecuteNonQuery();
@@ -2410,14 +2449,14 @@ namespace applications
                     db.openConnection();
                     cmd.ExecuteNonQuery();
                     db.closeConnection();
-                    MySqlCommand com = new MySqlCommand("DELETE FROM `operations` WHERE `operation` = 'Заявка №" + id + "';", db.getConnection());
+                    /*MySqlCommand com = new MySqlCommand("DELETE FROM `operations` WHERE `operation` = 'Заявка №" + id + "';", db.getConnection());
 
                     //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
                     db.openConnection();
 
                     com.ExecuteNonQuery();
 
-                    db.closeConnection();
+                    db.closeConnection();*/
                     del = true;
                     string nomen = "";
                     string[] frd = date.Split('.');
@@ -2455,22 +2494,25 @@ namespace applications
                     {
                         if (dgv[1, dgv.CurrentRow.Index].Value.Equals("Поставка"))
                         {
-                            MySqlCommand comand = new MySqlCommand("SELECT * FROM `product` WHERE `name` = '" + dgv[9, dgv.CurrentRow.Index].Value + "';", db.getConnection());
+                            String[] dates = dgv[3, dgv.CurrentRow.Index].Value.ToString().Split('.');
+                            String right = dates[2] + "-" + dates[1] + "-" + dates[0];
+                            MySqlCommand comand = new MySqlCommand("SELECT * FROM `operations` WHERE `product` = '" + dgv[9, dgv.CurrentRow.Index].Value + "' and `date` <= '" + right + "' order by `dateWrite` desc;", db.getConnection());
                             //MessageBox.Show("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';");
-                            MySqlDataReader myReader2;
-                            //MessageBox.Show("adasd");
                             double change = 0;
+                            //MessageBox.Show("SELECT * FROM `operations` WHERE `product` = '" + dataGridView1[0, p].Value + "' and `date` <= '" + right + "' order by `dateWrite` desc;");
                             try
                             {
                                 db.openConnection();
-                                myReader2 = comand.ExecuteReader();
+                                myReader = comand.ExecuteReader();
 
-                                while (myReader2.Read())
+                                while (myReader.Read())
                                 {
-                                    change = double.Parse(myReader2.GetString("count"));
+                                    //MessageBox.Show(myReader.GetString("countNow"));
+                                    change = double.Parse(myReader.GetString("countNow"));
                                     change += double.Parse(dgv[10, dgv.CurrentRow.Index].Value.ToString());
+                                    break;
                                 }
-                                myReader2.Close();
+                                myReader.Close();
                             }
                             catch (Exception ex)
                             {
@@ -2478,8 +2520,23 @@ namespace applications
                             }
                             db.closeConnection();
 
-                            comand = new MySqlCommand("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dgv[9, dgv.CurrentRow.Index].Value + "';", db.getConnection());
+                            //comand = new MySqlCommand("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';", db.getConnection());
                             //MessageBox.Show("UPDATE `product` SET `count` = '" + change.ToString() + "' WHERE `name` = '" + dataGridView1[0, p].Value + "';");
+                            //db.openConnection();
+
+                            //.ExecuteNonQuery();
+
+                            //db.closeConnection();
+
+                            comand = new MySqlCommand("INSERT INTO `operations` (`date`, `operation`, `product`, `count`, `countNow`) VALUES (@date, @ope, @product, @count, @countNow)", db.getConnection());
+
+                            //string[] fordate = dateTimePicker1.Value.ToString().Split(' ');
+                            comand.Parameters.Add("@date", MySqlDbType.Date).Value = dateTimePicker1.Value;
+                            //int idtemp = int.Parse(idRequest) - 1;
+                            comand.Parameters.Add("@ope", MySqlDbType.VarChar).Value = "Заявка №" + dgv[2, dgv.CurrentRow.Index].Value;
+                            comand.Parameters.Add("@product", MySqlDbType.VarChar).Value = dgv[9, dgv.CurrentRow.Index].Value;
+                            comand.Parameters.Add("@count", MySqlDbType.VarChar).Value = dgv[10, dgv.CurrentRow.Index].Value;
+                            comand.Parameters.Add("@countNow", MySqlDbType.VarChar).Value = change;
                             db.openConnection();
 
                             comand.ExecuteNonQuery();

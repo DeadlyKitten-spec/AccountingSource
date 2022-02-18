@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,7 +18,7 @@ namespace applications
         public VaultStatement()
         {
             InitializeComponent();
-            LoadDGV3();
+            //LoadDGV3();
             this.ControlBox = false;
             this.WindowState = FormWindowState.Maximized;
             button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -238,6 +239,128 @@ namespace applications
             }
             db.closeConnection();
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            dataGridView3.Rows.Clear();
+            dataGridView3.Columns.Clear();
+            dataGridView3.Columns.AddRange(
+            new DataGridViewTextBoxColumn() { Name = "product", HeaderText = "Наименование" },
+            new DataGridViewTextBoxColumn() { Name = "count", HeaderText = "Кол-во" });
+
+            DB db = new DB();
+            MySqlCommand command = new MySqlCommand("SELECT * FROM `product` ORDER BY `name`", db.getConnection());
+            MySqlDataReader myReader;
+            ArrayList names = new ArrayList();
+            try
+            {
+                db.openConnection();
+                myReader = command.ExecuteReader();
+                while (myReader.Read())
+                {
+                    String line = myReader.GetString("name");
+                    if (line.Equals("пусто"))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        if (!names.Contains(line))
+                        {
+                            names.Add(line);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            /*for(int i = 0; i < names.Count; i++)
+            {
+                MessageBox.Show(names[i].ToString());
+            }*/
+            //MessageBox.Show(names.Count.ToString());
+            db.closeConnection();
+
+            String[] dates = dateTimePicker2.Value.ToString().Split(' ');
+            String[] rightDate = dates[0].Split('.');
+            String right = rightDate[2] + "-" + rightDate[1] + "-" + rightDate[0];
+            int k = 0;
+            for (int i = 0; i < names.Count; i++) {
+                command = new MySqlCommand("SELECT * FROM `operations` WHERE `product` = '" + names[i] + "' and `date` <= '" + right + "' order by `date` desc, `dateWrite` desc;", db.getConnection());
+                //MessageBox.Show("SELECT * FROM `product` WHERE `name` = '" + dataGridView1[0, p].Value + "';");
+                double change = 0;
+                //MessageBox.Show("SELECT * FROM `operations` WHERE `product` = '" + dataGridView1[0, p].Value + "' and `date` <= '" + right + "' order by `dateWrite` desc;");
+                try
+                {
+                    db.openConnection();
+                    myReader = command.ExecuteReader();
+                    while (myReader.Read())
+                    {
+                        dataGridView3.Rows.Add();
+                        dataGridView3[0, k].Value = names[i];
+                        //MessageBox.Show("1");
+                        dataGridView3[1, k].Value = myReader.GetString("countNow");
+                        k++;
+                        break;
+                    }
+                    myReader.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+            }
+
+            dataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            int year = dateTimePicker2.Value.Date.Year;
+            int month = dateTimePicker2.Value.Date.Month;
+            int day = dateTimePicker2.Value.Date.Day;
+            int[] dateArr = visok(dateTimePicker2.Value.Date.Year);
+            if (day == 1)
+            {
+                month--;
+                if (month == 0)
+                {
+                    month = 12;
+                    year--;
+                }
+                day = dateArr[month - 1];
+                dateTimePicker2.Value = new DateTime(year, month, day);
+            }
+            else
+            {
+                dateTimePicker2.Value = new DateTime(year, month, day - 1);
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            int year = dateTimePicker2.Value.Date.Year;
+            int month = dateTimePicker2.Value.Date.Month;
+            int day = dateTimePicker2.Value.Date.Day;
+            int[] dateArr = visok(dateTimePicker2.Value.Date.Year);
+            if (day == dateArr[month - 1])
+            {
+                if (month == 12)
+                {
+                    month = 0;
+                    year++;
+                }
+                day = 1;
+                dateTimePicker2.Value = new DateTime(year, month + 1, day);
+            }
+            else
+            {
+                dateTimePicker2.Value = new DateTime(year, month, day + 1);
+            }
         }
     }
 }
