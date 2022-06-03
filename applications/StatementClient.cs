@@ -19,6 +19,7 @@ namespace applications
             InitializeComponent();
             FillCombo2();
             this.WindowState = FormWindowState.Maximized;
+            this.ControlBox = false;
             FlatColor = button6.FlatAppearance.BorderColor;
 
             //FillCombo2();
@@ -30,7 +31,6 @@ namespace applications
 
             button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button4.FlatAppearance.BorderColor = FlatColor;
-            this.ControlBox = false;
         }
 
         private void button5_Click(object sender, EventArgs e)

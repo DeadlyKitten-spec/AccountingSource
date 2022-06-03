@@ -75,6 +75,10 @@ namespace applications
             textBox4.Hide();
             button2.Hide();
             button3.Hide();
+            label33.Hide();
+            label34.Hide();
+            dateTimePicker2.Hide();
+            dateTimePicker6.Hide();
 
             if (WriteRequest.f)
             {
@@ -267,7 +271,7 @@ namespace applications
             {
                 for (int i = 0; i < WriteRequest.CargoCount; i++)
                 {
-                    MySqlCommand command = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid)", db.getConnection());
+                    MySqlCommand command = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload)", db.getConnection());
 
                     command.Parameters.Add("@id", MySqlDbType.Int32).Value = idRequest;
                     command.Parameters.Add("@data", MySqlDbType.Date).Value = dateTimePicker1.Value;
@@ -491,6 +495,24 @@ namespace applications
                     {
                         command.Parameters.Add("@cp", MySqlDbType.VarChar).Value = "пусто";
                     }
+                    if (checkBox8.CheckState == CheckState.Checked)
+                    {
+                        command.Parameters.Add("@stand", MySqlDbType.VarChar).Value = "Да";
+                    }
+                    else
+                    {
+                        command.Parameters.Add("@stand", MySqlDbType.VarChar).Value = "Нет";
+                    }
+                    string load = dateTimePicker2.Value.ToString();
+                    string[] sload = load.Split(' ');
+                    string[] ssload = sload[1].Split(':');
+                    load = ssload[0] + ":" + ssload[1];
+                    command.Parameters.Add("@tload", MySqlDbType.VarChar).Value = load;
+                    string uload = dateTimePicker6.Value.ToString();
+                    string[] suload = uload.Split(' ');
+                    string[] ssuload = suload[1].Split(':');
+                    uload = ssuload[0] + ":" + ssuload[1];
+                    command.Parameters.Add("@tunload", MySqlDbType.VarChar).Value = uload;
                     //MessageBox.Show(dataGridView1[3, i].Value.ToString());
                     db.openConnection();
                     if (command.ExecuteNonQuery() != 1)
@@ -1389,7 +1411,7 @@ namespace applications
                     bool fstat = false;
                     for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                     {
-                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid)", db.getConnection());
+                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload)", db.getConnection());
 
 
                         com.Parameters.AddWithValue("@id", idRequest);
@@ -1577,8 +1599,26 @@ namespace applications
                             com.Parameters.AddWithValue("@paid", "Нет");
                             //com.Parameters.AddWithValue("@status", "Исполнена");
                         }
+                        if (checkBox8.CheckState == CheckState.Checked)
+                        {
+                            com.Parameters.Add("@stand", MySqlDbType.VarChar).Value = "Да";
+                        }
+                        else
+                        {
+                            com.Parameters.Add("@stand", MySqlDbType.VarChar).Value = "Нет";
+                        }
+                        string load = dateTimePicker2.Value.ToString();
+                        string[] sload = load.Split(' ');
+                        string[] ssload = sload[1].Split(':');
+                        load = ssload[0] + ":" + ssload[1];
+                        com.Parameters.Add("@tload", MySqlDbType.VarChar).Value = load;
+                        string uload = dateTimePicker6.Value.ToString();
+                        string[] suload = uload.Split(' ');
+                        string[] ssuload = suload[1].Split(':');
+                        uload = ssuload[0] + ":" + ssuload[1];
+                        com.Parameters.Add("@tunload", MySqlDbType.VarChar).Value = uload;
                         db.openConnection();
-
+                        //com.ExecuteNonQuery();
                         if (com.ExecuteNonQuery() >= 1)
                         {
                             //MessageBox.Show(idRequest);
@@ -1591,6 +1631,7 @@ namespace applications
                             fstat = false;
                             //MessageBox.Show("Заявка не обновлена");
                         }
+                        db.closeConnection();
 
                     }
                     if (statusans.Equals("исполнена") || statusans.Equals("назначена"))
@@ -1702,15 +1743,17 @@ namespace applications
                             }
                         }
                     }
+
                     if (fstat)
                     {
+                        //MessageBox.Show("fstat " + fstat.ToString() );
                         com = new MySqlCommand("DELETE FROM `request` WHERE `id` = '" + idRequest + "';", db.getConnection());
                         db.openConnection();
                         com.ExecuteNonQuery();
                         db.closeConnection();
                         for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                         {
-                            com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid)", db.getConnection());
+                            com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload)", db.getConnection());
 
 
                             com.Parameters.AddWithValue("@id", idRequest);
@@ -1898,8 +1941,26 @@ namespace applications
                                 com.Parameters.AddWithValue("@paid", "Нет");
                                 //com.Parameters.AddWithValue("@status", "Исполнена");
                             }
+                            if (checkBox8.CheckState == CheckState.Checked)
+                            {
+                                com.Parameters.Add("@stand", MySqlDbType.VarChar).Value = "Да";
+                            }
+                            else
+                            {
+                                com.Parameters.Add("@stand", MySqlDbType.VarChar).Value = "Нет";
+                            }
+                            string load = dateTimePicker2.Value.ToString();
+                            string[] sload = load.Split(' ');
+                            string[] ssload = sload[1].Split(':');
+                            load = ssload[0] + ":" + ssload[1];
+                            com.Parameters.Add("@tload", MySqlDbType.VarChar).Value = load;
+                            string uload = dateTimePicker6.Value.ToString();
+                            string[] suload = uload.Split(' ');
+                            string[] ssuload = suload[1].Split(':');
+                            uload = ssuload[0] + ":" + ssuload[1];
+                            com.Parameters.Add("@tunload", MySqlDbType.VarChar).Value = uload;
                             db.openConnection();
-
+                            //com.ExecuteNonQuery();
                             if (com.ExecuteNonQuery() >= 1)
                             {
                                 //MessageBox.Show(idRequest);
@@ -1912,6 +1973,7 @@ namespace applications
                                 fstat = false;
                                 //MessageBox.Show("Заявка не обновлена");
                             }
+                            db.closeConnection();
 
                         }
                         MessageBox.Show("Заявка обновлена и " + statusans);
@@ -1922,9 +1984,10 @@ namespace applications
                     }
                     db.closeConnection();
                 }
-                catch
+                catch (Exception ex)
                 {
                     MessageBox.Show("Что-то пошло не так, заявка не обновлена. Попробуйте еще раз или свяжитесь с программистом");
+                    MessageBox.Show(ex.Message);
                 }
 
                 //}
@@ -2244,7 +2307,7 @@ namespace applications
                 MySqlCommand com;
                 for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                 {
-                    com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid);", db.getConnection());
+                    com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload);", db.getConnection());
 
                     com.Parameters.AddWithValue("@id", idRequest);
                     com.Parameters.AddWithValue("@data", dateTimePicker1.Value);
@@ -2420,7 +2483,24 @@ namespace applications
                             com.Parameters.AddWithValue("@status", "В работе");
                         }
                     }
-
+                    if (checkBox8.CheckState == CheckState.Checked)
+                    {
+                        com.Parameters.Add("@stand", MySqlDbType.VarChar).Value = "Да";
+                    }
+                    else
+                    {
+                        com.Parameters.Add("@stand", MySqlDbType.VarChar).Value = "Нет";
+                    }
+                    string load = dateTimePicker2.Value.ToString();
+                    string[] sload = load.Split(' ');
+                    string[] ssload = sload[1].Split(':');
+                    load = ssload[0] + ":" + ssload[1];
+                    com.Parameters.Add("@tload", MySqlDbType.VarChar).Value = load;
+                    string uload = dateTimePicker6.Value.ToString();
+                    string[] suload = uload.Split(' ');
+                    string[] ssuload = suload[1].Split(':');
+                    uload = ssuload[0] + ":" + ssuload[1];
+                    com.Parameters.Add("@tunload", MySqlDbType.VarChar).Value = uload;
                     db.openConnection();
                     //com.ExecuteNonQuery();
 
@@ -2448,7 +2528,7 @@ namespace applications
                     db.closeConnection();
                     for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                     {
-                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid);", db.getConnection());
+                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload);", db.getConnection());
 
                         com.Parameters.AddWithValue("@id", idRequest);
                         com.Parameters.AddWithValue("@data", dateTimePicker1.Value);
@@ -2626,6 +2706,24 @@ namespace applications
                                 com.Parameters.AddWithValue("@status", "В работе");
                             }
                         }
+                        if (checkBox8.CheckState == CheckState.Checked)
+                        {
+                            com.Parameters.Add("@stand", MySqlDbType.VarChar).Value = "Да";
+                        }
+                        else
+                        {
+                            com.Parameters.Add("@stand", MySqlDbType.VarChar).Value = "Нет";
+                        }
+                        string load = dateTimePicker2.Value.ToString();
+                        string[] sload = load.Split(' ');
+                        string[] ssload = sload[1].Split(':');
+                        load = ssload[0] + ":" + ssload[1];
+                        com.Parameters.Add("@tload", MySqlDbType.VarChar).Value = load;
+                        string uload = dateTimePicker6.Value.ToString();
+                        string[] suload = uload.Split(' ');
+                        string[] ssuload = suload[1].Split(':');
+                        uload = ssuload[0] + ":" + ssuload[1];
+                        com.Parameters.Add("@tunload", MySqlDbType.VarChar).Value = uload;
                         if (statusans.Equals("исполнена"))
                         {
                             if (comboBox1.Text.Equals("Поставка"))
@@ -3498,6 +3596,25 @@ namespace applications
                 checkBox7.Hide();
             }
         }
+
+        private void checkBox8_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox8.CheckState == CheckState.Checked)
+            {
+                label33.Show();
+                label34.Show();
+                dateTimePicker2.Show();
+                dateTimePicker6.Show();
+            }
+            else
+            {
+                label33.Hide();
+                label34.Hide();
+                dateTimePicker2.Hide();
+                dateTimePicker6.Hide();
+            }
+        }
+
 
 
         /*private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)

@@ -60,24 +60,14 @@ namespace applications
 
             if (fdriver)
             {
-                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `drivers` = '" + comboBox1.Text + "' AND `status` = 'Исполнена' ORDER BY `id` ASC;";
+                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `drivers` = '" + comboBox1.Text + "' AND `status` = 'Исполнена' ORDER BY `cars` ASC;";
                 DB db = new DB();
                 MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                 bool g = true;
                 db.openConnection();
                 object obj = command.ExecuteScalar();
                 db.closeConnection();
-                Salary[] salary = new Salary[1000];
-                for(int i = 0; i < 1000; i++)
-                {
-                    salary[i] = new Salary();
-                    salary[i].car = "-1";
-                    salary[i].objectt = "-1";
-                    salary[i].price = -1;
-                    salary[i].countTrip = -1;
-                    salary[i].sum = -1;
-                }
-                int sumTrip = 0;
+                List<Salary> array = new List<Salary>();
                 bool fobj = false;
                 int itter = 0;
                 int idlast = 0;
@@ -92,72 +82,81 @@ namespace applications
                         myReader = command.ExecuteReader();
                         while (myReader.Read())
                         {
-                            //MessageBox.Show(myReader.GetString("id"));
-                            idlast = int.Parse(myReader.GetString("id"));
-                            if(idlast == idmorelast)
+                            string pri = myReader.GetString("priceSalary");
+                            double pr = 0;
+                            if (pri.Equals("пусто"))
                             {
-                                idmorelast = idlast;
-                                continue;
+                                pr = 0;
                             }
-                            if (myReader.GetString("priceSalary").Equals("пусто"))
+                            else
                             {
-                                continue;
+                                pr = double.Parse(pri);
                             }
-                            string objectt = myReader.GetString("object");
-                            for(int i = 0; i < 1000; i++)
+                            double tax = 0;
+                            double wotax = 0;
+                            double cash = 0;
+                            if (myReader.GetString("tax").Equals("Нет"))
                             {
-                                //MessageBox.Show("nen");
-                                if (objectt.Equals(salary[i].objectt))
+                                tax = pr;
+                                wotax = 0;
+                            }
+                            else
+                            {
+                                tax = 0;
+                                wotax = pr;
+                            }
+                            if (myReader.GetString("cash").Equals("Да"))
+                            {
+                                cash = pr;
+                            }
+                            Salary temp = new Salary(myReader.GetString("id"), myReader.GetString("cars"), myReader.GetString("object"), 1, pr, pr, tax, wotax, cash);
+                            bool f = true;
+                            bool ob = true;
+                            bool p = true;
+                            for (int i = 0; i < array.Count; i++)
+                            {
+                                if (array[i].id.Equals(temp.id))
                                 {
-                                    idmorelast = idlast;
-                                    salary[i].countTrip++;
+                                    f = false;
                                     break;
                                 }
-                                else
+                                if (array[i].objectt.Equals(temp.objectt))
                                 {
-                                    if (salary[i].objectt.Equals("-1"))
-                                    {
-                                        idmorelast = idlast;
-                                        fobj = true;
-                                        itter = i;
-                                        break;
-                                    }
+                                    ob = false;
+                                }
+                                if (array[i].price.Equals(temp.price) && array[i].objectt.Equals(temp.objectt))
+                                {
+                                    p = false;
                                 }
                             }
-                            if(fobj == true)
+                            if (f)
                             {
-                                salary[itter].car = myReader.GetString("cars");
-                                salary[itter].objectt = myReader.GetString("object");
-                                //MessageBox.Show("asd");
-                                /*string priceSal = myReader.GetString("priceSalary");
-                                MessageBox.Show(priceSal);
-                                bool isStop = false;
-                                for (int i = 0; i < priceSal.Length; i++)
+                                if (p)
                                 {
-                                    if (priceSal[i].Equals(','))
-                                    {
-                                        isStop = true;
-                                    }
-                                }
-                                if (isStop)
-                                {
-                                    string[] forsplit = priceSal.Split(',');
-                                    //string sad = forsplit[0] + '.' + forsplit[1];
-                                    //MessageBox.Show(sad);
-                                    salary[itter].price = double.Parse(sad);
-                                    MessageBox.Show(salary[itter].price.ToString());
+                                    array.Add(temp);
                                 }
                                 else
                                 {
-                                    salary[itter].price = int.Parse(priceSal);
-                                }*/
-                                //MessageBox.Show("asd");
-                                //MessageBox.Show(salary[itter].ToString());
-                                //MessageBox.Show(myReader.GetString("priceSalary"));
-                                salary[itter].price = double.Parse(myReader.GetString("priceSalary"));
-                                salary[itter].countTrip = 1;
-                                fobj = false;
-                                itter = -1;
+                                    if (!ob)
+                                    {
+                                        for (int i = 0; i < array.Count; i++)
+                                        {
+                                            if (array[i].objectt.Equals(temp.objectt) && array[i].price.Equals(temp.price))
+                                            {
+                                                array[i].countTrip++;
+                                                array[i].sum += temp.sum;
+                                                array[i].tax += temp.tax;
+                                                array[i].wotax += temp.wotax;
+                                                array[i].cash += temp.cash;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        array.Add(temp);
+                                    }
+                                }
+
                             }
                         }
                     }
@@ -166,55 +165,113 @@ namespace applications
                         MessageBox.Show(ex.Message);
                     }
                     db.closeConnection();
-                    for (int i = 0; i < 1000; i++)
-                    {
-                        salary[i].sum = salary[i].countTrip * salary[i].price;
-                    }
                     dgv.Columns.Clear();
                     dgv.Rows.Clear();
                     dgv.Columns.AddRange(
                     new DataGridViewTextBoxColumn() { Name = "car", HeaderText = "Автомобиль" },
-                    //new DataGridViewTextBoxColumn() { Name = "buyer", HeaderText = "Покупатель/заказчик" },
-                    //new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Объект" },
                     new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Название Объекта" },
                     new DataGridViewTextBoxColumn() { Name = "countTrip", HeaderText = "Кол-во рейсов" },
                     new DataGridViewTextBoxColumn() { Name = "price", HeaderText = "Расценок ЗП" },
-                    new DataGridViewTextBoxColumn() { Name = "sum", HeaderText = "Сумма" });
+                    new DataGridViewTextBoxColumn() { Name = "sum", HeaderText = "Сумма" },
+                    new DataGridViewTextBoxColumn() { Name = "tax", HeaderText = "НДС" },
+                    new DataGridViewTextBoxColumn() { Name = "wotax", HeaderText = "Без НДС" },
+                    new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Наличными" });
                     dgv.Rows.Clear();
-                    //dgv.Rows.Add();
-                    int itterr = 0;
-                    double summ = 0;
-                    for(int i = 0; i < 1000; i++)
+                    string line = array[0].car;
+                    int count = 0;
+                    double sumTrip = 0;
+                    double sumAll = 0;
+                    double sumSum = 0;
+                    double sumAllSum = 0;
+                    double sumTax = 0;
+                    double sumAllTax = 0;
+                    double sumWOTax = 0;
+                    double sumAllWOTax = 0;
+                    double sumCash = 0;
+                    double sumAllCash = 0;
+                    for (int i = 0; i < array.Count; i++)
                     {
-                        if (salary[i].objectt.Equals("-1"))
+                        if (!line.Equals(array[i].car) /*|| ((i == array.Count - 1) && (i != 0))*/)
                         {
-                            itterr = i;
-                            break;
+                            dgv.Rows.Add();
+                            dgv[0, count].Value = "Итого";
+                            dgv[2, count].Value = sumTrip;
+                            dgv[4, count].Value = sumSum;
+                            dgv[5, count].Value = sumTax;
+                            dgv[6, count].Value = sumWOTax;
+                            dgv[7, count].Value = sumCash;
+                            dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                            sumAll += sumTrip;
+                            sumTrip = 0;
+                            sumAllSum += sumSum;
+                            sumSum = 0;
+                            sumAllTax += sumTax;
+                            sumTax = 0;
+                            sumAllWOTax += sumWOTax;
+                            sumWOTax = 0;
+                            sumAllCash += sumCash;
+                            sumCash = 0;
+                            count++;
+                            line = array[i].car;
                         }
                         dgv.Rows.Add();
-                        dgv[0, i].Value = salary[i].car;
-                        dgv[1, i].Value = salary[i].objectt;
-                        dgv[2, i].Value = salary[i].countTrip;
-                        dgv[3, i].Value = salary[i].price;
-                        dgv[4, i].Value = salary[i].sum;
-                        summ += salary[i].sum;
-                        sumTrip += salary[i].countTrip;
+                        dgv[0, count].Value = array[i].car;
+                        dgv[1, count].Value = array[i].objectt;
+                        dgv[2, count].Value = array[i].countTrip;
+                        dgv[3, count].Value = array[i].price;
+                        dgv[4, count].Value = array[i].sum;
+                        dgv[5, count].Value = array[i].tax;
+                        dgv[6, count].Value = array[i].wotax;
+                        dgv[7, count].Value = array[i].cash;
+                        sumTrip += array[i].countTrip;
+                        sumSum += array[i].sum;
+                        sumTax += array[i].tax;
+                        sumWOTax += array[i].wotax;
+                        sumCash += array[i].cash;
+                        count++;
+                        if ((i == array.Count - 1))
+                        {
+                            dgv.Rows.Add();
+                            dgv[0, count].Value = "Итого";
+                            dgv[2, count].Value = sumTrip;
+                            dgv[4, count].Value = sumSum;
+                            dgv[5, count].Value = sumTax;
+                            dgv[6, count].Value = sumWOTax;
+                            dgv[7, count].Value = sumCash;
+                            dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                            sumAll += sumTrip;
+                            sumTrip = 0;
+                            sumAllSum += sumSum;
+                            sumSum = 0;
+                            sumAllTax += sumTax;
+                            sumTax = 0;
+                            sumAllWOTax += sumWOTax;
+                            sumWOTax = 0;
+                            sumAllCash += sumCash;
+                            sumCash = 0;
+                            count++;
+                            line = array[i].car;
+                        }
                     }
-                    //MessageBox.Show(itterr.ToString());
+                    sumAll += sumTrip;
                     dgv.Rows.Add();
-                    dgv[0, itterr].Value = "Всего";
-                    /*                    dgv[1, itterr].Value = "0";
-                                        dgv[2, itterr].Value = "0";
-                                        dgv[3, itterr].Value = "0";*/
-                    dgv[2, itterr].Value = sumTrip;
-                    dgv[4, itterr].Value = summ;
-                    dgv[0, itterr + 1].Value = "ЗП водителю";
-                    dgv[4, itterr + 1].Value = summ * 0.15;
-                    dgv.Rows[itterr].DefaultCellStyle.BackColor = Color.LightGray;
-                    dgv.Rows[itterr + 1].DefaultCellStyle.BackColor = Color.LightGray;
+                    dgv[0, count].Value = "Всего";
+                    dgv[2, count].Value = sumAll;
+                    dgv[4, count].Value = sumAllSum;
+                    dgv[5, count].Value = sumAllTax;
+                    dgv[6, count].Value = sumAllWOTax;
+                    dgv[7, count].Value = sumAllCash;
+                    dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    dgv[0, count + 1].Value = "ЗП водителю";
+                    dgv[4, count + 1].Value = sumAllSum * 0.15;
+                    dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                    dgv.Rows[count + 1].DefaultCellStyle.BackColor = Color.LightGray;
                     dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                 }
-                
+
             }
             else
             {
@@ -227,17 +284,7 @@ namespace applications
                 db.openConnection();
                 object obj = command.ExecuteScalar();
                 db.closeConnection();
-                Salary[] salary = new Salary[1000];
-                for (int i = 0; i < 1000; i++)
-                {
-                    salary[i] = new Salary();
-                    salary[i].car = "-1";
-                    salary[i].objectt = "-1";
-                    salary[i].price = -1;
-                    salary[i].countTrip = -1;
-                    salary[i].sum = -1;
-                }
-                int sumTrip = 0;
+                List<Salary> array = new List<Salary>();
                 bool fobj = false;
                 int itter = 0;
                 int idlast = 0;
@@ -252,71 +299,81 @@ namespace applications
                         myReader = command.ExecuteReader();
                         while (myReader.Read())
                         {
-                            idlast = int.Parse(myReader.GetString("id"));
-                            if (idlast == idmorelast)
+                            string pri = myReader.GetString("priceSalary");
+                            double pr = 0;
+                            if (pri.Equals("пусто"))
                             {
-                                idmorelast = idlast;
-                                continue;
+                                pr = 0;
                             }
-                            if (myReader.GetString("priceSalary").Equals("пусто"))
+                            else
                             {
-                                continue;
+                                pr = double.Parse(pri);
                             }
-                            string objectt = myReader.GetString("object");
-                            for (int i = 0; i < 1000; i++)
+                            double tax = 0;
+                            double wotax = 0;
+                            double cash = 0;
+                            if (myReader.GetString("tax").Equals("Нет"))
                             {
-                                //MessageBox.Show("nen");
-                                if (objectt.Equals(salary[i].objectt))
+                                tax = pr;
+                                wotax = 0;
+                            }
+                            else
+                            {
+                                tax = 0;
+                                wotax = pr;
+                            }
+                            if (myReader.GetString("cash").Equals("Да"))
+                            {
+                                cash = pr;
+                            }
+                            Salary temp = new Salary(myReader.GetString("id"), myReader.GetString("cars"), myReader.GetString("object"), 1, pr, pr, tax, wotax, cash);
+                            bool f = true;
+                            bool ob = true;
+                            bool p = true;
+                            for (int i = 0; i < array.Count; i++)
+                            {
+                                if (array[i].id.Equals(temp.id))
                                 {
-                                    idmorelast = idlast;
-                                    salary[i].countTrip++;
+                                    f = false;
                                     break;
                                 }
-                                else
+                                if (array[i].objectt.Equals(temp.objectt))
                                 {
-                                    if (salary[i].objectt.Equals("-1"))
-                                    {
-                                        idmorelast = idlast;
-                                        fobj = true;
-                                        itter = i;
-                                        break;
-                                    }
+                                    ob = false;
+                                }
+                                if (array[i].price.Equals(temp.price) && array[i].objectt.Equals(temp.objectt))
+                                {
+                                    p = false;
                                 }
                             }
-                            if (fobj == true)
+                            if (f)
                             {
-                                salary[itter].car = myReader.GetString("cars");
-                                salary[itter].objectt = myReader.GetString("object");
-                                //MessageBox.Show("asd");
-                                /*string priceSal = myReader.GetString("priceSalary");
-                                MessageBox.Show(priceSal);
-                                bool isStop = false;
-                                for (int i = 0; i < priceSal.Length; i++)
+                                if (p)
                                 {
-                                    if (priceSal[i].Equals(','))
-                                    {
-                                        isStop = true;
-                                    }
-                                }
-                                if (isStop)
-                                {
-                                    string[] forsplit = priceSal.Split(',');
-                                    //string sad = forsplit[0] + '.' + forsplit[1];
-                                    //MessageBox.Show(sad);
-                                    salary[itter].price = double.Parse(sad);
-                                    MessageBox.Show(salary[itter].price.ToString());
+                                    array.Add(temp);
                                 }
                                 else
                                 {
-                                    salary[itter].price = int.Parse(priceSal);
-                                }*/
-                                //MessageBox.Show("asd");
-                                //MessageBox.Show(salary[itter].ToString());
-                                //MessageBox.Show(myReader.GetString("priceSalary"));
-                                salary[itter].price = double.Parse(myReader.GetString("priceSalary"));
-                                salary[itter].countTrip = 1;
-                                fobj = false;
-                                itter = -1;
+                                    if (!ob)
+                                    {
+                                        for(int i = 0; i < array.Count; i++)
+                                        {
+                                            if (array[i].objectt.Equals(temp.objectt) && array[i].price.Equals(temp.price))
+                                            {
+                                                array[i].countTrip++;
+                                                array[i].sum += temp.sum;
+                                                array[i].tax += temp.tax;
+                                                array[i].wotax += temp.wotax;
+                                                array[i].cash += temp.cash;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        array.Add(temp);
+                                    }
+                                }
+
                             }
                         }
                     }
@@ -325,52 +382,110 @@ namespace applications
                         MessageBox.Show(ex.Message);
                     }
                     db.closeConnection();
-                    for (int i = 0; i < 1000; i++)
-                    {
-                        salary[i].sum = salary[i].countTrip * salary[i].price;
-                    }
                     dgv.Columns.Clear();
                     dgv.Rows.Clear();
                     dgv.Columns.AddRange(
                     new DataGridViewTextBoxColumn() { Name = "car", HeaderText = "Автомобиль" },
-                    //new DataGridViewTextBoxColumn() { Name = "buyer", HeaderText = "Покупатель/заказчик" },
-                    //new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Объект" },
                     new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Название Объекта" },
                     new DataGridViewTextBoxColumn() { Name = "countTrip", HeaderText = "Кол-во рейсов" },
                     new DataGridViewTextBoxColumn() { Name = "price", HeaderText = "Расценок ЗП" },
-                    new DataGridViewTextBoxColumn() { Name = "sum", HeaderText = "Сумма" });
+                    new DataGridViewTextBoxColumn() { Name = "sum", HeaderText = "Сумма" },
+                    new DataGridViewTextBoxColumn() { Name = "tax", HeaderText = "НДС" },
+                    new DataGridViewTextBoxColumn() { Name = "wotax", HeaderText = "Без НДС" },
+                    new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Наличными" });
                     dgv.Rows.Clear();
-                    //dgv.Rows.Add();
-                    int itterr = 0;
-                    double summ = 0;
-                    for (int i = 0; i < 1000; i++)
+                    string line = array[0].car;
+                    int count = 0;
+                    double sumTrip = 0;
+                    double sumAll = 0;
+                    double sumSum = 0;
+                    double sumAllSum = 0;
+                    double sumTax = 0;
+                    double sumAllTax = 0;
+                    double sumWOTax = 0;
+                    double sumAllWOTax = 0;
+                    double sumCash = 0;
+                    double sumAllCash = 0;
+                    for (int i = 0; i < array.Count; i++)
                     {
-                        if (salary[i].objectt.Equals("-1"))
+                        if (!line.Equals(array[i].car) /*|| ((i == array.Count - 1) && (i != 0))*/)
                         {
-                            itterr = i;
-                            break;
+                            dgv.Rows.Add();
+                            dgv[0, count].Value = "Итого";
+                            dgv[2, count].Value = sumTrip;
+                            dgv[4, count].Value = sumSum;
+                            dgv[5, count].Value = sumTax;
+                            dgv[6, count].Value = sumWOTax;
+                            dgv[7, count].Value = sumCash;
+                            dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                            sumAll += sumTrip;
+                            sumTrip = 0;
+                            sumAllSum += sumSum;
+                            sumSum = 0;
+                            sumAllTax += sumTax;
+                            sumTax = 0;
+                            sumAllWOTax += sumWOTax;
+                            sumWOTax = 0;
+                            sumAllCash += sumCash;
+                            sumCash = 0;
+                            count++;
+                            line = array[i].car;
                         }
                         dgv.Rows.Add();
-                        dgv[0, i].Value = salary[i].car;
-                        dgv[1, i].Value = salary[i].objectt;
-                        dgv[2, i].Value = salary[i].countTrip;
-                        dgv[3, i].Value = salary[i].price;
-                        dgv[4, i].Value = salary[i].sum;
-                        summ += salary[i].sum;
-                        sumTrip += salary[i].countTrip;
+                        dgv[0, count].Value = array[i].car;
+                        dgv[1, count].Value = array[i].objectt;
+                        dgv[2, count].Value = array[i].countTrip;
+                        dgv[3, count].Value = array[i].price;
+                        dgv[4, count].Value = array[i].sum;
+                        dgv[5, count].Value = array[i].tax;
+                        dgv[6, count].Value = array[i].wotax;
+                        dgv[7, count].Value = array[i].cash;
+                        sumTrip += array[i].countTrip;
+                        sumSum += array[i].sum;
+                        sumTax += array[i].tax;
+                        sumWOTax += array[i].wotax;
+                        sumCash += array[i].cash;
+                        count++;
+                        if ((i == array.Count - 1))
+                        {
+                            dgv.Rows.Add();
+                            dgv[0, count].Value = "Итого";
+                            dgv[2, count].Value = sumTrip;
+                            dgv[4, count].Value = sumSum;
+                            dgv[5, count].Value = sumTax;
+                            dgv[6, count].Value = sumWOTax;
+                            dgv[7, count].Value = sumCash;
+                            dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                            sumAll += sumTrip;
+                            sumTrip = 0;
+                            sumAllSum += sumSum;
+                            sumSum = 0;
+                            sumAllTax += sumTax;
+                            sumTax = 0;
+                            sumAllWOTax += sumWOTax;
+                            sumWOTax = 0;
+                            sumAllCash += sumCash;
+                            sumCash = 0;
+                            count++;
+                            line = array[i].car;
+                        }
                     }
-                    //MessageBox.Show(itterr.ToString());
+                    sumAll += sumTrip;
                     dgv.Rows.Add();
-                    dgv[0, itterr].Value = "Всего";
-                    /*                    dgv[1, itterr].Value = "0";
-                                        dgv[2, itterr].Value = "0";
-                                        dgv[3, itterr].Value = "0";*/
-                    dgv[2, itterr].Value = sumTrip;
-                    dgv[4, itterr].Value = summ;
-                    dgv[0, itterr + 1].Value = "ЗП водителю";
-                    dgv[4, itterr + 1].Value = summ * 0.15;
-                    dgv.Rows[itterr].DefaultCellStyle.BackColor = Color.LightGray;
-                    dgv.Rows[itterr + 1].DefaultCellStyle.BackColor = Color.LightGray;
+                    dgv[0, count].Value = "Всего";
+                    dgv[2, count].Value = sumAll;
+                    dgv[4, count].Value = sumAllSum;
+                    dgv[5, count].Value = sumAllTax;
+                    dgv[6, count].Value = sumAllWOTax;
+                    dgv[7, count].Value = sumAllCash;
+                    dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    dgv[0, count + 1].Value = "ЗП водителю";
+                    dgv[4, count + 1].Value = sumAllSum * 0.15;
+                    dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                    dgv.Rows[count + 1].DefaultCellStyle.BackColor = Color.LightGray;
                     dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                 }
             }

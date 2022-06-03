@@ -179,10 +179,15 @@ namespace applications
             {
                 fdriver = true;
             }
+            string checkLine = "AND `status` = 'Исполнена'";
+            if (checkBox3.CheckState == CheckState.Checked)
+            {
+                checkLine = "AND (`status` = 'Исполнена' or `status` = 'Назначена')";
+            }
 
             if (fdriver)
             {
-                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `contractor` = '" + comboBox2.Text + "' AND `cars` = '" + comboBox1.Text + "' AND `status` = 'Исполнена' ORDER BY `object` ASC;";
+                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `contractor` = '" + comboBox2.Text + "' AND `cars` = '" + comboBox1.Text + "' " + checkLine + " ORDER BY `object` ASC;";
                 DB db = new DB();
                 MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                 bool g = true;
@@ -416,7 +421,7 @@ namespace applications
             {
                 //Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "';";
                 //MessageBox.Show("Выберите водителя");
-                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `contractor` = '" + comboBox2.Text + "' AND `status` = 'Исполнена' ORDER BY `cars`, `id` ASC;";
+                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `contractor` = '" + comboBox2.Text + "' " + checkLine + " ORDER BY `cars`, `id` ASC;";
                 DB db = new DB();
                 MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                 bool g = true;

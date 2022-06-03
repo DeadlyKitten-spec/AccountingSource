@@ -121,6 +121,12 @@
     <Compile Include="Contractor.Designer.cs">
       <DependentUpon>Contractor.cs</DependentUpon>
     </Compile>
+    <Compile Include="CostRegister.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CostRegister.Designer.cs">
+      <DependentUpon>CostRegister.cs</DependentUpon>
+    </Compile>
     <Compile Include="CounterParty.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -196,6 +202,7 @@
       <DependentUpon>Drivers.cs</DependentUpon>
     </Compile>
     <Compile Include="ForBuyer.cs" />
+    <Compile Include="ForCostRegister.cs" />
     <Compile Include="ForNom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -209,6 +216,7 @@
     <Compile Include="ForProduct.Designer.cs">
       <DependentUpon>ForProduct.cs</DependentUpon>
     </Compile>
+    <Compile Include="ForStandRegister.cs" />
     <Compile Include="ForStatCP.cs" />
     <Compile Include="ForTable.cs" />
     <Compile Include="ForWorkers.cs">
@@ -295,6 +303,12 @@
       <DependentUpon>Report.cs</DependentUpon>
     </Compile>
     <Compile Include="Salary.cs" />
+    <Compile Include="StandRegister.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StandRegister.Designer.cs">
+      <DependentUpon>StandRegister.cs</DependentUpon>
+    </Compile>
     <Compile Include="StatementBuyer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -373,6 +387,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Contractor.resx">
       <DependentUpon>Contractor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CostRegister.resx">
+      <DependentUpon>CostRegister.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CounterParty.resx">
       <DependentUpon>CounterParty.cs</DependentUpon>
@@ -468,6 +485,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Report.resx">
       <DependentUpon>Report.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StandRegister.resx">
+      <DependentUpon>StandRegister.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatementBuyer.resx">
       <DependentUpon>StatementBuyer.cs</DependentUpon>

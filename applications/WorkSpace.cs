@@ -944,7 +944,8 @@ namespace applications
                     new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Расчет наличными" },
                     new DataGridViewTextBoxColumn() { Name = "tax", HeaderText = "Без НДС" },
                     new DataGridViewTextBoxColumn() { Name = "numberDocTrip", HeaderText = "Номер ТТН" },
-                    new DataGridViewTextBoxColumn() { Name = "paid", HeaderText = "Оплачено" });
+                    new DataGridViewTextBoxColumn() { Name = "paid", HeaderText = "Оплачено" },
+                    new DataGridViewTextBoxColumn() { Name = "coment", HeaderText = "Комментарий" });
                     dgv.Rows.Clear();
                     try
                     {
@@ -1076,6 +1077,10 @@ namespace applications
                                 dgv[17, i].Value = myReader.GetString("paid");
                             else
                                 dgv[17, i].Value = " ";
+                            if (!myReader.GetString("coment").Equals("пусто"))
+                                dgv[18, i].Value = myReader.GetString("coment");
+                            else
+                                dgv[18, i].Value = " ";
                             i++;
                         }
                     }
@@ -1158,7 +1163,8 @@ namespace applications
                         new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Расчет наличными" },
                         new DataGridViewTextBoxColumn() { Name = "tax", HeaderText = "Без НДС" },
                         new DataGridViewTextBoxColumn() { Name = "numberDocTrip", HeaderText = "Номер ТТН" },
-                        new DataGridViewTextBoxColumn() { Name = "paid", HeaderText = "Оплачено" });
+                        new DataGridViewTextBoxColumn() { Name = "paid", HeaderText = "Оплачено" },
+                        new DataGridViewTextBoxColumn() { Name = "coment", HeaderText = "Комментарий" });
                         dgv.Rows.Clear();
                         try
                         {
@@ -1290,6 +1296,10 @@ namespace applications
                                     dgv[17, i].Value = myReader.GetString("paid");
                                 else
                                     dgv[17, i].Value = " ";
+                                if (!myReader.GetString("coment").Equals("пусто"))
+                                    dgv[18, i].Value = myReader.GetString("coment");
+                                else
+                                    dgv[18, i].Value = " ";
                                 i++;
                             }
                         }
@@ -1473,6 +1483,22 @@ namespace applications
                                     {
                                         write.checkBox2.CheckState = CheckState.Unchecked;
                                     }
+                                    if (myReader.GetString("stand").Equals("Да"))
+                                    {
+                                        write.checkBox8.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox8.CheckState = CheckState.Unchecked;
+                                    }
+                                    string[] tload = myReader.GetString("timeLoading").Split(':');
+                                    int hourl = int.Parse(tload[0]);
+                                    int minutel = int.Parse(tload[1]);
+                                    write.dateTimePicker2.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hourl, minutel, 0);
+                                    string[] tuload = myReader.GetString("timeUnloading").Split(':');
+                                    int hourul = int.Parse(tuload[0]);
+                                    int minuteul = int.Parse(tuload[1]);
+                                    write.dateTimePicker6.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hourul, minuteul, 0);
                                     i++;
                                     write.buttonAdd.Hide();
                                     write.button2.Show();
@@ -1614,6 +1640,22 @@ namespace applications
                                     {
                                         write.checkBox2.CheckState = CheckState.Unchecked;
                                     }
+                                    if (myReader.GetString("stand").Equals("Да"))
+                                    {
+                                        write.checkBox8.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox8.CheckState = CheckState.Unchecked;
+                                    }
+                                    string[] tload = myReader.GetString("timeLoading").Split(':');
+                                    int hourl = int.Parse(tload[0]);
+                                    int minutel = int.Parse(tload[1]);
+                                    write.dateTimePicker2.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hourl, minutel, 0);
+                                    string[] tuload = myReader.GetString("timeUnloading").Split(':');
+                                    int hourul = int.Parse(tuload[0]);
+                                    int minuteul = int.Parse(tuload[1]);
+                                    write.dateTimePicker6.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hourul, minuteul, 0);
                                     i++;
                                     write.buttonAdd.Hide();
                                     write.button2.Hide();
@@ -3879,7 +3921,8 @@ namespace applications
                 new DataGridViewTextBoxColumn() { Name = "driver", HeaderText = "Водитель" },
                 new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Расчет наличными" },
                 new DataGridViewTextBoxColumn() { Name = "numberDocTrip", HeaderText = "Номер ТТН" },
-                new DataGridViewTextBoxColumn() { Name = "paid", HeaderText = "Оплачено" });
+                new DataGridViewTextBoxColumn() { Name = "paid", HeaderText = "Оплачено" },
+                new DataGridViewTextBoxColumn() { Name = "coment", HeaderText = "Комментарий" });
                 dgv.Rows.Clear();
                 try
                 {
@@ -4009,6 +4052,10 @@ namespace applications
                             dgv[18, i].Value = myReader.GetString("paid");
                         else
                             dgv[18, i].Value = " ";
+                        if (!myReader.GetString("coment").Equals("пусто"))
+                            dgv[19, i].Value = myReader.GetString("coment");
+                        else
+                            dgv[19, i].Value = " ";
                         i++;
                     }
                 }
