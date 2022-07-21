@@ -250,7 +250,7 @@ namespace applications
 
         void FillCombo1()
         {
-            string Query = "SELECT * FROM `counterparty` WHERE `status` != 'Грузоотправитель' ORDER BY `name` ASC";
+            string Query = "SELECT * FROM `counterparty` WHERE `status` != 'Грузоотправитель' and `ageCP` = 'новый' ORDER BY `name` ASC";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
@@ -498,7 +498,7 @@ namespace applications
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBox4.Items.Clear();
-            string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' ORDER BY `objectName` ASC;";
+            string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' and `ageOb` = 'новый' ORDER BY `objectName` ASC;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
@@ -910,6 +910,86 @@ namespace applications
             }
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             db.closeConnection();
+        }
+
+        private void button19_Click(object sender, EventArgs e)
+        {
+            if (button19.Text.Equals("Показать все записи"))
+            {
+                comboBox4.Items.Clear();
+                string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' ORDER BY `objectName` ASC;";
+                DB db = new DB();
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader;
+
+                try
+                {
+                    db.openConnection();
+                    myReader = cmdDataBase.ExecuteReader();
+
+                    while (myReader.Read())
+                    {
+                        string objName = myReader.GetString("objectName");
+                        if (objName.Equals("пусто"))
+                        {
+                            continue;
+                        }
+                        comboBox4.Items.Add(objName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button19.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                button19.Text = "Показать все записи";
+                FillCombo1();
+            }
+        }
+
+        private void button18_Click(object sender, EventArgs e)
+        {
+            if (button18.Text.Equals("Показать все записи"))
+            {
+                comboBox4.Items.Clear();
+                string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' ORDER BY `objectName` ASC;";
+                DB db = new DB();
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader;
+
+                try
+                {
+                    db.openConnection();
+                    myReader = cmdDataBase.ExecuteReader();
+
+                    while (myReader.Read())
+                    {
+                        string objName = myReader.GetString("objectName");
+                        if (objName.Equals("пусто"))
+                        {
+                            continue;
+                        }
+                        comboBox4.Items.Add(objName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button18.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                button18.Text = "Показать все записи";
+                comboBox1_SelectedIndexChanged(sender, e);
+            }
         }
     }
 }

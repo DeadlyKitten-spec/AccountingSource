@@ -50,6 +50,7 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.button9 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -60,6 +61,7 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(245)))), ((int)(((byte)(196)))));
+            this.panel1.Controls.Add(this.button9);
             this.panel1.Controls.Add(this.checkBox3);
             this.panel1.Controls.Add(this.pictureBox3);
             this.panel1.Controls.Add(this.button4);
@@ -91,7 +93,7 @@
             // 
             this.checkBox3.AutoSize = true;
             this.checkBox3.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.checkBox3.Location = new System.Drawing.Point(243, 179);
+            this.checkBox3.Location = new System.Drawing.Point(243, 188);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(196, 25);
             this.checkBox3.TabIndex = 66;
@@ -275,9 +277,9 @@
             // dgv
             // 
             this.dgv.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv.Location = new System.Drawing.Point(47, 210);
+            this.dgv.Location = new System.Drawing.Point(47, 218);
             this.dgv.Name = "dgv";
-            this.dgv.Size = new System.Drawing.Size(1402, 673);
+            this.dgv.Size = new System.Drawing.Size(1402, 665);
             this.dgv.TabIndex = 12;
             // 
             // comboBox1
@@ -310,6 +312,16 @@
             this.label1.Size = new System.Drawing.Size(62, 25);
             this.label1.TabIndex = 8;
             this.label1.Text = "Дата";
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(243, 160);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(275, 22);
+            this.button9.TabIndex = 97;
+            this.button9.Text = "Показать все записи";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
             // StatementCounterparty
             // 
@@ -353,5 +365,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox checkBox3;
+        public System.Windows.Forms.Button button9;
     }
 }

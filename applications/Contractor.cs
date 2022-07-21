@@ -57,12 +57,11 @@ namespace applications
             command = new MySqlCommand("SELECT * FROM `cars` ORDER BY `contractor` ASC", db.getConnection());
             MySqlDataReader myReader;
             int k = 0;
-            string[] names = new string[100];
+            List<string> names = new List<string>();
             try
             {
                 db.openConnection();
                 myReader = command.ExecuteReader();
-                int j = 0;
                 while (myReader.Read())
                 {
                     string objName = myReader.GetString("contractor");
@@ -71,21 +70,17 @@ namespace applications
                         continue;
                     }
                     bool f = true;
-                    for (int i = 0; i < names.Length; i++)
+                    for (int i = 0; i < names.Count; i++)
                     {
-                        if (names[i] != null)
+                        if (names[i].Equals(objName))
                         {
-                            if (names[i].Equals(objName))
-                            {
-                                f = false;
-                                break;
-                            }
+                            f = false;
+                            break;
                         }
                     }
                     if (f == true)
                     {
-                        names[j] = objName;
-                        j++;
+                        names.Add(objName);
                         dataGridView1.Rows.Add();
                         //dataGridView1[0, k].Value = k + 1;
                         dataGridView1[0, k].Value = objName;
@@ -98,6 +93,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
 
         void FillDGV()
@@ -106,12 +102,11 @@ namespace applications
             MySqlCommand command = new MySqlCommand("SELECT * FROM `cars` ORDER BY `contractor` ASC", db.getConnection());
             MySqlDataReader myReader;
             int k = 0;
-            string[] names = new string[100];
+            List<string> names = new List<string>();
             try
             {
                 db.openConnection();
                 myReader = command.ExecuteReader();
-                int j = 0;
                 while (myReader.Read())
                 {
                     string objName = myReader.GetString("contractor");
@@ -120,21 +115,17 @@ namespace applications
                         continue;
                     }
                     bool f = true;
-                    for (int i = 0; i < names.Length; i++)
+                    for (int i = 0; i < names.Count; i++)
                     {
-                        if (names[i] != null)
+                        if (names[i].Equals(objName))
                         {
-                            if (names[i].Equals(objName))
-                            {
-                                f = false;
-                                break;
-                            }
+                            f = false;
+                            break;
                         }
                     }
                     if (f == true)
                     {
-                        names[j] = objName;
-                        j++;
+                        names.Add(objName);
                         dataGridView1.Rows.Add();
                         //dataGridView1[0, k].Value = k + 1;
                         dataGridView1[0, k].Value = objName;
@@ -147,6 +138,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)
@@ -196,12 +188,11 @@ namespace applications
             command = new MySqlCommand("SELECT * FROM `cars` ORDER BY `contractor` ASC", db.getConnection());
             MySqlDataReader myReader;
             int k = 0;
-            string[] names = new string[100];
+            List<string> names = new List<string>();
             try
             {
                 db.openConnection();
                 myReader = command.ExecuteReader();
-                int j = 0;
                 while (myReader.Read())
                 {
                     string objName = myReader.GetString("contractor");
@@ -210,21 +201,17 @@ namespace applications
                         continue;
                     }
                     bool f = true;
-                    for (int i = 0; i < names.Length; i++)
+                    for (int i = 0; i < names.Count; i++)
                     {
-                        if (names[i] != null)
+                        if (names[i].Equals(objName))
                         {
-                            if (names[i].Equals(objName))
-                            {
-                                f = false;
-                                break;
-                            }
+                            f = false;
+                            break;
                         }
                     }
                     if (f == true)
                     {
-                        names[j] = objName;
-                        j++;
+                        names.Add(objName);
                         dataGridView1.Rows.Add();
                         //dataGridView1[0, k].Value = k + 1;
                         dataGridView1[0, k].Value = objName;
@@ -237,6 +224,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -270,7 +258,7 @@ namespace applications
             command = new MySqlCommand("SELECT * FROM `cars` ORDER BY `contractor` ASC", db.getConnection());
             MySqlDataReader myReader;
             int k = 0;
-            string[] names = new string[100];
+            List<string> names = new List<string>();
             try
             {
                 db.openConnection();
@@ -284,21 +272,17 @@ namespace applications
                         continue;
                     }
                     bool f = true;
-                    for (int i = 0; i < names.Length; i++)
+                    for (int i = 0; i < names.Count; i++)
                     {
-                        if (names[i] != null)
-                        {
                             if (names[i].Equals(objName))
                             {
                                 f = false;
                                 break;
                             }
-                        }
                     }
                     if (f == true)
                     {
-                        names[j] = objName;
-                        j++;
+                        names.Add(objName);
                         dataGridView1.Rows.Add();
                         //dataGridView1[0, k].Value = k + 1;
                         dataGridView1[0, k].Value = objName;
@@ -311,6 +295,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
     }
 }

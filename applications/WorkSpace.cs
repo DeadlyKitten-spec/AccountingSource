@@ -93,13 +93,6 @@ namespace applications
             /*button20.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button20.FlatAppearance.BorderColor = FlatColor;*/
 
-            button21.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button21.FlatAppearance.BorderColor = FlatColor;
-            button21.BringToFront();
-
-            button22.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button22.FlatAppearance.BorderColor = FlatColor;
-
             button23.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button23.FlatAppearance.BorderColor = FlatColor;
             button23.BringToFront();
@@ -118,9 +111,6 @@ namespace applications
 
             button28.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button28.FlatAppearance.BorderColor = FlatColor;
-
-            button29.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button29.FlatAppearance.BorderColor = FlatColor;
 
             button30.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button30.FlatAppearance.BorderColor = FlatColor;
@@ -1451,6 +1441,14 @@ namespace applications
                                     {
                                         write.checkBox1.CheckState = CheckState.Unchecked;
                                     }
+                                    if (myReader.GetString("card").Equals("Да"))
+                                    {
+                                        write.checkBox9.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox9.CheckState = CheckState.Unchecked;
+                                    }
                                     if (myReader.GetString("tax").Equals("Да"))
                                     {
                                         write.checkBox5.CheckState = CheckState.Checked;
@@ -1593,6 +1591,14 @@ namespace applications
                                     else
                                     {
                                         write.checkBox2.CheckState = CheckState.Unchecked;
+                                    }
+                                    if (myReader.GetString("card").Equals("Да"))
+                                    {
+                                        write.checkBox9.CheckState = CheckState.Checked;
+                                    }
+                                    else
+                                    {
+                                        write.checkBox9.CheckState = CheckState.Unchecked;
                                     }
                                     if (myReader.GetString("mission").Equals("Да"))
                                     {
@@ -1995,12 +2001,6 @@ namespace applications
         {
             Contractor cont = new Contractor();
             cont.Show();
-        }
-
-        private void button16_Click(object sender, EventArgs e)
-        {
-            Price price = new Price();
-            price.Show();
         }
 
         private void button17_Click(object sender, EventArgs e)
@@ -4304,11 +4304,6 @@ namespace applications
             dictionaries.Owner = this;
         }
 
-        private void button22_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button6_Click_1(object sender, EventArgs e)
         {
             Analytics analytics = new Analytics();
@@ -4608,6 +4603,46 @@ namespace applications
         {
             Paid paid = new Paid();
             paid.Show();
+        }
+
+        private void button9_Click_1(object sender, EventArgs e)
+        {
+            if(button9.Text.Equals("Показать все записи"))
+            {
+                DB db = new DB();
+                comboBox5.Items.Clear();
+                string Query = "SELECT * FROM `cars` WHERE `contractor` = '" + comboBox4.Text.ToString() + "' ORDER BY `name` ASC;";
+                //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+                MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader2;
+
+                try
+                {
+                    db.openConnection();
+                    myReader2 = cmdDataBase2.ExecuteReader();
+
+                    while (myReader2.Read())
+                    {
+                        string objName = myReader2.GetString("name");
+                        if (objName.Equals(""))
+                        {
+                            continue;
+                        }
+                        comboBox5.Items.Add(objName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button9.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                button9.Text = "Показать все записи";
+                this.comboBox4_SelectedIndexChanged(sender, e);
+            }
         }
     }
 }

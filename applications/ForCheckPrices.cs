@@ -6,23 +6,27 @@ using System.Threading.Tasks;
 
 namespace applications
 {
-    class ForCostRegister
+    class ForCheckPrices
     {
+        public string id = "";
         public string date = "";
         public string cp = "";
         public string objectt = "";
-        public string id = "";
         public string price = "";
         public string priceSalary = "";
+        public string priceDict = "";
+        public string priceSalaryDict = "";
 
-        public ForCostRegister(string date, string cp, string objectt, string id, string price, string priceSalary)
+        public ForCheckPrices(string id, string date, string cp, string objectt,  string price, string priceSalary, string priceDict, string priceSalaryDict)
         {
+            this.id = id;
             this.date = date;
             this.cp = cp;
             this.objectt = objectt;
-            this.id = id;
             this.price = price;
             this.priceSalary = priceSalary;
+            this.priceDict = priceDict;
+            this.priceSalaryDict = priceSalaryDict;
         }
     }
 }

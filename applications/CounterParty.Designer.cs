@@ -30,6 +30,8 @@
         {
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
@@ -45,6 +47,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Запись = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -61,7 +64,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(660, 691);
+            this.panel2.Size = new System.Drawing.Size(757, 691);
             this.panel2.TabIndex = 3;
             this.panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseDown_1);
             this.panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseMove_1);
@@ -70,6 +73,8 @@
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(237)))), ((int)(((byte)(147)))));
             this.panel3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panel3.Controls.Add(this.label5);
+            this.panel3.Controls.Add(this.checkBox4);
             this.panel3.Controls.Add(this.checkBox3);
             this.panel3.Controls.Add(this.label4);
             this.panel3.Controls.Add(this.checkBox2);
@@ -85,10 +90,31 @@
             this.panel3.Controls.Add(this.pictureBox2);
             this.panel3.Location = new System.Drawing.Point(2, 2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(656, 687);
+            this.panel3.Size = new System.Drawing.Size(752, 687);
             this.panel3.TabIndex = 0;
             this.panel3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel3_MouseDown);
             this.panel3.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel3_MouseMove);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(561, 629);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(159, 25);
+            this.label5.TabIndex = 56;
+            this.label5.Text = "Старая запись";
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.checkBox4.Location = new System.Drawing.Point(635, 664);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(15, 14);
+            this.checkBox4.TabIndex = 55;
+            this.checkBox4.UseVisualStyleBackColor = true;
             // 
             // checkBox3
             // 
@@ -153,7 +179,7 @@
             // pictureBox4
             // 
             this.pictureBox4.Image = global::applications.Properties.Resources.delete;
-            this.pictureBox4.Location = new System.Drawing.Point(553, 564);
+            this.pictureBox4.Location = new System.Drawing.Point(660, 564);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(51, 59);
             this.pictureBox4.TabIndex = 48;
@@ -163,7 +189,7 @@
             // pictureBox3
             // 
             this.pictureBox3.Image = global::applications.Properties.Resources.edit;
-            this.pictureBox3.Location = new System.Drawing.Point(491, 564);
+            this.pictureBox3.Location = new System.Drawing.Point(598, 564);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(61, 59);
             this.pictureBox3.TabIndex = 47;
@@ -177,18 +203,19 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.name,
-            this.status});
-            this.dataGridView1.Location = new System.Drawing.Point(47, 39);
+            this.status,
+            this.Запись});
+            this.dataGridView1.Location = new System.Drawing.Point(24, 39);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(563, 521);
+            this.dataGridView1.Size = new System.Drawing.Size(705, 521);
             this.dataGridView1.TabIndex = 44;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = global::applications.Properties.Resources.plus2;
-            this.pictureBox1.Location = new System.Drawing.Point(428, 564);
+            this.pictureBox1.Location = new System.Drawing.Point(535, 564);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(61, 59);
             this.pictureBox1.TabIndex = 42;
@@ -198,9 +225,9 @@
             // textBox2
             // 
             this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox2.Location = new System.Drawing.Point(214, 581);
+            this.textBox2.Location = new System.Drawing.Point(174, 581);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(208, 26);
+            this.textBox2.Size = new System.Drawing.Size(355, 26);
             this.textBox2.TabIndex = 41;
             // 
             // label1
@@ -218,7 +245,7 @@
             // 
             this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox2.Image = global::applications.Properties.Resources.iconfinder_173_Arrow_Loop_Loop_Arrow_Back_4541847;
-            this.pictureBox2.Location = new System.Drawing.Point(596, -7);
+            this.pictureBox2.Location = new System.Drawing.Point(690, -2);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(62, 58);
             this.pictureBox2.TabIndex = 39;
@@ -238,12 +265,18 @@
             this.status.Name = "status";
             this.status.ReadOnly = true;
             // 
+            // Запись
+            // 
+            this.Запись.HeaderText = "Актуальная запись";
+            this.Запись.Name = "Запись";
+            this.Запись.ReadOnly = true;
+            // 
             // CounterParty
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(660, 691);
+            this.ClientSize = new System.Drawing.Size(757, 691);
             this.Controls.Add(this.panel2);
             this.Name = "CounterParty";
             this.Text = "Контрагенты";
@@ -276,7 +309,10 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Запись;
     }
 }

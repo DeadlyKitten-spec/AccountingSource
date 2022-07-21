@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
@@ -43,6 +45,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Option = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Запись = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -56,6 +59,8 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(237)))), ((int)(((byte)(147)))));
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.checkBox1);
             this.panel1.Controls.Add(this.textBox2);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.pictureBox4);
@@ -69,16 +74,38 @@
             this.panel1.Controls.Add(this.closeButton);
             this.panel1.Location = new System.Drawing.Point(3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(681, 663);
+            this.panel1.Size = new System.Drawing.Size(759, 663);
             this.panel1.TabIndex = 0;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label4.Location = new System.Drawing.Point(41, 165);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(159, 25);
+            this.label4.TabIndex = 52;
+            this.label4.Text = "Старая запись";
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.checkBox1.Location = new System.Drawing.Point(222, 173);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(15, 14);
+            this.checkBox1.TabIndex = 51;
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(226, 125);
+            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox2.Location = new System.Drawing.Point(222, 122);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(208, 20);
+            this.textBox2.Size = new System.Drawing.Size(281, 26);
             this.textBox2.TabIndex = 50;
             // 
             // label2
@@ -95,7 +122,7 @@
             // pictureBox4
             // 
             this.pictureBox4.Image = global::applications.Properties.Resources.delete;
-            this.pictureBox4.Location = new System.Drawing.Point(563, 40);
+            this.pictureBox4.Location = new System.Drawing.Point(637, 40);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(51, 59);
             this.pictureBox4.TabIndex = 48;
@@ -105,7 +132,7 @@
             // pictureBox3
             // 
             this.pictureBox3.Image = global::applications.Properties.Resources.edit;
-            this.pictureBox3.Location = new System.Drawing.Point(501, 40);
+            this.pictureBox3.Location = new System.Drawing.Point(575, 40);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(61, 59);
             this.pictureBox3.TabIndex = 47;
@@ -114,10 +141,11 @@
             // 
             // comboBox1
             // 
+            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(226, 30);
+            this.comboBox1.Location = new System.Drawing.Point(222, 27);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(208, 21);
+            this.comboBox1.Size = new System.Drawing.Size(281, 28);
             this.comboBox1.TabIndex = 45;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
@@ -139,18 +167,19 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.name,
-            this.Option});
-            this.dataGridView1.Location = new System.Drawing.Point(46, 180);
+            this.Option,
+            this.Запись});
+            this.dataGridView1.Location = new System.Drawing.Point(46, 202);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(563, 463);
+            this.dataGridView1.Size = new System.Drawing.Size(642, 441);
             this.dataGridView1.TabIndex = 43;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // plusButton
             // 
             this.plusButton.Image = global::applications.Properties.Resources.plus2;
-            this.plusButton.Location = new System.Drawing.Point(440, 40);
+            this.plusButton.Location = new System.Drawing.Point(514, 40);
             this.plusButton.Name = "plusButton";
             this.plusButton.Size = new System.Drawing.Size(61, 59);
             this.plusButton.TabIndex = 42;
@@ -159,9 +188,10 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(226, 79);
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox1.Location = new System.Drawing.Point(222, 76);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(208, 20);
+            this.textBox1.Size = new System.Drawing.Size(281, 26);
             this.textBox1.TabIndex = 41;
             // 
             // label3
@@ -179,7 +209,7 @@
             // 
             this.closeButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.closeButton.Image = global::applications.Properties.Resources.iconfinder_173_Arrow_Loop_Loop_Arrow_Back_4541847;
-            this.closeButton.Location = new System.Drawing.Point(618, -3);
+            this.closeButton.Location = new System.Drawing.Point(697, 0);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(62, 58);
             this.closeButton.TabIndex = 39;
@@ -194,7 +224,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(687, 667);
+            this.panel2.Size = new System.Drawing.Size(765, 667);
             this.panel2.TabIndex = 1;
             this.panel2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseDown);
             this.panel2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseMove);
@@ -212,11 +242,17 @@
             this.Option.Name = "Option";
             this.Option.ReadOnly = true;
             // 
+            // Запись
+            // 
+            this.Запись.HeaderText = "Актуальная запись";
+            this.Запись.Name = "Запись";
+            this.Запись.ReadOnly = true;
+            // 
             // Cars
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(687, 667);
+            this.ClientSize = new System.Drawing.Size(765, 667);
             this.Controls.Add(this.panel2);
             this.Name = "Cars";
             this.Text = "Автомобили";
@@ -247,7 +283,10 @@
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Option;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Запись;
     }
 }

@@ -40,7 +40,7 @@ namespace applications
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader;
-            string[] names = new string[100];
+            List<string> names = new List<string>();
             try
             {
                 db.openConnection();
@@ -55,21 +55,17 @@ namespace applications
                         continue;
                     }
                     bool f = true;
-                    for (int i = 0; i < names.Length; i++)
+                    for (int i = 0; i < names.Count; i++)
                     {
-                        if (names[i] != null)
+                        if (names[i].Equals(objName))
                         {
-                            if (names[i].Equals(objName))
-                            {
-                                f = false;
-                                break;
-                            }
+                            f = false;
+                            break;
                         }
                     }
-                    if (f == true)
+                    if (f)
                     {
-                        names[j] = objName;
-                        j++;
+                        names.Add(objName);
                         comboBox1.Items.Add(objName);
                     }
                 }
@@ -79,6 +75,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
 
         void FillDGV()
@@ -122,11 +119,13 @@ namespace applications
             MySqlCommand command = new MySqlCommand("SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox1.Text + "' ORDER BY `name` ASC", db.getConnection());
             MySqlDataReader myReader;
             int k = 0;
-            string[] names = new string[100];
+            List<string> names = new List<string>();
+            List<string> age = new List<string>();
             try
             {
                 db.openConnection();
                 myReader = command.ExecuteReader();
+
                 int j = 0;
                 while (myReader.Read())
                 {
@@ -136,25 +135,25 @@ namespace applications
                         continue;
                     }
                     bool f = true;
-                    for (int i = 0; i < names.Length; i++)
+                    for (int i = 0; i < names.Count; i++)
                     {
-                        if (names[i] != null)
+                        if (names[i].Equals(objName))
                         {
-                            if (names[i].Equals(objName))
-                            {
-                                f = false;
-                                break;
-                            }
+                            f = false;
+                            break;
                         }
                     }
-                    if (f == true)
+                    if (f)
                     {
-                        names[j] = objName;
-                        j++;
-                        dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[0, k].Value = objName;
-                        k++;
+                        names.Add(objName);
+                        if (myReader.GetString("age").Equals("старый"))
+                        {
+                            age.Add("Нет");
+                        }
+                        else
+                        {
+                            age.Add("Да");
+                        }
                     }
                 }
             }
@@ -163,15 +162,30 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            for(int i = 0; i < names.Count; i++)
+            {
+                dataGridView1.Rows.Add();
+                dataGridView1[0, i].Value = names[i];
+                dataGridView1[1, i].Value = age[i];
+            }
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
 
         private void plusButton_Click(object sender, EventArgs e)
         {
             DB db = new DB();
-            MySqlCommand command = new MySqlCommand("INSERT INTO `drivers` (`contractor`, `name`) VALUES (@contractor, @drivers)", db.getConnection());
+            MySqlCommand command = new MySqlCommand("INSERT INTO `drivers` (`contractor`, `name`, `age`) VALUES (@contractor, @drivers, @age)", db.getConnection());
 
             command.Parameters.Add("@contractor", MySqlDbType.VarChar).Value = comboBox1.Text;
             command.Parameters.Add("@drivers", MySqlDbType.VarChar).Value = textBox1.Text;
+            if(checkBox1.CheckState == CheckState.Checked)
+            {
+                command.Parameters.Add("@age", MySqlDbType.VarChar).Value = "старый";
+            }
+            else
+            {
+                command.Parameters.Add("@age", MySqlDbType.VarChar).Value = "новый";
+            }
             db.openConnection();
 
             command.ExecuteNonQuery();
@@ -180,16 +194,19 @@ namespace applications
             db.closeConnection();
 
             textBox1.Text = "";
+            checkBox1.CheckState = CheckState.Unchecked;
             dataGridView1.Rows.Clear();
             command = new MySqlCommand("SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox1.Text + "' ORDER BY `name` ASC", db.getConnection());
             MySqlDataReader myReader;
             int k = 0;
-            string[] names = new string[100];
+            List<string> names = new List<string>();
+            List<string> age = new List<string>();
             try
             {
                 db.openConnection();
                 myReader = command.ExecuteReader();
 
+                int j = 0;
                 while (myReader.Read())
                 {
                     string objName = myReader.GetString("name");
@@ -197,10 +214,27 @@ namespace applications
                     {
                         continue;
                     }
-                    dataGridView1.Rows.Add();
-                    //dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[0, k].Value = objName;
-                    k++;
+                    bool f = true;
+                    for (int i = 0; i < names.Count; i++)
+                    {
+                        if (names[i].Equals(objName))
+                        {
+                            f = false;
+                            break;
+                        }
+                    }
+                    if (f)
+                    {
+                        names.Add(objName);
+                        if (myReader.GetString("age").Equals("старый"))
+                        {
+                            age.Add("Нет");
+                        }
+                        else 
+                        {
+                            age.Add("Да");
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -208,12 +242,30 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            for (int i = 0; i < names.Count; i++)
+            {
+                dataGridView1.Rows.Add();
+                dataGridView1[0, i].Value = names[i];
+                dataGridView1[1, i].Value = age[i];
+            }
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
         {
             DB db = new DB();
-            MySqlCommand command = new MySqlCommand("UPDATE `drivers` SET `name` = '" + textBox1.Text + "' WHERE `name` = '" + val + "'", db.getConnection());
+
+            string age = "";
+            if (checkBox1.CheckState == CheckState.Checked)
+            {
+                age = "старый";
+            }
+            else
+            {
+                age = "новый";
+            }
+
+            MySqlCommand command = new MySqlCommand("UPDATE `drivers` SET `name` = '" + textBox1.Text + "', `age` = '" + age + "' WHERE `name` = '" + val + "'", db.getConnection());
 
             db.openConnection();
 
@@ -229,16 +281,19 @@ namespace applications
             db.closeConnection();
 
             textBox1.Text = "";
+            checkBox1.CheckState = CheckState.Unchecked;
             dataGridView1.Rows.Clear();
             command = new MySqlCommand("SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox1.Text + "' ORDER BY `name` ASC", db.getConnection());
             MySqlDataReader myReader;
             int k = 0;
-            string[] names = new string[100];
+            List<string> names = new List<string>();
+            List<string> ages = new List<string>();
             try
             {
                 db.openConnection();
                 myReader = command.ExecuteReader();
 
+                int j = 0;
                 while (myReader.Read())
                 {
                     string objName = myReader.GetString("name");
@@ -246,10 +301,27 @@ namespace applications
                     {
                         continue;
                     }
-                    dataGridView1.Rows.Add();
-                    //dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[0, k].Value = objName;
-                    k++;
+                    bool f = true;
+                    for (int i = 0; i < names.Count; i++)
+                    {
+                        if (names[i].Equals(objName))
+                        {
+                            f = false;
+                            break;
+                        }
+                    }
+                    if (f)
+                    {
+                        names.Add(objName);
+                        if (myReader.GetString("age").Equals("старый"))
+                        {
+                            ages.Add("Нет");
+                        }
+                        else
+                        {
+                            ages.Add("Да");
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -257,6 +329,13 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            for (int i = 0; i < names.Count; i++)
+            {
+                dataGridView1.Rows.Add();
+                dataGridView1[0, i].Value = names[i];
+                dataGridView1[1, i].Value = ages[i];
+            }
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
 
         private void pictureBox4_Click(object sender, EventArgs e)
@@ -271,16 +350,19 @@ namespace applications
             db.closeConnection();
 
             textBox1.Text = "";
+            checkBox1.CheckState = CheckState.Unchecked;
             dataGridView1.Rows.Clear();
             command = new MySqlCommand("SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox1.Text + "' ORDER BY `name` ASC", db.getConnection());
             MySqlDataReader myReader;
             int k = 0;
-            string[] names = new string[100];
+            List<string> names = new List<string>();
+            List<string> age = new List<string>();
             try
             {
                 db.openConnection();
                 myReader = command.ExecuteReader();
 
+                int j = 0;
                 while (myReader.Read())
                 {
                     string objName = myReader.GetString("name");
@@ -288,10 +370,27 @@ namespace applications
                     {
                         continue;
                     }
-                    dataGridView1.Rows.Add();
-                    //dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[0, k].Value = objName;
-                    k++;
+                    bool f = true;
+                    for (int i = 0; i < names.Count; i++)
+                    {
+                        if (names[i].Equals(objName))
+                        {
+                            f = false;
+                            break;
+                        }
+                    }
+                    if (f)
+                    {
+                        names.Add(objName);
+                        if (myReader.GetString("age").Equals("старый"))
+                        {
+                            age.Add("Нет");
+                        }
+                        else
+                        {
+                            age.Add("Да");
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -299,6 +398,13 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            for (int i = 0; i < names.Count; i++)
+            {
+                dataGridView1.Rows.Add();
+                dataGridView1[0, i].Value = names[i];
+                dataGridView1[1, i].Value = age[i];
+            }
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -306,6 +412,14 @@ namespace applications
             int idx = dataGridView1.CurrentRow.Index;
             val = dataGridView1[0, idx].Value.ToString();
             textBox1.Text = dataGridView1[0, idx].Value.ToString();
+            if (dataGridView1[1, idx].Value.Equals("Нет"))
+            {
+                checkBox1.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                checkBox1.CheckState = CheckState.Unchecked;
+            }
         }
     }
 }

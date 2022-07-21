@@ -187,7 +187,7 @@ namespace applications
 
             if (fdriver)
             {
-                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `contractor` = '" + comboBox2.Text + "' AND `cars` = '" + comboBox1.Text + "' " + checkLine + " ORDER BY `object` ASC;";
+                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `contractor` = '" + comboBox2.Text + "' AND `cars` = '" + comboBox1.Text + "' " + checkLine + " ORDER BY `object`, `id` ASC;";
                 DB db = new DB();
                 MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                 bool g = true;
@@ -232,12 +232,13 @@ namespace applications
                             {
                                 continue;
                             }
+                            double price = double.Parse(myReader.GetString("price"));
                             string cars = myReader.GetString("cars");
                             string objectt = myReader.GetString("object");
                             for (int i = 0; i < 1000; i++)
                             {
                                 //MessageBox.Show("nen");
-                                if (objectt.Equals(salary[i].objectt) && cars.Equals(salary[i].cp))
+                                if (objectt.Equals(salary[i].objectt) && cars.Equals(salary[i].cp) && price.Equals(salary[i].price))
                                 {
                                     idmorelast = idlast;
                                     salary[i].countTrip++;
@@ -273,32 +274,6 @@ namespace applications
                             {
                                 salary[itter].cp = myReader.GetString("cars");
                                 salary[itter].objectt = myReader.GetString("object");
-                                //MessageBox.Show("asd");
-                                /*string priceSal = myReader.GetString("priceSalary");
-                                MessageBox.Show(priceSal);
-                                bool isStop = false;
-                                for (int i = 0; i < priceSal.Length; i++)
-                                {
-                                    if (priceSal[i].Equals(','))
-                                    {
-                                        isStop = true;
-                                    }
-                                }
-                                if (isStop)
-                                {
-                                    string[] forsplit = priceSal.Split(',');
-                                    //string sad = forsplit[0] + '.' + forsplit[1];
-                                    //MessageBox.Show(sad);
-                                    salary[itter].price = double.Parse(sad);
-                                    MessageBox.Show(salary[itter].price.ToString());
-                                }
-                                else
-                                {
-                                    salary[itter].price = int.Parse(priceSal);
-                                }*/
-                                //MessageBox.Show("asd");
-                                //MessageBox.Show(salary[itter].ToString());
-                                //MessageBox.Show(myReader.GetString("priceSalary"));
                                 salary[itter].price = double.Parse(myReader.GetString("price"));
                                 salary[itter].countTrip = 1;
                                 if (myReader.GetString("tax").Equals("Да"))
@@ -466,12 +441,13 @@ namespace applications
                             {
                                 continue;
                             }
+                            double price = double.Parse(myReader.GetString("price"));
                             string cars = myReader.GetString("cars");
                             string objectt = myReader.GetString("object");
                             for (int i = 0; i < 1000; i++)
                             {
                                 //MessageBox.Show("nen");
-                                if (objectt.Equals(salary[i].objectt) && cars.Equals(salary[i].cp))
+                                if (objectt.Equals(salary[i].objectt) && cars.Equals(salary[i].cp) && price.Equals(salary[i].price))
                                 {
                                     idmorelast = idlast;
                                     salary[i].countTrip++;
@@ -787,7 +763,7 @@ namespace applications
         {
             DB db = new DB();
             comboBox1.Items.Clear();
-            string Query = "SELECT * FROM `cars` WHERE `contractor` = '" + comboBox2.Text.ToString() + "' ORDER BY `name` ASC;";
+            string Query = "SELECT * FROM `cars` WHERE `contractor` = '" + comboBox2.Text.ToString() + "' and `age` = 'новый' ORDER BY `name` ASC;";
             //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
             MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader2;
@@ -896,6 +872,46 @@ namespace applications
             CRViewerAnC crv = new CRViewerAnC();
             crv.crystalReportViewer1.ReportSource = cr;
             crv.Show();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if (button9.Text.Equals("Показать все записи"))
+            {
+                DB db = new DB();
+                comboBox1.Items.Clear();
+                string Query = "SELECT * FROM `cars` WHERE `contractor` = '" + comboBox2.Text.ToString() + "' ORDER BY `name` ASC;";
+                //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+                MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader2;
+
+                try
+                {
+                    db.openConnection();
+                    myReader2 = cmdDataBase2.ExecuteReader();
+
+                    while (myReader2.Read())
+                    {
+                        string objName = myReader2.GetString("name");
+                        if (objName.Equals(""))
+                        {
+                            continue;
+                        }
+                        comboBox1.Items.Add(objName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button9.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                button9.Text = "Показать все записи";
+                this.comboBox2_SelectedIndexChanged(sender, e);
+            }
         }
     }
 }
