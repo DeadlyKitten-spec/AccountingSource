@@ -77,6 +77,8 @@ namespace applications
             button3.Hide();
             label33.Hide();
             label34.Hide();
+            label35.Hide();
+            checkBox9.Hide();
             dateTimePicker2.Hide();
             dateTimePicker6.Hide();
 
@@ -90,6 +92,8 @@ namespace applications
                     dataGridView1["cargoNum", i].Value = WriteRequest.numCargo[i];
                 }
             }
+
+            button4.Text = "Показать все записи";
 
         }
 
@@ -271,7 +275,7 @@ namespace applications
             {
                 for (int i = 0; i < WriteRequest.CargoCount; i++)
                 {
-                    MySqlCommand command = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload)", db.getConnection());
+                    MySqlCommand command = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `card`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @card, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload)", db.getConnection());
 
                     command.Parameters.Add("@id", MySqlDbType.Int32).Value = idRequest;
                     command.Parameters.Add("@data", MySqlDbType.Date).Value = dateTimePicker1.Value;
@@ -437,6 +441,14 @@ namespace applications
                     else
                     {
                         command.Parameters.Add("@cash", MySqlDbType.VarChar).Value = "Нет";
+                    }
+                    if (checkBox9.CheckState == CheckState.Checked)
+                    {
+                        command.Parameters.Add("@card", MySqlDbType.VarChar).Value = "Да";
+                    }
+                    else
+                    {
+                        command.Parameters.Add("@card", MySqlDbType.VarChar).Value = "Нет";
                     }
                     if (checkBox5.CheckState == CheckState.Checked)
                     {
@@ -691,6 +703,7 @@ namespace applications
             checkBox5.CheckState = CheckState.Unchecked;
             checkBox6.CheckState = CheckState.Unchecked;
             checkBox7.CheckState = CheckState.Unchecked;
+            checkBox9.CheckState = CheckState.Unchecked;
             textBox1.Text = "";
             textBox4.Text = "";
             label13.Hide();
@@ -969,7 +982,7 @@ namespace applications
 
         void FillCombo3()
         {
-            string Query = "SELECT * FROM `counterparty` WHERE `status` != 'Грузоотправитель'" + /*WHERE status = 'Грузополучатель/грузоотправитель' OR status = 'Диспетчер'*/  "ORDER BY `name` ASC;";
+            string Query = "SELECT * FROM `counterparty` WHERE `status` != 'Грузоотправитель'" + /*WHERE status = 'Грузополучатель/грузоотправитель' OR status = 'Диспетчер'*/  " and `ageCP` = 'новый' ORDER BY `name` ASC;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
@@ -1013,7 +1026,7 @@ namespace applications
 
         void FillCombo4()
         {
-            string Query = "SELECT * FROM `counterparty` WHERE status = 'Грузополучатель/грузоотправитель' OR status = 'Грузоотправитель' ORDER BY `name` ASC;" ;
+            string Query = "SELECT * FROM `counterparty` WHERE (status = 'Грузополучатель/грузоотправитель' OR status = 'Грузоотправитель') and `ageCP` = 'новый' ORDER BY `name` ASC;" ;
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
@@ -1057,8 +1070,7 @@ namespace applications
 
         void FillCombo5()
         {
-            
-            string Query = "SELECT * FROM `counterparty` WHERE status = 'Грузополучатель/грузоотправитель' OR status = 'Грузополучатель' ORDER BY `name` ASC;";
+            string Query = "SELECT * FROM `counterparty` WHERE (status = 'Грузополучатель/грузоотправитель' OR status = 'Грузополучатель') and `ageCP` = 'новый' ORDER BY `name` ASC;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
@@ -1295,10 +1307,8 @@ namespace applications
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //comboBox5.Text = comboBox3.Text;
             comboBox6.Items.Clear();
-            //string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox3.Text.ToString() + "' ORDER BY `objectName` ASC;";
-            string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox3.Text.ToString() + "' ORDER BY `objectName` ASC;";
+            string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox3.Text.ToString() + "' and `ageOb` = 'новый' ORDER BY `objectName` ASC;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
@@ -1320,7 +1330,9 @@ namespace applications
                     if (myReader.GetString("status").Equals("Б/С"))
                     {
                         comboBox4.Text = comboBox3.Text;
+                        this.comboBox5_SelectedIndexChanged(sender, e);
                         comboBox5.Text = comboBox3.Text;
+                        this.comboBox4_SelectedIndexChanged(sender, e);
                     }
                 }
             }
@@ -1411,7 +1423,7 @@ namespace applications
                     bool fstat = false;
                     for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                     {
-                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload)", db.getConnection());
+                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `card`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @card, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload)", db.getConnection());
 
 
                         com.Parameters.AddWithValue("@id", idRequest);
@@ -1526,6 +1538,14 @@ namespace applications
                         else
                         {
                             com.Parameters.AddWithValue("@cash", "Нет");
+                        }
+                        if (checkBox9.CheckState == CheckState.Checked)
+                        {
+                            com.Parameters.AddWithValue("@card", "Да");
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@card", "Нет");
                         }
                         if (checkBox5.CheckState == CheckState.Checked)
                         {
@@ -1753,7 +1773,7 @@ namespace applications
                         db.closeConnection();
                         for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                         {
-                            com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload)", db.getConnection());
+                            com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `card`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @card, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload)", db.getConnection());
 
 
                             com.Parameters.AddWithValue("@id", idRequest);
@@ -1868,6 +1888,14 @@ namespace applications
                             else
                             {
                                 com.Parameters.AddWithValue("@cash", "Нет");
+                            }
+                            if (checkBox9.CheckState == CheckState.Checked)
+                            {
+                                com.Parameters.AddWithValue("@card", "Да");
+                            }
+                            else
+                            {
+                                com.Parameters.AddWithValue("@card", "Нет");
                             }
                             if (checkBox5.CheckState == CheckState.Checked)
                             {
@@ -2307,7 +2335,7 @@ namespace applications
                 MySqlCommand com;
                 for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                 {
-                    com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload);", db.getConnection());
+                    com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `card`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @card, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload);", db.getConnection());
 
                     com.Parameters.AddWithValue("@id", idRequest);
                     com.Parameters.AddWithValue("@data", dateTimePicker1.Value);
@@ -2431,6 +2459,14 @@ namespace applications
                     {
                         com.Parameters.AddWithValue("@cash", "Нет");
                     }
+                    if (checkBox9.CheckState == CheckState.Checked)
+                    {
+                        com.Parameters.AddWithValue("@card", "Да");
+                    }
+                    else
+                    {
+                        com.Parameters.AddWithValue("@card", "Нет");
+                    }
                     if (checkBox5.CheckState == CheckState.Checked)
                     {
                         com.Parameters.AddWithValue("@tax", "Да");
@@ -2528,7 +2564,7 @@ namespace applications
                     db.closeConnection();
                     for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                     {
-                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload);", db.getConnection());
+                        com = new MySqlCommand("INSERT INTO `request` (`id`, `docDate`, `dateAccept`, `timeAccept`, `deal`, `ourFirms`, `buyer`, `sender`, `recipient`, `object`, `objectArrive`, `objectSend`, `status`, `nameCargo`, `numberNomenclature`, `traffic`, `numberDocDriver`, `dateDocDriver`, `fromCounterparty`, `coment`, `contractor`, `cars`, `driveCont`, `drivers`, `cash`, `card`, `tax`, `numberDocTrip`, `dateTTN`, `paid`, `priceSalary`, `price`, `mission`, `missionPaid`, `stand`, `timeLoading`, `timeUnloading`) VALUES (@id, @data, @accept, @timeaccept, @deal, @ourFirms, @buyer, @sender, @recipient, @object, @objectArrive, @objectSend, @status, @cargo, @nomenclature, @traffic, @numberDocDriver, @dateDocDriver, @from, @coment, @contractor, @cars, @driveCont, @drivers, @cash, @card, @tax, @trip, @ttn, @paid, @salary, @cp, @mission, @missionPaid, @stand, @tload, @tunload);", db.getConnection());
 
                         com.Parameters.AddWithValue("@id", idRequest);
                         com.Parameters.AddWithValue("@data", dateTimePicker1.Value);
@@ -2652,6 +2688,14 @@ namespace applications
                         else
                         {
                             com.Parameters.AddWithValue("@cash", "Нет");
+                        }
+                        if (checkBox9.CheckState == CheckState.Checked)
+                        {
+                            com.Parameters.AddWithValue("@card", "Да");
+                        }
+                        else
+                        {
+                            com.Parameters.AddWithValue("@card", "Нет");
                         }
                         if (checkBox5.CheckState == CheckState.Checked)
                         {
@@ -3086,64 +3130,68 @@ namespace applications
 
         private void comboBox7_SelectedIndexChanged(object sender, EventArgs e)
         {
-            comboBox11.Text = comboBox7.Text;
-            comboBox8.Text = "";
-            /*comboBox9.Items.Clear();
-            string Query = "SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC;";
-            //string Query = "(SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
-            DB db = new DB();
-            MySqlDataAdapter adapter = new MySqlDataAdapter();
-            MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
-            MySqlDataReader myReader;
-
-            try
+            if (!comboBox14.Text.Equals("") && comboBox7.Text.Equals("АвтоСтройХолдинг бортовые"))
             {
-                db.openConnection();
-                myReader = cmdDataBase.ExecuteReader();
+                //comboBox11.Text = comboBox7.Text;
+                //comboBox8.Text = "";
+                DB db = new DB();
+                comboBox8.Items.Clear();
+                string Query = "SELECT * FROM `tracks` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' and `type` = '" + comboBox14.Text + "'ORDER BY `name`;";
+                //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+                MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader2;
 
-                while (myReader.Read())
+                try
                 {
-                    string objName = myReader.GetString("name");
-                    if (objName.Equals(""))
+                    db.openConnection();
+                    myReader2 = cmdDataBase2.ExecuteReader();
+
+                    while (myReader2.Read())
                     {
-                        continue;
+                        string objName = myReader2.GetString("car");
+                        if (objName.Equals(""))
+                        {
+                            continue;
+                        }
+                        comboBox8.Items.Add(objName);
                     }
-                    comboBox9.Items.Add(objName);
                 }
-                myReader.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }*/
-
-            DB db = new DB();
-            comboBox8.Items.Clear();
-            string Query = "SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC;";
-            //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
-            MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
-            MySqlDataReader myReader2;
-
-            try
-            {
-                db.openConnection();
-                myReader2 = cmdDataBase2.ExecuteReader();
-
-                while (myReader2.Read())
+                catch (Exception ex)
                 {
-                    string objName = myReader2.GetString("name");
-                    if (objName.Equals(""))
-                    {
-                        continue;
-                    }
-                    comboBox8.Items.Add(objName);
+                    MessageBox.Show(ex.Message);
                 }
+                db.closeConnection();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message);
+                DB db = new DB();
+                comboBox8.Items.Clear();
+                string Query = "SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text + "' and `age` = 'новый' ORDER BY `name` ASC;";
+                //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+                MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader2;
+
+                try
+                {
+                    db.openConnection();
+                    myReader2 = cmdDataBase2.ExecuteReader();
+
+                    while (myReader2.Read())
+                    {
+                        string objName = myReader2.GetString("name");
+                        if (objName.Equals("") || objName.Equals(" "))
+                        {
+                            continue;
+                        }
+                        comboBox8.Items.Add(objName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
             }
-            db.closeConnection();
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -3173,11 +3221,15 @@ namespace applications
             {
                 label11.Show();
                 checkBox2.Show();
+                label35.Show();
+                checkBox9.Show();
             }
             else
             {
                 label11.Hide();
                 checkBox2.Hide();
+                label35.Hide();
+                checkBox9.Hide();
             }
         }
 
@@ -3275,7 +3327,7 @@ namespace applications
         {
             comboBox9.Items.Clear();
             comboBox9.Text = "";
-            string Query = "SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox11.Text.ToString() + "' ORDER BY `name` ASC;";
+            string Query = "SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox11.Text.ToString() + "' and `age` = 'новый' ORDER BY `name` ASC;";
             //string Query = "(SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
@@ -3308,8 +3360,7 @@ namespace applications
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBox12.Items.Clear();
-            //string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox3.Text.ToString() + "' ORDER BY `objectName` ASC;";
-            string Query = "(SELECT * FROM `counterparty` WHERE `name` = '" + comboBox4.Text.ToString() + "' ORDER BY `objectName` ASC) ORDER BY `count` desc;";
+            string Query = "(SELECT * FROM `counterparty` WHERE `name` = '" + comboBox4.Text.ToString() + "' and `ageOb` = 'новый' ORDER BY `objectName` ASC) ORDER BY `count` desc;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
@@ -3364,8 +3415,7 @@ namespace applications
         private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBox13.Items.Clear();
-            //string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox3.Text.ToString() + "' ORDER BY `objectName` ASC;";
-            string Query = "(SELECT * FROM `counterparty` WHERE `name` = '" + comboBox5.Text.ToString() + "' ORDER BY `objectName` ASC) ORDER BY `count` desc;";
+            string Query = "(SELECT * FROM `counterparty` WHERE `name` = '" + comboBox5.Text.ToString() + "' and `ageOb` = 'новый' ORDER BY `objectName` ASC) ORDER BY `count` desc;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
@@ -3557,6 +3607,7 @@ namespace applications
 
         private void comboBox14_SelectedIndexChanged(object sender, EventArgs e)
         {
+            /*
             DB db = new DB();
             comboBox8.Items.Clear();
             comboBox9.Items.Clear();
@@ -3581,6 +3632,39 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            */
+            if (comboBox7.Text != "" /*&& comboBox8.Text == ""*/ && comboBox7.Text.Equals("АвтоСтройХолдинг бортовые"))
+            {
+                //comboBox11.Text = comboBox7.Text;
+                //comboBox8.Text = "";
+                DB db = new DB();
+                comboBox8.Items.Clear();
+                string Query = "SELECT * FROM `tracks` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' and `type` = '" + comboBox14.Text + "';";
+                //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+                MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader2;
+
+                try
+                {
+                    db.openConnection();
+                    myReader2 = cmdDataBase2.ExecuteReader();
+
+                    while (myReader2.Read())
+                    {
+                        string objName = myReader2.GetString("car");
+                        if (objName.Equals(""))
+                        {
+                            continue;
+                        }
+                        comboBox8.Items.Add(objName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+            }
         }
 
         private void checkBox6_CheckedChanged(object sender, EventArgs e)
@@ -3614,6 +3698,478 @@ namespace applications
                 dateTimePicker6.Hide();
             }
         }
+
+        private void comboBox8_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            comboBox11.Text = "";
+            comboBox9.Text = "";
+            /*comboBox9.Items.Clear();
+            string Query = "SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC;";
+            //string Query = "(SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+            DB db = new DB();
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+            MySqlDataReader myReader;
+
+            try
+            {
+                db.openConnection();
+                myReader = cmdDataBase.ExecuteReader();
+
+                while (myReader.Read())
+                {
+                    string objName = myReader.GetString("name");
+                    if (objName.Equals(""))
+                    {
+                        continue;
+                    }
+                    comboBox9.Items.Add(objName);
+                }
+                myReader.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }*/
+
+            DB db = new DB();
+            string Query = "SELECT * FROM `tracks` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' and `car` = '" + comboBox8.Text + "';";
+            //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+            MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
+            MySqlDataReader myReader2;
+
+            try
+            {
+                db.openConnection();
+                myReader2 = cmdDataBase2.ExecuteReader();
+
+                while (myReader2.Read())
+                {
+                    string cont = myReader2.GetString("driveCont");
+                    string driver = myReader2.GetString("driver");
+                    if (cont.Equals("") || driver.Equals(""))
+                    {
+                        break;
+                    }
+                    comboBox11.Text = cont;
+                    comboBox9.Text = driver;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            db.closeConnection();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (button4.Text.Equals("Показать все записи"))
+            {
+                comboBox3.Items.Clear();
+                string Query = "SELECT * FROM `counterparty` WHERE `status` != 'Грузоотправитель'" + /*WHERE status = 'Грузополучатель/грузоотправитель' OR status = 'Диспетчер'*/  "ORDER BY `name` ASC;";
+                DB db = new DB();
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader;
+                string[] names = new string[1000];
+                try
+                {
+                    db.openConnection();
+                    myReader = cmdDataBase.ExecuteReader();
+
+                    int j = 0;
+                    while (myReader.Read())
+                    {
+                        string objName = myReader.GetString("name");
+                        bool f = true;
+                        for (int i = 0; i < names.Length; i++)
+                        {
+                            if (names[i] != null)
+                            {
+                                if (names[i].Equals(objName))
+                                {
+                                    f = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (f == true)
+                        {
+                            names[j] = objName;
+                            j++;
+                            comboBox3.Items.Add(objName);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button4.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                comboBox3.Items.Clear();
+                FillCombo3();
+                button4.Text = "Показать все записи";
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (button6.Text.Equals("Показать все записи"))
+            {
+                comboBox5.Items.Clear();
+                string Query = "SELECT * FROM `counterparty` WHERE status = 'Грузополучатель/грузоотправитель' OR status = 'Грузополучатель' ORDER BY `name` ASC;";
+                DB db = new DB();
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader;
+                string[] names = new string[1000];
+                try
+                {
+                    db.openConnection();
+                    myReader = cmdDataBase.ExecuteReader();
+
+                    int j = 0;
+                    while (myReader.Read())
+                    {
+                        string objName = myReader.GetString("name");
+                        bool f = true;
+                        for (int i = 0; i < names.Length; i++)
+                        {
+                            if (names[i] != null)
+                            {
+                                if (names[i].Equals(objName))
+                                {
+                                    f = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (f == true)
+                        {
+                            names[j] = objName;
+                            j++;
+                            comboBox5.Items.Add(objName);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button6.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                comboBox5.Items.Clear();
+                FillCombo5();
+                button6.Text = "Показать все записи";
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if(button7.Text.Equals("Показать все записи"))
+            {
+                comboBox4.Items.Clear();
+                string Query = "SELECT * FROM `counterparty` WHERE status = 'Грузополучатель/грузоотправитель' OR status = 'Грузоотправитель' ORDER BY `name` ASC;";
+                DB db = new DB();
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader;
+                string[] names = new string[1000];
+                try
+                {
+                    db.openConnection();
+                    myReader = cmdDataBase.ExecuteReader();
+
+                    int j = 0;
+                    while (myReader.Read())
+                    {
+                        string objName = myReader.GetString("name");
+                        bool f = true;
+                        for (int i = 0; i < names.Length; i++)
+                        {
+                            if (names[i] != null)
+                            {
+                                if (names[i].Equals(objName))
+                                {
+                                    f = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (f == true)
+                        {
+                            names[j] = objName;
+                            j++;
+                            comboBox4.Items.Add(objName);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button7.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                comboBox4.Items.Clear();
+                FillCombo4();
+                button7.Text = "Показать все записи";
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if(button8.Text.Equals("Показать все записи"))
+            {
+                comboBox6.Items.Clear();
+                string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox3.Text.ToString() + "' ORDER BY `objectName` ASC;";
+                DB db = new DB();
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader;
+
+                try
+                {
+                    db.openConnection();
+                    myReader = cmdDataBase.ExecuteReader();
+
+                    while (myReader.Read())
+                    {
+                        string objName = myReader.GetString("objectName");
+                        if (objName.Equals("пусто"))
+                        {
+                            continue;
+                        }
+                        comboBox6.Items.Add(objName);
+                        if (myReader.GetString("status").Equals("Б/С"))
+                        {
+                            comboBox4.Text = comboBox3.Text;
+                            comboBox5.Text = comboBox3.Text;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button8.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                button8.Text = "Показать все записи";
+                this.comboBox3_SelectedIndexChanged(sender, e);
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if(button9.Text.Equals("Показать все записи"))
+            {
+                comboBox13.Items.Clear();
+                string Query = "(SELECT * FROM `counterparty` WHERE `name` = '" + comboBox5.Text.ToString() + "' ORDER BY `objectName` ASC) ORDER BY `count` desc;";
+                DB db = new DB();
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader;
+
+                try
+                {
+                    db.openConnection();
+                    myReader = cmdDataBase.ExecuteReader();
+
+                    while (myReader.Read())
+                    {
+                        string objName = myReader.GetString("objectName");
+                        if (objName.Equals("пусто"))
+                        {
+                            continue;
+                        }
+                        comboBox13.Items.Add(objName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button9.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                button9.Text = "Показать все записи";
+                this.comboBox5_SelectedIndexChanged(sender, e);
+            }
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            if (button10.Text.Equals("Показать все записи"))
+            {
+                comboBox12.Items.Clear();
+                string Query = "(SELECT * FROM `counterparty` WHERE `name` = '" + comboBox4.Text.ToString() + "' ORDER BY `objectName` ASC) ORDER BY `count` desc;";
+                DB db = new DB();
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader;
+
+                try
+                {
+                    db.openConnection();
+                    myReader = cmdDataBase.ExecuteReader();
+
+                    while (myReader.Read())
+                    {
+                        string objName = myReader.GetString("objectName");
+                        if (objName.Equals("пусто"))
+                        {
+                            continue;
+                        }
+                        comboBox12.Items.Add(objName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button10.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                button10.Text = "Показать все записи";
+                this.comboBox4_SelectedIndexChanged(sender, e);
+            }
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            if (button11.Text.Equals("Показать все записи"))
+            {
+                if (!comboBox14.Text.Equals("") && comboBox7.Text.Equals("АвтоСтройХолдинг бортовые"))
+                {
+                    //comboBox11.Text = comboBox7.Text;
+                    //comboBox8.Text = "";
+                    DB db = new DB();
+                    comboBox8.Items.Clear();
+                    string Query = "SELECT * FROM `tracks` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' and `type` = '" + comboBox14.Text + "';";
+                    //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+                    MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
+                    MySqlDataReader myReader2;
+
+                    try
+                    {
+                        db.openConnection();
+                        myReader2 = cmdDataBase2.ExecuteReader();
+
+                        while (myReader2.Read())
+                        {
+                            string objName = myReader2.GetString("car");
+                            if (objName.Equals(""))
+                            {
+                                continue;
+                            }
+                            comboBox8.Items.Add(objName);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    db.closeConnection();
+                }
+                else
+                {
+                    DB db = new DB();
+                    comboBox8.Items.Clear();
+                    string Query = "SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text + "'ORDER BY `name` ASC;";
+                    //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+                    MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
+                    MySqlDataReader myReader2;
+
+                    try
+                    {
+                        db.openConnection();
+                        myReader2 = cmdDataBase2.ExecuteReader();
+
+                        while (myReader2.Read())
+                        {
+                            string objName = myReader2.GetString("name");
+                            if (objName.Equals("") || objName.Equals(" "))
+                            {
+                                continue;
+                            }
+                            comboBox8.Items.Add(objName);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    db.closeConnection();
+                }
+                button11.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                button11.Text = "Показать все записи";
+                this.comboBox7_SelectedIndexChanged(sender, e);
+            }
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            if (button12.Text.Equals("Показать все записи"))
+            {
+                comboBox9.Items.Clear();
+                comboBox9.Text = "";
+                string Query = "SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox11.Text.ToString() + "' ORDER BY `name` ASC;";
+                //string Query = "(SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+                DB db = new DB();
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader;
+
+                try
+                {
+                    db.openConnection();
+                    myReader = cmdDataBase.ExecuteReader();
+
+                    while (myReader.Read())
+                    {
+                        string objName = myReader.GetString("name");
+                        if (objName.Equals(""))
+                        {
+                            continue;
+                        }
+                        comboBox9.Items.Add(objName);
+                    }
+                    myReader.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button12.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                button12.Text = "Показать все записи";
+                this.comboBox11_SelectedIndexChanged(sender, e);
+            }
+        }
+
 
 
 

@@ -88,9 +88,9 @@
             this.comboBox2.Items.AddRange(new object[] {
             "Товар",
             "Груз"});
-            this.comboBox2.Location = new System.Drawing.Point(226, 657);
+            this.comboBox2.Location = new System.Drawing.Point(131, 657);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(208, 26);
+            this.comboBox2.Size = new System.Drawing.Size(320, 26);
             this.comboBox2.TabIndex = 50;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
@@ -184,9 +184,9 @@
             // textBox2
             // 
             this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox2.Location = new System.Drawing.Point(226, 714);
+            this.textBox2.Location = new System.Drawing.Point(131, 714);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(208, 24);
+            this.textBox2.Size = new System.Drawing.Size(320, 24);
             this.textBox2.TabIndex = 41;
             // 
             // label1

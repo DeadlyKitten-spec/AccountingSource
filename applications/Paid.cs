@@ -193,7 +193,7 @@ namespace applications
                     }
                 }
 
-                Line = "(SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' " + tar + " AND `status` = 'Исполнена' ORDER BY `id` ASC) ORDER BY `object` ASC;";
+                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' " + tar + " AND `status` = 'Исполнена' ORDER BY `buyer`, `id` ASC;";
                 DB db = new DB();
                 MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                 bool g = true;
@@ -204,8 +204,12 @@ namespace applications
                 dgv.Rows.Clear();
                 dgv.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Name = "id", HeaderText = "Номер заявки" },
+                new DataGridViewTextBoxColumn() { Name = "date", HeaderText = "Дата" },
+                new DataGridViewTextBoxColumn() { Name = "buyer", HeaderText = "Заказчик" },
                 new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Название Объекта" },
-                new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Оплата" });
+                new DataGridViewTextBoxColumn() { Name = "paid", HeaderText = "Оплата" },
+                new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Наличные" },
+                new DataGridViewTextBoxColumn() { Name = "card", HeaderText = "На карту" });
                 MySqlDataReader myReader;
                 try
                 {
@@ -224,16 +228,21 @@ namespace applications
                         }
                         dgv.Rows.Add();
                         dgv[0, itter].Value = myReader.GetString("id");
-                        dgv[1, itter].Value = myReader.GetString("object");
+                        string[] fs = myReader.GetString("docDate").Split(' ');
+                        dgv[1, itter].Value = fs[0];
+                        dgv[2, itter].Value = myReader.GetString("buyer");
+                        dgv[3, itter].Value = myReader.GetString("object");
                         if (myReader.GetString("paid").Equals("Да"))
                         {
-                            dgv[2, itter].Value = "Оплачено";
+                            dgv[4, itter].Value = "Оплачено";
                         }
                         else
                         {
 
-                            dgv[2, itter].Value = "Не оплачено";
+                            dgv[4, itter].Value = "Не оплачено";
                         }
+                        dgv[5, itter].Value = myReader.GetString("cash");
+                        dgv[6, itter].Value = myReader.GetString("card");
                         itter++;
                     }
                 }

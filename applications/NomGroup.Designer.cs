@@ -35,11 +35,11 @@
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -79,13 +79,14 @@
             // 
             // comboBox1
             // 
+            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "Товар",
             "Груз"});
-            this.comboBox1.Location = new System.Drawing.Point(210, 590);
+            this.comboBox1.Location = new System.Drawing.Point(210, 586);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(208, 21);
+            this.comboBox1.Size = new System.Drawing.Size(208, 28);
             this.comboBox1.TabIndex = 50;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
@@ -103,7 +104,7 @@
             // pictureBox4
             // 
             this.pictureBox4.Image = global::applications.Properties.Resources.delete;
-            this.pictureBox4.Location = new System.Drawing.Point(553, 616);
+            this.pictureBox4.Location = new System.Drawing.Point(579, 598);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(51, 59);
             this.pictureBox4.TabIndex = 48;
@@ -113,7 +114,7 @@
             // pictureBox3
             // 
             this.pictureBox3.Image = global::applications.Properties.Resources.edit;
-            this.pictureBox3.Location = new System.Drawing.Point(491, 616);
+            this.pictureBox3.Location = new System.Drawing.Point(517, 598);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(61, 59);
             this.pictureBox3.TabIndex = 47;
@@ -134,10 +135,17 @@
             this.dataGridView1.TabIndex = 44;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
+            // name
+            // 
+            this.name.HeaderText = "Группа";
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            this.name.Width = 200;
+            // 
             // pictureBox1
             // 
             this.pictureBox1.Image = global::applications.Properties.Resources.plus2;
-            this.pictureBox1.Location = new System.Drawing.Point(428, 616);
+            this.pictureBox1.Location = new System.Drawing.Point(454, 598);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(61, 59);
             this.pictureBox1.TabIndex = 42;
@@ -146,9 +154,10 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(210, 638);
+            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox2.Location = new System.Drawing.Point(210, 634);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(208, 20);
+            this.textBox2.Size = new System.Drawing.Size(208, 26);
             this.textBox2.TabIndex = 41;
             // 
             // label1
@@ -172,13 +181,6 @@
             this.pictureBox2.TabIndex = 39;
             this.pictureBox2.TabStop = false;
             this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
-            // 
-            // name
-            // 
-            this.name.HeaderText = "Группа";
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
-            this.name.Width = 200;
             // 
             // NomGroup
             // 

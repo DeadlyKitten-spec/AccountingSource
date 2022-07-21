@@ -29,6 +29,14 @@
         private void InitializeComponent()
         {
             this.mainPanel = new System.Windows.Forms.Panel();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.label35 = new System.Windows.Forms.Label();
+            this.checkBox9 = new System.Windows.Forms.CheckBox();
             this.label17 = new System.Windows.Forms.Label();
             this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
@@ -76,6 +84,8 @@
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button12 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
             this.dateTimePicker6 = new System.Windows.Forms.DateTimePicker();
             this.label34 = new System.Windows.Forms.Label();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
@@ -123,6 +133,14 @@
             // mainPanel
             // 
             this.mainPanel.BackColor = System.Drawing.Color.LightCyan;
+            this.mainPanel.Controls.Add(this.button10);
+            this.mainPanel.Controls.Add(this.button9);
+            this.mainPanel.Controls.Add(this.button8);
+            this.mainPanel.Controls.Add(this.button7);
+            this.mainPanel.Controls.Add(this.button6);
+            this.mainPanel.Controls.Add(this.button4);
+            this.mainPanel.Controls.Add(this.label35);
+            this.mainPanel.Controls.Add(this.checkBox9);
             this.mainPanel.Controls.Add(this.label17);
             this.mainPanel.Controls.Add(this.checkBox5);
             this.mainPanel.Controls.Add(this.pictureBox5);
@@ -176,6 +194,85 @@
             this.mainPanel.TabIndex = 0;
             this.mainPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseDown);
             this.mainPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.mainPanel_MouseMove);
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(843, 539);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(266, 22);
+            this.button10.TabIndex = 84;
+            this.button10.Text = "Показать все записи";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(843, 478);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(266, 22);
+            this.button9.TabIndex = 83;
+            this.button9.Text = "Показать все записи";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(843, 414);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(266, 22);
+            this.button8.TabIndex = 82;
+            this.button8.Text = "Показать все записи";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(271, 539);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(266, 22);
+            this.button7.TabIndex = 81;
+            this.button7.Text = "Показать все записи";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(271, 478);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(266, 22);
+            this.button6.TabIndex = 80;
+            this.button6.Text = "Показать все записи";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(271, 414);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(266, 22);
+            this.button4.TabIndex = 79;
+            this.button4.Text = "Показать все записи";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Font = new System.Drawing.Font("Microsoft YaHei", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label35.Location = new System.Drawing.Point(1679, 348);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(102, 28);
+            this.label35.TabIndex = 78;
+            this.label35.Text = "На карту";
+            // 
+            // checkBox9
+            // 
+            this.checkBox9.AutoSize = true;
+            this.checkBox9.Location = new System.Drawing.Point(1797, 358);
+            this.checkBox9.Name = "checkBox9";
+            this.checkBox9.Size = new System.Drawing.Size(15, 14);
+            this.checkBox9.TabIndex = 77;
+            this.checkBox9.UseVisualStyleBackColor = true;
             // 
             // label17
             // 
@@ -645,6 +742,8 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.NavajoWhite;
+            this.panel1.Controls.Add(this.button12);
+            this.panel1.Controls.Add(this.button11);
             this.panel1.Controls.Add(this.dateTimePicker6);
             this.panel1.Controls.Add(this.label34);
             this.panel1.Controls.Add(this.dateTimePicker2);
@@ -677,6 +776,26 @@
             this.panel1.TabIndex = 1;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
+            // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(271, 239);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(266, 22);
+            this.button12.TabIndex = 83;
+            this.button12.Text = "Показать все записи";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
+            // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(271, 142);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(266, 22);
+            this.button11.TabIndex = 82;
+            this.button11.Text = "Показать все записи";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
             // dateTimePicker6
             // 
@@ -805,7 +924,7 @@
             // 
             this.comboBox11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBox11.FormattingEnabled = true;
-            this.comboBox11.Location = new System.Drawing.Point(271, 159);
+            this.comboBox11.Location = new System.Drawing.Point(271, 169);
             this.comboBox11.Name = "comboBox11";
             this.comboBox11.Size = new System.Drawing.Size(266, 28);
             this.comboBox11.TabIndex = 60;
@@ -815,7 +934,7 @@
             // 
             this.label25.AutoSize = true;
             this.label25.Font = new System.Drawing.Font("Microsoft YaHei", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label25.Location = new System.Drawing.Point(22, 159);
+            this.label25.Location = new System.Drawing.Point(22, 169);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(249, 28);
             this.label25.TabIndex = 59;
@@ -882,7 +1001,7 @@
             // 
             this.comboBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBox9.FormattingEnabled = true;
-            this.comboBox9.Location = new System.Drawing.Point(271, 203);
+            this.comboBox9.Location = new System.Drawing.Point(271, 213);
             this.comboBox9.Name = "comboBox9";
             this.comboBox9.Size = new System.Drawing.Size(266, 28);
             this.comboBox9.TabIndex = 44;
@@ -891,16 +1010,17 @@
             // 
             this.comboBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBox8.FormattingEnabled = true;
-            this.comboBox8.Location = new System.Drawing.Point(271, 114);
+            this.comboBox8.Location = new System.Drawing.Point(271, 118);
             this.comboBox8.Name = "comboBox8";
             this.comboBox8.Size = new System.Drawing.Size(266, 28);
             this.comboBox8.TabIndex = 43;
+            this.comboBox8.SelectedIndexChanged += new System.EventHandler(this.comboBox8_SelectedIndexChanged);
             // 
             // label16
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft YaHei", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label16.Location = new System.Drawing.Point(22, 202);
+            this.label16.Location = new System.Drawing.Point(22, 212);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(109, 28);
             this.label16.TabIndex = 40;
@@ -910,7 +1030,7 @@
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft YaHei", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label15.Location = new System.Drawing.Point(22, 114);
+            this.label15.Location = new System.Drawing.Point(22, 118);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(176, 28);
             this.label15.TabIndex = 39;
@@ -1138,5 +1258,15 @@
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Label label23;
         public System.Windows.Forms.CheckBox checkBox8;
+        private System.Windows.Forms.Label label35;
+        public System.Windows.Forms.CheckBox checkBox9;
+        public System.Windows.Forms.Button button4;
+        public System.Windows.Forms.Button button7;
+        public System.Windows.Forms.Button button6;
+        public System.Windows.Forms.Button button10;
+        public System.Windows.Forms.Button button9;
+        public System.Windows.Forms.Button button8;
+        public System.Windows.Forms.Button button12;
+        public System.Windows.Forms.Button button11;
     }
 }

@@ -50,32 +50,27 @@ namespace applications
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader;
-            string[] names = new string[1000];
+            List<string> names = new List<string>();
             try
             {
                 db.openConnection();
                 myReader = cmdDataBase.ExecuteReader();
 
-                int j = 0;
                 while (myReader.Read())
                 {
                     string objName = myReader.GetString("name");
                     bool f = true;
-                    for (int i = 0; i < names.Length; i++)
+                    for (int i = 0; i < names.Count; i++)
                     {
-                        if (names[i] != null)
+                        if (names[i].Equals(objName))
                         {
-                            if (names[i].Equals(objName))
-                            {
-                                f = false;
-                                break;
-                            }
+                            f = false;
+                            break;
                         }
                     }
-                    if (f == true)
+                    if (f)
                     {
-                        names[j] = objName;
-                        j++;
+                        names.Add(objName);
                         comboBox1.Items.Add(objName);
                     }
                 }
@@ -90,22 +85,12 @@ namespace applications
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             dataGridView1.Rows.Clear();
-            string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "';";
+            string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' order by `objectName`;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader;
-            ForPrice[] frprice = new ForPrice[1000];
-            for(int i = 0; i < 1000; i++)
-            {
-                frprice[i] = new ForPrice();
-                frprice[i].counterparty = "-1";
-                frprice[i].objectt = "-1";
-                frprice[i].price = "-1";
-                frprice[i].pricebuy = "-1";
-                frprice[i].pricebuycount = "-1";
-                frprice[i].pricecount = "-1";
-            }
+            List<ForPrice> frprice = new List<ForPrice>();
             int k = 0;
             try
             {
@@ -113,61 +98,16 @@ namespace applications
                 myReader = cmdDataBase.ExecuteReader();
                 while (myReader.Read())
                 {
-                    /*int priceCount = myReader.GetInt32("priceCount");
-                    string objName = myReader.GetString("objectName");
-                    if (objName.Equals("") || objName.Equals(" "))
-                    {
-                        continue;
-                    }
-                    bool f = true;
-                    for (int i = 0; i < names.Length; i++)
-                    {
-                        if (names[i] != null)
-                        {
-                            if (names[i].Equals(objName))
-                            {
-                                f = false;
-                                break;
-                            }
-                        }
-                    }*/
                     string name = myReader.GetString("name");
                     string objName = myReader.GetString("objectName");
                     string priceCount = myReader.GetString("priceCount");
                     string priceCountBuy = myReader.GetString("priceBuyerCount");
                     int itter = 0;
-                    //MessageBox.Show("обнуление");
                     if (objName.Equals("пусто"))
                     {
-                        //MessageBox.Show("проверкапустоты");
                         continue;
                     }
-                    for (int i = 0; i < 1000; i++)
-                    {
-                        //MessageBox.Show("цикл");
-                        if (frprice[i].counterparty.Equals("-1"))
-                        {
-                            itter = i;
-                            break;
-                        }
-                    }
-                    frprice[itter].counterparty = name;
-                    frprice[itter].objectt = objName;
-                    frprice[itter].pricebuycount = priceCountBuy;
-                    frprice[itter].pricecount = priceCount;
-                    frprice[itter].price = myReader.GetString("price" + priceCount);
-                    frprice[itter].pricebuy = myReader.GetString("priceBuyer" + priceCountBuy);
-                    /*if (f == true)
-                    {
-                        names[k] = objName;
-                        dataGridView1.Rows.Add();
-                        dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[1, k].Value = myReader.GetString("name");
-                        dataGridView1[2, k].Value = objName;
-                        string pricec = "price" + priceCount;
-                        dataGridView1[3, k].Value = myReader.GetString(pricec);
-                        k++;
-                    }*/
+                    frprice.Add(new ForPrice(name, objName, myReader.GetString("price" + priceCount), priceCount, myReader.GetString("priceBuyer" + priceCountBuy), priceCountBuy, myReader.GetString("ageOb")));
                 }
             }
             catch (Exception ex)
@@ -175,24 +115,24 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < frprice.Count; i++)
             {
-                if (!frprice[i].counterparty.Equals("-1"))
+                dataGridView1.Rows.Add();
+                dataGridView1[0, k].Value = frprice[i].counterparty;
+                dataGridView1[1, k].Value = frprice[i].objectt;
+                dataGridView1[2, k].Value = frprice[i].price;
+                dataGridView1[3, k].Value = frprice[i].pricebuy;
+                if (frprice[i].age.Equals("старый"))
                 {
-                    //MessageBox.Show("таблица");
-                    dataGridView1.Rows.Add();
-                    //dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[0, k].Value = frprice[i].counterparty;
-                    dataGridView1[1, k].Value = frprice[i].objectt;
-                    dataGridView1[2, k].Value = frprice[i].price;
-                    dataGridView1[3, k].Value = frprice[i].pricebuy;
-                    k++;
+                    dataGridView1[4, k].Value = "Нет";
                 }
                 else
                 {
-                    break;
+                    dataGridView1[4, k].Value = "Да";
                 }
+                k++;
             }
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
 
 
@@ -203,7 +143,7 @@ namespace applications
         {
             DB db = new DB();
 
-            MySqlCommand command = new MySqlCommand("INSERT INTO `counterparty` (`name`, `objectName`, `status`, `price1`, `priceCount`, `priceBuyer1`, `priceBuyerCount`) VALUES (@name, @object, @status, @price, @priceCount, @priceBuyer, @priceBuyerCount)", db.getConnection());
+            MySqlCommand command = new MySqlCommand("INSERT INTO `counterparty` (`name`, `objectName`, `status`, `price1`, `priceCount`, `priceBuyer1`, `priceBuyerCount`, `ageOb`) VALUES (@name, @object, @status, @price, @priceCount, @priceBuyer, @priceBuyerCount, @ageOb)", db.getConnection());
 
             command.Parameters.Add("@name", MySqlDbType.VarChar).Value = comboBox1.Text;
             command.Parameters.Add("@object", MySqlDbType.VarChar).Value = textBox2.Text;
@@ -240,86 +180,40 @@ namespace applications
             command.Parameters.Add("@priceCount", MySqlDbType.Int32).Value = 1;
             command.Parameters.Add("@priceBuyer", MySqlDbType.VarChar).Value = numbuy;
             command.Parameters.Add("@priceBuyerCount", MySqlDbType.Int32).Value = 1;
+            if (checkBox1.CheckState == CheckState.Checked)
+            {
+                command.Parameters.Add("@ageOb", MySqlDbType.VarChar).Value = "старый";
+            }
+            else
+            {
+                command.Parameters.Add("@ageOb", MySqlDbType.VarChar).Value = "новый";
+            }
+
             db.openConnection();
             command.ExecuteNonQuery();
             db.closeConnection();
             dataGridView1.Rows.Clear();
-            string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' ORDER BY `name` ASC;";
+            string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' ORDER BY `objectName` ASC;";
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader;
             int k = 0;
-            ForPrice[] frprice = new ForPrice[1000];
-            for (int i = 0; i < 1000; i++)
-            {
-                frprice[i] = new ForPrice();
-                frprice[i].counterparty = "-1";
-                frprice[i].objectt = "-1";
-                frprice[i].price = "-1";
-                frprice[i].pricebuy = "-1";
-                frprice[i].pricebuycount = "-1";
-                frprice[i].pricecount = "-1";
-            }
+            List<ForPrice> frprice = new List<ForPrice>();
             try
             {
                 db.openConnection();
                 myReader = cmdDataBase.ExecuteReader();
                 while (myReader.Read())
                 {
-                    /*int priceCount = myReader.GetInt32("priceCount");
-                    string objName = myReader.GetString("objectName");
-                    if (objName.Equals("") || objName.Equals(" "))
-                    {
-                        continue;
-                    }
-                    bool f = true;
-                    for (int i = 0; i < names.Length; i++)
-                    {
-                        if (names[i] != null)
-                        {
-                            if (names[i].Equals(objName))
-                            {
-                                f = false;
-                                break;
-                            }
-                        }
-                    }*/
                     string name = myReader.GetString("name");
                     string objName = myReader.GetString("objectName");
                     string priceCount = myReader.GetString("priceCount");
                     string priceCountBuy = myReader.GetString("priceBuyerCount");
                     int itter = 0;
-                    //MessageBox.Show("обнуление");
                     if (objName.Equals("пусто"))
                     {
-                        //MessageBox.Show("проверкапустоты");
                         continue;
                     }
-                    for (int i = 0; i < 1000; i++)
-                    {
-                        //MessageBox.Show("цикл");
-                        if (frprice[i].counterparty.Equals("-1"))
-                        {
-                            itter = i;
-                            break;
-                        }
-                    }
-                    frprice[itter].counterparty = name;
-                    frprice[itter].objectt = objName;
-                    frprice[itter].pricebuycount = priceCountBuy;
-                    frprice[itter].pricecount = priceCount;
-                    frprice[itter].price = myReader.GetString("price" + priceCount);
-                    frprice[itter].pricebuy = myReader.GetString("priceBuyer" + priceCountBuy);
-                    /*if (f == true)
-                    {
-                        names[k] = objName;
-                        dataGridView1.Rows.Add();
-                        dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[1, k].Value = myReader.GetString("name");
-                        dataGridView1[2, k].Value = objName;
-                        string pricec = "price" + priceCount;
-                        dataGridView1[3, k].Value = myReader.GetString(pricec);
-                        k++;
-                    }*/
+                    frprice.Add(new ForPrice(name, objName, myReader.GetString("price" + priceCount), priceCount, myReader.GetString("priceBuyer" + priceCountBuy), priceCountBuy, myReader.GetString("ageOb")));
                 }
             }
             catch (Exception ex)
@@ -327,28 +221,29 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < frprice.Count; i++)
             {
-                if (!frprice[i].counterparty.Equals("-1"))
+                dataGridView1.Rows.Add();
+                dataGridView1[0, k].Value = frprice[i].counterparty;
+                dataGridView1[1, k].Value = frprice[i].objectt;
+                dataGridView1[2, k].Value = frprice[i].price;
+                dataGridView1[3, k].Value = frprice[i].pricebuy;
+                if (frprice[i].age.Equals("старый"))
                 {
-                    //MessageBox.Show("таблица");
-                    dataGridView1.Rows.Add();
-                    //dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[0, k].Value = frprice[i].counterparty;
-                    dataGridView1[1, k].Value = frprice[i].objectt;
-                    dataGridView1[2, k].Value = frprice[i].price;
-                    dataGridView1[3, k].Value = frprice[i].pricebuy;
-                    k++;
+                    dataGridView1[4, k].Value = "Нет";
                 }
                 else
                 {
-                    break;
+                    dataGridView1[4, k].Value = "Да";
                 }
+                k++;
             }
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
             textBox2.Text = "";
             textBox1.Text = "";
             textBox3.Text = "";
+            checkBox1.CheckState = CheckState.Unchecked;
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
@@ -423,51 +318,16 @@ namespace applications
             db.closeConnection();
             myReader2.Close();
             MySqlCommand command = new MySqlCommand();
-            /*if (d)
+            string ageLine = "";
+            if (checkBox1.CheckState == CheckState.Checked)
             {
-                if (!textBox1.Text.Equals("") && !textBox2.Text.Equals(""))
-                {
-                    command = new MySqlCommand("UPDATE `counterparty` SET `objectName` = '" + textBox2.Text + "' , `" + pricec + "` = '" + num + "' , `priceCount` = '" + priceCount + "' WHERE `objectName` = '" + val + "'", db.getConnection());
-                }
-                else
-                {
-                    if (!textBox2.Text.Equals(""))
-                    {
-                        command = new MySqlCommand("UPDATE `counterparty` SET `objectName` = '" + textBox2.Text + "' , `priceCount` = '" + priceCount + "' WHERE `objectName` = '" + val + "'", db.getConnection());
-                    }
-                    else
-                    {
-                        if (!textBox1.Text.Equals(""))
-                        {
-                            command = new MySqlCommand("UPDATE `counterparty` SET `" + pricec + "` = '" + num + "' , `priceCount` = '" + priceCount + "' WHERE `objectName` = '" + val + "'", db.getConnection());
-                        }
-                    }
-                }
+                ageLine = "старый";
             }
             else
             {
-                if (!textBox1.Text.Equals("") && !textBox2.Text.Equals(""))
-                {
-                    command = new MySqlCommand("UPDATE `counterparty` SET `objectName` = '" + textBox2.Text + "' , `" + pricec + "` = '" + num + "' WHERE `objectName` = '" + val + "'", db.getConnection());
-                }
-                else
-                {
-                    if (!textBox2.Text.Equals(""))
-                    {
-                        command = new MySqlCommand("UPDATE `counterparty` SET `objectName` = '" + textBox2.Text + "' WHERE `objectName` = '" + val + "'", db.getConnection());
-                    }
-                    else
-                    {
-                        if (!textBox1.Text.Equals(""))
-                        {
-                            command = new MySqlCommand("UPDATE `counterparty` SET `" + pricec + "` = '" + num + "' WHERE `objectName` = '" + val + "'", db.getConnection());
-                        }
-                    }
-                }
-            }*/
-            //MessageBox.Show("UPDATE `counterparty` SET `objectName` = '" + objectName + "' , `" + pricec + "` = '" + num + "', `" + pricecbuy + "` = '" + numbuy + "' WHERE `objectName` = '" + val + "'");
-            //MessageBox.Show("UPDATE `counterparty` SET `objectName` = '" + objectName + "', `" + pricec + "` = '" + num + "', `" + pricecbuy + "` = '" + numbuy + "' WHERE `objectName` = '" + val + "' and `name` = '" + dataGridView1["name", dataGridView1.CurrentRow.Index].Value.ToString() + "'");
-            command = new MySqlCommand("UPDATE `counterparty` SET `objectName` = '" + objectName + "' , `" + pricec + "` = '" + num + "', `" + pricecbuy + "` = '" + numbuy + "', `priceCount` = '" + priceCountt + "', `priceBuyerCount` = '" + priceBuyerCount + "' WHERE `objectName` = '" + val + "' and `name` = '" + dataGridView1["name", dataGridView1.CurrentRow.Index].Value.ToString() + "'", db.getConnection());
+                ageLine = "новый";
+            }
+            command = new MySqlCommand("UPDATE `counterparty` SET `objectName` = '" + objectName + "' , `" + pricec + "` = '" + num + "', `" + pricecbuy + "` = '" + numbuy + "', `priceCount` = '" + priceCountt + "', `priceBuyerCount` = '" + priceBuyerCount + "', `ageOb` = '" + ageLine + "' WHERE `objectName` = '" + val + "' and `name` = '" + dataGridView1["name", dataGridView1.CurrentRow.Index].Value.ToString() + "'", db.getConnection());
             db.openConnection();
 
             command.ExecuteNonQuery();
@@ -496,83 +356,29 @@ namespace applications
             db.closeConnection();
 
             textBox2.Text = "";
+            checkBox1.CheckState = CheckState.Unchecked;
             dataGridView1.Rows.Clear();
-            string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' ORDER BY `name` ASC;";
+            string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' order by `objectName` ASC;";
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader;
             int k = 0;
-            ForPrice[] frprice = new ForPrice[1000];
-            for (int i = 0; i < 1000; i++)
-            {
-                frprice[i] = new ForPrice();
-                frprice[i].counterparty = "-1";
-                frprice[i].objectt = "-1";
-                frprice[i].price = "-1";
-                frprice[i].pricebuy = "-1";
-                frprice[i].pricebuycount = "-1";
-                frprice[i].pricecount = "-1";
-            }
+            List<ForPrice> frprice = new List<ForPrice>();
             try
             {
                 db.openConnection();
                 myReader = cmdDataBase.ExecuteReader();
                 while (myReader.Read())
                 {
-                    /*int priceCount = myReader.GetInt32("priceCount");
-                    string objName = myReader.GetString("objectName");
-                    if (objName.Equals("") || objName.Equals(" "))
-                    {
-                        continue;
-                    }
-                    bool f = true;
-                    for (int i = 0; i < names.Length; i++)
-                    {
-                        if (names[i] != null)
-                        {
-                            if (names[i].Equals(objName))
-                            {
-                                f = false;
-                                break;
-                            }
-                        }
-                    }*/
                     string name = myReader.GetString("name");
                     string objName = myReader.GetString("objectName");
                     string priceCount = myReader.GetString("priceCount");
                     string priceCountBuy = myReader.GetString("priceBuyerCount");
                     int itter = 0;
-                    //MessageBox.Show("обнуление");
                     if (objName.Equals("пусто"))
                     {
-                        //MessageBox.Show("проверкапустоты");
                         continue;
                     }
-                    for (int i = 0; i < 1000; i++)
-                    {
-                        //MessageBox.Show("цикл");
-                        if (frprice[i].counterparty.Equals("-1"))
-                        {
-                            itter = i;
-                            break;
-                        }
-                    }
-                    frprice[itter].counterparty = name;
-                    frprice[itter].objectt = objName;
-                    frprice[itter].pricebuycount = priceCountBuy;
-                    frprice[itter].pricecount = priceCount;
-                    frprice[itter].price = myReader.GetString("price" + priceCount);
-                    frprice[itter].pricebuy = myReader.GetString("priceBuyer" + priceCountBuy);
-                    /*if (f == true)
-                    {
-                        names[k] = objName;
-                        dataGridView1.Rows.Add();
-                        dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[1, k].Value = myReader.GetString("name");
-                        dataGridView1[2, k].Value = objName;
-                        string pricec = "price" + priceCount;
-                        dataGridView1[3, k].Value = myReader.GetString(pricec);
-                        k++;
-                    }*/
+                    frprice.Add(new ForPrice(name, objName, myReader.GetString("price" + priceCount), priceCount, myReader.GetString("priceBuyer" + priceCountBuy), priceCountBuy, myReader.GetString("ageOb")));
                 }
             }
             catch (Exception ex)
@@ -580,24 +386,24 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < frprice.Count; i++)
             {
-                if (!frprice[i].counterparty.Equals("-1"))
+                dataGridView1.Rows.Add();
+                dataGridView1[0, k].Value = frprice[i].counterparty;
+                dataGridView1[1, k].Value = frprice[i].objectt;
+                dataGridView1[2, k].Value = frprice[i].price;
+                dataGridView1[3, k].Value = frprice[i].pricebuy;
+                if (frprice[i].age.Equals("старый"))
                 {
-                    //MessageBox.Show("таблица");
-                    dataGridView1.Rows.Add();
-                    //dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[0, k].Value = frprice[i].counterparty;
-                    dataGridView1[1, k].Value = frprice[i].objectt;
-                    dataGridView1[2, k].Value = frprice[i].price;
-                    dataGridView1[3, k].Value = frprice[i].pricebuy;
-                    k++;
+                    dataGridView1[4, k].Value = "Нет";
                 }
                 else
                 {
-                    break;
+                    dataGridView1[4, k].Value = "Да";
                 }
+                k++;
             }
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
 
             db.closeConnection();
@@ -614,6 +420,14 @@ namespace applications
             textBox2.Text = dataGridView1[1, dataGridView1.CurrentRow.Index].Value.ToString();
             textBox1.Text = dataGridView1[2, dataGridView1.CurrentRow.Index].Value.ToString();
             textBox3.Text = dataGridView1[3, dataGridView1.CurrentRow.Index].Value.ToString();
+            if(dataGridView1[4, dataGridView1.CurrentRow.Index].Value.Equals("Нет"))
+            {
+                checkBox1.CheckState = CheckState.Checked;
+            }
+            else
+            {
+                checkBox1.CheckState = CheckState.Unchecked;
+            }
         }
 
         private void pictureBox4_Click(object sender, EventArgs e)
@@ -629,82 +443,27 @@ namespace applications
 
             textBox2.Text = "";
             dataGridView1.Rows.Clear();
-            string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' ORDER BY `name` ASC;";
+            string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' order by `objectName` ASC;";
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader;
+            List<ForPrice> frprice = new List<ForPrice>();
             int k = 0;
-            ForPrice[] frprice = new ForPrice[1000];
-            for (int i = 0; i < 1000; i++)
-            {
-                frprice[i] = new ForPrice();
-                frprice[i].counterparty = "-1";
-                frprice[i].objectt = "-1";
-                frprice[i].price = "-1";
-                frprice[i].pricebuy = "-1";
-                frprice[i].pricebuycount = "-1";
-                frprice[i].pricecount = "-1";
-            }
             try
             {
                 db.openConnection();
                 myReader = cmdDataBase.ExecuteReader();
                 while (myReader.Read())
                 {
-                    /*int priceCount = myReader.GetInt32("priceCount");
-                    string objName = myReader.GetString("objectName");
-                    if (objName.Equals("") || objName.Equals(" "))
-                    {
-                        continue;
-                    }
-                    bool f = true;
-                    for (int i = 0; i < names.Length; i++)
-                    {
-                        if (names[i] != null)
-                        {
-                            if (names[i].Equals(objName))
-                            {
-                                f = false;
-                                break;
-                            }
-                        }
-                    }*/
                     string name = myReader.GetString("name");
                     string objName = myReader.GetString("objectName");
                     string priceCount = myReader.GetString("priceCount");
                     string priceCountBuy = myReader.GetString("priceBuyerCount");
                     int itter = 0;
-                    //MessageBox.Show("обнуление");
                     if (objName.Equals("пусто"))
                     {
-                        //MessageBox.Show("проверкапустоты");
                         continue;
                     }
-                    for (int i = 0; i < 1000; i++)
-                    {
-                        //MessageBox.Show("цикл");
-                        if (frprice[i].counterparty.Equals("-1"))
-                        {
-                            itter = i;
-                            break;
-                        }
-                    }
-                    frprice[itter].counterparty = name;
-                    frprice[itter].objectt = objName;
-                    frprice[itter].pricebuycount = priceCountBuy;
-                    frprice[itter].pricecount = priceCount;
-                    frprice[itter].price = myReader.GetString("price" + priceCount);
-                    frprice[itter].pricebuy = myReader.GetString("priceBuyer" + priceCountBuy);
-                    /*if (f == true)
-                    {
-                        names[k] = objName;
-                        dataGridView1.Rows.Add();
-                        dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[1, k].Value = myReader.GetString("name");
-                        dataGridView1[2, k].Value = objName;
-                        string pricec = "price" + priceCount;
-                        dataGridView1[3, k].Value = myReader.GetString(pricec);
-                        k++;
-                    }*/
+                    frprice.Add(new ForPrice(name, objName, myReader.GetString("price" + priceCount), priceCount, myReader.GetString("priceBuyer" + priceCountBuy), priceCountBuy, myReader.GetString("ageOb")));
                 }
             }
             catch (Exception ex)
@@ -712,30 +471,31 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < frprice.Count; i++)
             {
-                if (!frprice[i].counterparty.Equals("-1"))
+                dataGridView1.Rows.Add();
+                dataGridView1[0, k].Value = frprice[i].counterparty;
+                dataGridView1[1, k].Value = frprice[i].objectt;
+                dataGridView1[2, k].Value = frprice[i].price;
+                dataGridView1[3, k].Value = frprice[i].pricebuy;
+                if (frprice[i].age.Equals("старый"))
                 {
-                    //MessageBox.Show("таблица");
-                    dataGridView1.Rows.Add();
-                    //dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[0, k].Value = frprice[i].counterparty;
-                    dataGridView1[1, k].Value = frprice[i].objectt;
-                    dataGridView1[2, k].Value = frprice[i].price;
-                    dataGridView1[3, k].Value = frprice[i].pricebuy;
-                    k++;
+                    dataGridView1[4, k].Value = "Нет";
                 }
                 else
                 {
-                    break;
+                    dataGridView1[4, k].Value = "Да";
                 }
+                k++;
             }
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
 
             db.closeConnection();
             textBox2.Text = "";
             textBox1.Text = "";
             textBox3.Text = "";
+            checkBox1.CheckState = CheckState.Unchecked;
         }
     }
 }

@@ -39,13 +39,7 @@ namespace applications
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader;
-            CounterObject[] counter = new CounterObject[1000];
-            for(int i = 0; i < 1000; i++)
-            {
-                counter[i] = new CounterObject();
-                counter[i].name = "-1";
-                counter[i].status = "-1";
-            }
+            List<CounterObject> counter = new List<CounterObject>();
             int k = 0;
             try
             {
@@ -58,25 +52,8 @@ namespace applications
                     string Name = myReader.GetString("name");
                     string objName = myReader.GetString("status");
                     bool f = true;
-                    int itter = 0;
-                    /*for (int i = 0; i < names.Length; i++)
+                    for(int i = 0; i < counter.Count; i++)
                     {
-                        if (names[i].Equals(Name))
-                        {
-                            if (namesStatus[i].Equals(objName))
-                            {   
-                                f = false;
-                                break;
-                            }
-                        }
-                    }*/
-                    for(int i = 0; i < 1000; i++)
-                    {
-                        if (counter[i].name.Equals("-1"))
-                        {
-                            itter = i;
-                            break;
-                        }
                         if (counter[i].name.Equals(Name))
                         {
                             if (!counter[i].status.Equals(objName))
@@ -89,10 +66,9 @@ namespace applications
                             f = false;
                         }
                     }
-                    if(f == true)
+                    if(f)
                     {
-                        counter[itter].name = Name;
-                        counter[itter].status = objName;
+                        counter.Add(new CounterObject(Name, objName, myReader.GetString("ageCP")));
                     }
                 }
             }
@@ -101,20 +77,20 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < counter.Count; i++)
             {
-                if (!counter[i].name.Equals("-1"))
+                dataGridView1.Rows.Add();
+                dataGridView1[0, k].Value = counter[i].name;
+                dataGridView1[1, k].Value = counter[i].status;
+                if (counter[i].age.Equals("старый"))
                 {
-                    dataGridView1.Rows.Add();
-                    //dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[0, k].Value = counter[i].name;
-                    dataGridView1[1, k].Value = counter[i].status;
-                    k++;
+                    dataGridView1[2, k].Value = "Нет";
                 }
                 else
                 {
-                    break;
+                    dataGridView1[2, k].Value = "Да";
                 }
+                k++;
             }
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
@@ -128,7 +104,7 @@ namespace applications
             else
             {
                 DB db = new DB();
-                MySqlCommand command = new MySqlCommand("INSERT INTO `counterparty` (`name`, `objectName`, `price1`, `priceCount`, `status`, `priceBuyer1`, `priceBuyerCount`) VALUES (@party, @object, @price, @count, @status, @priceBuyer, @priceBuyerCount)", db.getConnection());
+                MySqlCommand command = new MySqlCommand("INSERT INTO `counterparty` (`name`, `objectName`, `price1`, `priceCount`, `status`, `priceBuyer1`, `priceBuyerCount`, `ageCP`) VALUES (@party, @object, @price, @count, @status, @priceBuyer, @priceBuyerCount, @ageCP)", db.getConnection());
 
                 command.Parameters.Add("@party", MySqlDbType.VarChar).Value = textBox2.Text;
                 command.Parameters.Add("@object", MySqlDbType.VarChar).Value = "пусто";
@@ -165,6 +141,14 @@ namespace applications
                         }
                     }
                 }
+                if (checkBox4.CheckState == CheckState.Checked)
+                {
+                    command.Parameters.Add("@ageCP", MySqlDbType.VarChar).Value = "старый";
+                }
+                else
+                {
+                    command.Parameters.Add("@ageCP", MySqlDbType.VarChar).Value = "новый";
+                }
 
                 db.openConnection();
 
@@ -176,16 +160,11 @@ namespace applications
                 checkBox1.CheckState = CheckState.Unchecked;
                 checkBox2.CheckState = CheckState.Unchecked;
                 checkBox3.CheckState = CheckState.Unchecked;
+                checkBox4.CheckState = CheckState.Unchecked;
                 dataGridView1.Rows.Clear();
                 command = new MySqlCommand("SELECT * FROM `counterparty` ORDER BY `name` ASC", db.getConnection());
                 MySqlDataReader myReader;
-                CounterObject[] counter = new CounterObject[1000];
-                for (int i = 0; i < 1000; i++)
-                {
-                    counter[i] = new CounterObject();
-                    counter[i].name = "-1";
-                    counter[i].status = "-1";
-                }
+                List<CounterObject> counter = new List<CounterObject>();
                 int k = 0;
                 try
                 {
@@ -198,25 +177,8 @@ namespace applications
                         string Name = myReader.GetString("name");
                         string objName = myReader.GetString("status");
                         bool f = true;
-                        int itter = 0;
-                        /*for (int i = 0; i < names.Length; i++)
+                        for (int i = 0; i < counter.Count; i++)
                         {
-                            if (names[i].Equals(Name))
-                            {
-                                if (namesStatus[i].Equals(objName))
-                                {   
-                                    f = false;
-                                    break;
-                                }
-                            }
-                        }*/
-                        for (int i = 0; i < 1000; i++)
-                        {
-                            if (counter[i].name.Equals("-1"))
-                            {   
-                                itter = i;
-                                break;
-                            }
                             if (counter[i].name.Equals(Name))
                             {
                                 if (!counter[i].status.Equals(objName))
@@ -229,10 +191,9 @@ namespace applications
                                 f = false;
                             }
                         }
-                        if (f == true)
+                        if (f)
                         {
-                            counter[itter].name = Name;
-                            counter[itter].status = objName;
+                            counter.Add(new CounterObject(Name, objName, myReader.GetString("ageCP")));
                         }
                     }
                 }
@@ -241,20 +202,20 @@ namespace applications
                     MessageBox.Show(ex.Message);
                 }
                 db.closeConnection();
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < counter.Count; i++)
                 {
-                    if (!counter[i].name.Equals("-1"))
+                    dataGridView1.Rows.Add();
+                    dataGridView1[0, k].Value = counter[i].name;
+                    dataGridView1[1, k].Value = counter[i].status;
+                    if (counter[i].age.Equals("старый"))
                     {
-                        dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[0, k].Value = counter[i].name;
-                        dataGridView1[1, k].Value = counter[i].status;
-                        k++;
+                        dataGridView1[2, k].Value = "Нет";
                     }
                     else
                     {
-                        break;
+                        dataGridView1[2, k].Value = "Да";
                     }
+                    k++;
                 }
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             }
@@ -335,6 +296,14 @@ namespace applications
                 }
             }
             textBox2.Text = dataGridView1[0, idx].Value.ToString();
+            if (dataGridView1[2, idx].Value.Equals("Нет"))
+            {
+                checkBox4.CheckState = CheckState.Checked; ;
+            }
+            else
+            {
+                checkBox4.CheckState = CheckState.Unchecked;
+            }
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
@@ -351,63 +320,48 @@ namespace applications
                 {
                     if (checkBox3.CheckState == CheckState.Checked)
                     {
-                        Line = "UPDATE `counterparty` SET `name` = '" + textBox2.Text + "', `status` = 'Диспетчер' WHERE `name` = '" + val + "'";
+                        Line = "UPDATE `counterparty` SET `name` = '" + textBox2.Text + "', `status` = 'Диспетчер'";
                     }
                     else
                     {
                         if ((checkBox1.CheckState == CheckState.Checked) && (checkBox2.CheckState == CheckState.Checked))
                         {
-                            Line = "UPDATE `counterparty` SET `name` = '" + textBox2.Text + "', `status` = 'Грузополучатель/грузоотправитель' WHERE `name` = '" + val + "'";
+                            Line = "UPDATE `counterparty` SET `name` = '" + textBox2.Text + "', `status` = 'Грузополучатель/грузоотправитель'";
                         }
                         else
                         {
                             if (checkBox1.CheckState == CheckState.Checked)
                             {
-                                Line = "UPDATE `counterparty` SET `name` = '" + textBox2.Text + "', `status` = 'Грузополучатель' WHERE `name` = '" + val + "'";
+                                Line = "UPDATE `counterparty` SET `name` = '" + textBox2.Text + "', `status` = 'Грузополучатель'";
                             }
                             else
                             {
                                 if (checkBox2.CheckState == CheckState.Checked)
                                 {
-                                    Line = "UPDATE `counterparty` SET `name` = '" + textBox2.Text + "', `status` = 'Грузоотправитель' WHERE `name` = '" + val + "'";
+                                    Line = "UPDATE `counterparty` SET `name` = '" + textBox2.Text + "', `status` = 'Грузоотправитель'";
                                 }
                             }
                         }
                     }
                     if(checkBox1.CheckState == CheckState.Unchecked && checkBox2.CheckState == CheckState.Unchecked && checkBox3.CheckState == CheckState.Unchecked)
                     {
-                        Line = "UPDATE `counterparty` SET `name` = '" + textBox2.Text + "', `status` = 'Б/С' WHERE `name` = '" + val + "'";
+                        Line = "UPDATE `counterparty` SET `name` = '" + textBox2.Text + "', `status` = 'Б/С'";
                     }
                 }
                 else
                 {
-                    /*if (checkBox3.CheckState == CheckState.Checked)
-                    {
-                        Line = "UPDATE `counterparty` SET `status` = 'Диспетчер' WHERE `name` = '" + val + "'";
-                    }
-                    else
-                    {
-                        if ((checkBox1.CheckState == CheckState.Checked) && (checkBox2.CheckState == CheckState.Checked))
-                        {
-                            Line = "UPDATE `counterparty` SET `status` = 'Грузополучатель/грузоотправитель' WHERE `name` = '" + val + "'";
-                        }
-                        else
-                        {
-                            if (checkBox1.CheckState == CheckState.Checked)
-                            {
-                                Line = "UPDATE `counterparty` SET `status` = 'Грузополучатель' WHERE `name` = '" + val + "'";
-                            }
-                            else
-                            {
-                                if (checkBox2.CheckState == CheckState.Checked)
-                                {
-                                    Line = "UPDATE `counterparty` SET `status` = 'Грузоотправитель' WHERE `name` = '" + val + "'"; ;
-                                }
-                            }
-                        }
-                    }*/
                     MessageBox.Show("Вы не ввели название контрагенту");
                 }
+
+                if (checkBox4.CheckState == CheckState.Checked)
+                {
+                    Line += ", `ageCP` = 'старый' WHERE `name` = '" + val + "'";
+                }
+                else
+                {
+                    Line += ", `ageCP` = 'новый' WHERE `name` = '" + val + "'";
+                }
+
                 MySqlCommand command = new MySqlCommand(Line, db.getConnection());
 
                 db.openConnection();
@@ -451,16 +405,11 @@ namespace applications
                 checkBox1.CheckState = CheckState.Unchecked;
                 checkBox2.CheckState = CheckState.Unchecked;
                 checkBox3.CheckState = CheckState.Unchecked;
+                checkBox4.CheckState = CheckState.Unchecked;
                 dataGridView1.Rows.Clear();
                 command = new MySqlCommand("SELECT * FROM `counterparty` ORDER BY `name` ASC", db.getConnection());
                 MySqlDataReader myReader;
-                CounterObject[] counter = new CounterObject[1000];
-                for (int i = 0; i < 1000; i++)
-                {
-                    counter[i] = new CounterObject();
-                    counter[i].name = "-1";
-                    counter[i].status = "-1";
-                }
+                List<CounterObject> counter = new List<CounterObject>();
                 int k = 0;
                 try
                 {
@@ -473,25 +422,8 @@ namespace applications
                         string Name = myReader.GetString("name");
                         string objName = myReader.GetString("status");
                         bool f = true;
-                        int itter = 0;
-                        /*for (int i = 0; i < names.Length; i++)
+                        for (int i = 0; i < counter.Count; i++)
                         {
-                            if (names[i].Equals(Name))
-                            {
-                                if (namesStatus[i].Equals(objName))
-                                {   
-                                    f = false;
-                                    break;
-                                }
-                            }
-                        }*/
-                        for (int i = 0; i < 1000; i++)
-                        {
-                            if (counter[i].name.Equals("-1"))
-                            {
-                                itter = i;
-                                break;
-                            }
                             if (counter[i].name.Equals(Name))
                             {
                                 if (!counter[i].status.Equals(objName))
@@ -504,10 +436,9 @@ namespace applications
                                 f = false;
                             }
                         }
-                        if (f == true)
+                        if (f)
                         {
-                            counter[itter].name = Name;
-                            counter[itter].status = objName;
+                            counter.Add(new CounterObject(Name, objName, myReader.GetString("ageCP")));
                         }
                     }
                 }
@@ -516,20 +447,20 @@ namespace applications
                     MessageBox.Show(ex.Message);
                 }
                 db.closeConnection();
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < counter.Count; i++)
                 {
-                    if (!counter[i].name.Equals("-1"))
+                    dataGridView1.Rows.Add();
+                    dataGridView1[0, k].Value = counter[i].name;
+                    dataGridView1[1, k].Value = counter[i].status;
+                    if (counter[i].age.Equals("старый"))
                     {
-                        dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[0, k].Value = counter[i].name;
-                        dataGridView1[1, k].Value = counter[i].status;
-                        k++;
+                        dataGridView1[2, k].Value = "Нет";
                     }
                     else
                     {
-                        break;
+                        dataGridView1[2, k].Value = "Да";
                     }
+                    k++;
                 }
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             }
@@ -550,16 +481,11 @@ namespace applications
             checkBox1.CheckState = CheckState.Unchecked;
             checkBox2.CheckState = CheckState.Unchecked;
             checkBox3.CheckState = CheckState.Unchecked;
+            checkBox4.CheckState = CheckState.Unchecked;
             dataGridView1.Rows.Clear();
             command = new MySqlCommand("SELECT * FROM `counterparty` ORDER BY `name` ASC", db.getConnection());
             MySqlDataReader myReader;
-            CounterObject[] counter = new CounterObject[1000];
-            for (int i = 0; i < 1000; i++)
-            {
-                counter[i] = new CounterObject();
-                counter[i].name = "-1";
-                counter[i].status = "-1";
-            }
+            List<CounterObject> counter = new List<CounterObject>();
             int k = 0;
             try
             {
@@ -572,25 +498,8 @@ namespace applications
                     string Name = myReader.GetString("name");
                     string objName = myReader.GetString("status");
                     bool f = true;
-                    int itter = 0;
-                    /*for (int i = 0; i < names.Length; i++)
+                    for (int i = 0; i < counter.Count; i++)
                     {
-                        if (names[i].Equals(Name))
-                        {
-                            if (namesStatus[i].Equals(objName))
-                            {   
-                                f = false;
-                                break;
-                            }
-                        }
-                    }*/
-                    for (int i = 0; i < 1000; i++)
-                    {
-                        if (counter[i].name.Equals("-1"))
-                        {
-                            itter = i;
-                            break;
-                        }
                         if (counter[i].name.Equals(Name))
                         {
                             if (!counter[i].status.Equals(objName))
@@ -603,10 +512,9 @@ namespace applications
                             f = false;
                         }
                     }
-                    if (f == true)
+                    if (f)
                     {
-                        counter[itter].name = Name;
-                        counter[itter].status = objName;
+                        counter.Add(new CounterObject(Name, objName, myReader.GetString("ageCP")));
                     }
                 }
             }
@@ -615,20 +523,20 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < counter.Count; i++)
             {
-                if (!counter[i].name.Equals("-1"))
+                dataGridView1.Rows.Add();
+                dataGridView1[0, k].Value = counter[i].name;
+                dataGridView1[1, k].Value = counter[i].status;
+                if (counter[i].age.Equals("старый"))
                 {
-                    dataGridView1.Rows.Add();
-                    //dataGridView1[0, k].Value = k + 1;
-                    dataGridView1[0, k].Value = counter[i].name;
-                    dataGridView1[1, k].Value = counter[i].status;
-                    k++;
+                    dataGridView1[2, k].Value = "Нет";
                 }
                 else
                 {
-                    break;
+                    dataGridView1[2, k].Value = "Да";
                 }
+                k++;
             }
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }

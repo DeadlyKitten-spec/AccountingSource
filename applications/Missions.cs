@@ -210,7 +210,7 @@ namespace applications
         {
             comboBox1.Items.Clear();
             comboBox1.Text = "";
-            string Query = "SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox2.Text.ToString() + "' ORDER BY `name` ASC;";
+            string Query = "SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox2.Text.ToString() + "' and `age` = 'новый' ORDER BY `name` ASC;";
             //string Query = "(SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
@@ -370,6 +370,49 @@ namespace applications
                     MessageBox.Show(ex.Message);
                 }
                 dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if (button9.Text.Equals("Показать все записи"))
+            {
+                comboBox1.Items.Clear();
+                comboBox1.Text = "";
+                string Query = "SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox2.Text.ToString() + "' ORDER BY `name` ASC;";
+                //string Query = "(SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+                DB db = new DB();
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader;
+
+                try
+                {
+                    db.openConnection();
+                    myReader = cmdDataBase.ExecuteReader();
+
+                    while (myReader.Read())
+                    {
+                        string objName = myReader.GetString("name");
+                        if (objName.Equals(""))
+                        {
+                            continue;
+                        }
+                        comboBox1.Items.Add(objName);
+                    }
+                    myReader.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button9.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                button9.Text = "Показать все записи";
+                this.comboBox2_SelectedIndexChanged(sender, e);
             }
         }
     }
