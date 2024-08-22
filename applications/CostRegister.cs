@@ -221,7 +221,7 @@ namespace applications
                 zxc = asd[0].Split('.');
                 string answer2 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
 
-                //string Line = "SELECT * FROM `request` WHERE `docDate` = '" + answer + "';";
+                //string Line = "SELECT * FROM `request` WHERE `dateAccept` = '" + answer + "';";
                 bool fbuyer = false;
 
                 string Line = "";// = "SELECT * FROM `request` WHERE `status` = '" + comboBox1.Text + "';";
@@ -232,7 +232,7 @@ namespace applications
 
                 if (fbuyer)
                 {
-                    Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `deal` = '" + comboBox3.Text + "' AND `ourFirms` = '" + comboBox4.Text + "' AND `buyer` = '" + comboBox2.Text + "' ORDER BY `object` ASC;";
+                    Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `deal` = '" + comboBox3.Text + "' AND `ourFirms` = '" + comboBox4.Text + "' AND `buyer` = '" + comboBox2.Text + "' ORDER BY `object` ASC;";
                     DB db = new DB();
                     MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                     bool g = true;
@@ -250,7 +250,7 @@ namespace applications
                             myReader = command.ExecuteReader();
                             while (myReader.Read())
                             {
-                                string datefirst = myReader.GetString("docDate");
+                                string datefirst = myReader.GetString("dateAccept");
                                 string[] datesplit = datefirst.Split(' ');
                                 string pr = myReader.GetString("price");
                                 if (pr.Equals("пусто"))
@@ -307,7 +307,7 @@ namespace applications
                                 dgv[3, count].Value = sumTrip;
                                 dgv[4, count].Value = sumTripS;
                                 dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                                 sumAll += sumTrip;
                                 sumTrip = 0;
                                 sumAllS += sumTripS;
@@ -331,7 +331,7 @@ namespace applications
                                 dgv[3, count].Value = sumTrip;
                                 dgv[4, count].Value = sumTripS;
                                 dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                                 sumAll += sumTrip;
                                 sumTrip = 0;
                                 sumAllS += sumTripS;
@@ -347,13 +347,13 @@ namespace applications
                         dgv[3, count].Value = sumAll;
                         dgv[4, count].Value = sumAllS;
                         dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                     }
 
                 }
                 else
                 {
-                    Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `deal` = '" + comboBox3.Text + "' AND `ourFirms` = '" + comboBox4.Text + "' ORDER BY `object` ASC;";
+                    Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `deal` = '" + comboBox3.Text + "' AND `ourFirms` = '" + comboBox4.Text + "' ORDER BY `object` ASC;";
                     DB db = new DB();
                     MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                     bool g = true;
@@ -371,7 +371,7 @@ namespace applications
                             myReader = command.ExecuteReader();
                             while (myReader.Read())
                             {
-                                string datefirst = myReader.GetString("docDate");
+                                string datefirst = myReader.GetString("dateAccept");
                                 string[] datesplit = datefirst.Split(' ');
                                 string pr = myReader.GetString("price");
                                 if (pr.Equals("пусто"))
@@ -429,7 +429,7 @@ namespace applications
                                 dgv[4, count].Value = sumTrip;
                                 dgv[5, count].Value = sumTripS;
                                 dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                                 sumAll += sumTrip;
                                 sumTrip = 0;
                                 sumAllS += sumTripS;
@@ -454,7 +454,7 @@ namespace applications
                                 dgv[4, count].Value = sumTrip;
                                 dgv[5, count].Value = sumTripS;
                                 dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                                 sumAll += sumTrip;
                                 sumTrip = 0; 
                                 sumAllS += sumTripS;
@@ -470,7 +470,7 @@ namespace applications
                         dgv[4, count].Value = sumAll;
                         dgv[5, count].Value = sumAllS;
                         dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                     }
                 }
             }

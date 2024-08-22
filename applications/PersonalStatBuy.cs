@@ -254,11 +254,11 @@ namespace applications
             string Line = "";
             if (comboBox4.Text.Equals(""))
             {
-                Line = "SELECT * FROM `request` WHERE `buyer` = '" + comboBox1.Text + "' AND `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `status` = 'Исполнена' ORDER BY `object`, `id` ASC;";
+                Line = "SELECT * FROM `request` WHERE `buyer` = '" + comboBox1.Text + "' AND `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `status` = 'Исполнена' ORDER BY `object`, `id` ASC;";
             }
             else
             {
-                Line = "SELECT * FROM `request` WHERE `buyer` = '" + comboBox1.Text + "' AND `sender` = '" + comboBox4.Text + "' AND `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `status` = 'Исполнена' ORDER BY `object`, `id` ASC;";
+                Line = "SELECT * FROM `request` WHERE `buyer` = '" + comboBox1.Text + "' AND `sender` = '" + comboBox4.Text + "' AND `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `status` = 'Исполнена' ORDER BY `object`, `id` ASC;";
             }
             //MessageBox.Show(Line);
             DB db = new DB();
@@ -371,7 +371,7 @@ namespace applications
                 dgv[2, ro].Value = nomCountSum;
                 dgv[3, ro].Value = tripMax;
                 dgv.Rows[ro].DefaultCellStyle.BackColor = Color.LightGray;
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                 db.closeConnection();
             }
         }

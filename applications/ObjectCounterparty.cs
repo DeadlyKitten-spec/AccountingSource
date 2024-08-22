@@ -85,11 +85,11 @@ namespace applications
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             dataGridView1.Rows.Clear();
+            //dataGridView1.Columns.Clear();
             string Query = "SELECT * FROM `counterparty` WHERE `name` = '" + comboBox1.Text.ToString() + "' order by `objectName`;";
             DB db = new DB();
-            MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
-            MySqlDataReader myReader;
+            MySqlDataReader myReader = null;
             List<ForPrice> frprice = new List<ForPrice>();
             int k = 0;
             try
@@ -114,6 +114,14 @@ namespace applications
             {
                 MessageBox.Show(ex.Message);
             }
+            finally
+            {
+                if (myReader != null && !myReader.IsClosed)
+                {
+                    myReader.Close();
+                }
+            }
+
             db.closeConnection();
             for (int i = 0; i < frprice.Count; i++)
             {
@@ -132,7 +140,7 @@ namespace applications
                 }
                 k++;
             }
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
 
@@ -238,7 +246,7 @@ namespace applications
                 }
                 k++;
             }
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
             textBox2.Text = "";
             textBox1.Text = "";
@@ -403,7 +411,7 @@ namespace applications
                 }
                 k++;
             }
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
 
             db.closeConnection();
@@ -488,7 +496,7 @@ namespace applications
                 }
                 k++;
             }
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
 
             db.closeConnection();

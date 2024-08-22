@@ -223,7 +223,8 @@
     <Compile Include="ForProduct.Designer.cs">
       <DependentUpon>ForProduct.cs</DependentUpon>
     </Compile>
-    <Compile Include="ForStandRegister.cs" />
+    <Compile Include="ForStandRegisterCars.cs" />
+    <Compile Include="ForStandRegisterDrivers.cs" />
     <Compile Include="ForStatCP.cs" />
     <Compile Include="ForTable.cs" />
     <Compile Include="ForWorkers.cs">

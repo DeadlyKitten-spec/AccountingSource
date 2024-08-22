@@ -22,6 +22,7 @@ namespace applications
 
             this.WindowState = FormWindowState.Maximized;
             this.ControlBox = false;
+            comboBox1.SelectedIndex = 0;
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -132,6 +133,7 @@ namespace applications
         {
             dateTimePicker1.ResetText();
             dateTimePicker3.ResetText();
+            comboBox1.SelectedIndex = 0;
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
@@ -155,109 +157,221 @@ namespace applications
             string answer2 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
 
             string Line = "";
-            Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `stand` = 'Да' ORDER BY `cars` ASC;";
-            DB db = new DB();
-            MySqlCommand command = new MySqlCommand(Line, db.getConnection());
-            bool g = true;
-            db.openConnection();
-            object obj = command.ExecuteScalar();
-            db.closeConnection();
-            List<ForStandRegister> array = new List<ForStandRegister>();
-            if (obj != null)
+            if (comboBox1.SelectedIndex == 1)
             {
-                MySqlDataAdapter adapter = new MySqlDataAdapter();
-                MySqlDataReader myReader;
-                try
+                Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `stand` = 'Да' ORDER BY `cars` ASC;";
+                DB db = new DB();
+                MySqlCommand command = new MySqlCommand(Line, db.getConnection());
+                bool g = true;
+                db.openConnection();
+                object obj = command.ExecuteScalar();
+                db.closeConnection();
+                List<ForStandRegisterCars> array = new List<ForStandRegisterCars>();
+                if (obj != null)
                 {
-                    db.openConnection();
-                    myReader = command.ExecuteReader();
-                    while (myReader.Read())
+                    MySqlDataAdapter adapter = new MySqlDataAdapter();
+                    MySqlDataReader myReader;
+                    try
                     {
-                        string datefirst = myReader.GetString("docDate");
-                        string[] datesplit = datefirst.Split(' ');
-                        ForStandRegister temp = new ForStandRegister(myReader.GetString("cars"),  datesplit[0], myReader.GetString("object"), myReader.GetString("id"), myReader.GetString("timeLoading"), myReader.GetString("timeUnloading"));
-                        bool f = true;
-                        for (int i = 0; i < array.Count; i++)
+                        db.openConnection();
+                        myReader = command.ExecuteReader();
+                        while (myReader.Read())
                         {
-                            if (array[i].id.Equals(temp.id))
+                            string datefirst = myReader.GetString("dateAccept");
+                            string[] datesplit = datefirst.Split(' ');
+                            ForStandRegisterCars temp = new ForStandRegisterCars(myReader.GetString("cars"), datesplit[0], myReader.GetString("object"), myReader.GetString("id"), myReader.GetString("timeLoading"), myReader.GetString("timeUnloading"));
+                            bool f = true;
+                            for (int i = 0; i < array.Count; i++)
                             {
-                                f = false;
-                                break;
+                                if (array[i].id.Equals(temp.id))
+                                {
+                                    f = false;
+                                    break;
+                                }
+                            }
+                            if (f)
+                            {
+                                array.Add(temp);
                             }
                         }
-                        if (f)
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    db.closeConnection();
+                    dgv.Columns.Clear();
+                    dgv.Rows.Clear();
+                    dgv.Columns.AddRange(
+                        new DataGridViewTextBoxColumn() { Name = "car", HeaderText = "№ Автомобиля" },
+                        new DataGridViewTextBoxColumn() { Name = "date", HeaderText = "Дата" },
+                        new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Объект поставки" },
+                        new DataGridViewTextBoxColumn() { Name = "load", HeaderText = "Погрузка" },
+                        new DataGridViewTextBoxColumn() { Name = "unload", HeaderText = "Разгрузка" });
+                    dgv.Rows.Clear();
+                    //dgv.Rows.Add();
+                    string line = array[0].car;
+                    int count = 0;
+                    int sumTrip = 0;
+                    int sumAll = 0;
+                    for (int i = 0; i < array.Count; i++)
+                    {
+                        if (!line.Equals(array[i].car))
                         {
-                            array.Add(temp);
+                            dgv.Rows.Add();
+                            dgv[0, count].Value = "Итого время простоя";
+                            string timeCar = sumTrip / 60 + ":" + sumTrip % 60;
+                            dgv[4, count].Value = timeCar;
+                            dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+                            sumAll += sumTrip;
+                            sumTrip = 0;
+                            count++;
+                            line = array[i].car;
+                        }
+                        dgv.Rows.Add();
+                        dgv[0, count].Value = array[i].car;
+                        dgv[1, count].Value = array[i].date;
+                        dgv[2, count].Value = array[i].objectt;
+                        dgv[3, count].Value = array[i].timeLoad;
+                        dgv[4, count].Value = array[i].timeUnload;
+                        string[] timel = array[i].timeLoad.Split(':');
+                        int minutel = int.Parse(timel[0]) * 60 + int.Parse(timel[1]);
+                        string[] timeul = array[i].timeUnload.Split(':');
+                        int minuteul = int.Parse(timeul[0]) * 60 + int.Parse(timeul[1]);
+                        sumTrip += (minuteul - minutel);
+                        count++;
+                        if ((i == array.Count - 1))
+                        {
+                            dgv.Rows.Add();
+                            dgv[0, count].Value = "Итого время простоя";
+                            string timeCar = sumTrip / 60 + ":" + sumTrip % 60;
+                            dgv[4, count].Value = timeCar;
+                            dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+                            sumAll += sumTrip;
+                            sumTrip = 0;
+                            count++;
+                            line = array[i].car;
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-                db.closeConnection();
-                dgv.Columns.Clear();
-                dgv.Rows.Clear();
-                dgv.Columns.AddRange(
-                    new DataGridViewTextBoxColumn() { Name = "car", HeaderText = "№ Автомобиля" },
-                    new DataGridViewTextBoxColumn() { Name = "date", HeaderText = "Дата" },
-                    new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Объект поставки" },
-                    new DataGridViewTextBoxColumn() { Name = "load", HeaderText = "Погрузка" },
-                    new DataGridViewTextBoxColumn() { Name = "unload", HeaderText = "Разгрузка" });
-                dgv.Rows.Clear();
-                //dgv.Rows.Add();
-                string line = array[0].car;
-                int count = 0;
-                int sumTrip = 0;
-                int sumAll = 0;
-                for (int i = 0; i < array.Count; i++)
-                {
-                    if (!line.Equals(array[i].car) || (i == array.Count - 1))
-                    {
-                        dgv.Rows.Add();
-                        dgv[0, count].Value = "Итого время простоя";
-                        string timeCar = sumTrip / 60 + ":" + sumTrip % 60;
-                        dgv[4, count].Value = timeCar;
-                        dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-                        sumAll += sumTrip;
-                        sumTrip = 0;
-                        count++;
-                        line = array[i].car;
-                    }
+                    sumAll += sumTrip;
                     dgv.Rows.Add();
-                    dgv[0, count].Value = array[i].car;
-                    dgv[1, count].Value = array[i].date;
-                    dgv[2, count].Value = array[i].objectt;
-                    dgv[3, count].Value = array[i].timeLoad;
-                    dgv[4, count].Value = array[i].timeUnload;
-                    string[] timel = array[i].timeLoad.Split(':');
-                    int minutel = int.Parse(timel[0]) * 60 + int.Parse(timel[1]);
-                    string[] timeul = array[i].timeUnload.Split(':');
-                    int minuteul = int.Parse(timeul[0]) * 60 + int.Parse(timeul[1]);
-                    sumTrip += (minuteul - minutel);
-                    count++;
-                    if ((i == array.Count - 1))
-                    {
-                        dgv.Rows.Add();
-                        dgv[0, count].Value = "Итого время простоя";
-                        string timeCar = sumTrip / 60 + ":" + sumTrip % 60;
-                        dgv[4, count].Value = timeCar;
-                        dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-                        sumAll += sumTrip;
-                        sumTrip = 0;
-                        count++;
-                        line = array[i].car;
-                    }
+                    dgv[0, count].Value = "Всего время простоя";
+                    string timeCarr = sumAll / 60 + ":" + sumAll % 60;
+                    dgv[4, count].Value = timeCarr;
+                    dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                 }
-                sumAll += sumTrip;
-                dgv.Rows.Add();
-                dgv[0, count].Value = "Всего время простоя";
-                string timeCarr = sumAll / 60 + ":" + sumAll % 60;
-                dgv[4, count].Value = timeCarr;
-                dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            }
+            else
+            {
+                Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `stand` = 'Да' ORDER BY `drivers` ASC;";
+                DB db = new DB();
+                MySqlCommand command = new MySqlCommand(Line, db.getConnection());
+                bool g = true;
+                db.openConnection();
+                object obj = command.ExecuteScalar();
+                db.closeConnection();
+                List<ForStandRegisterDrivers> array = new List<ForStandRegisterDrivers>();
+                if (obj != null)
+                {
+                    MySqlDataAdapter adapter = new MySqlDataAdapter();
+                    MySqlDataReader myReader;
+                    try
+                    {
+                        db.openConnection();
+                        myReader = command.ExecuteReader();
+                        while (myReader.Read())
+                        {
+                            string datefirst = myReader.GetString("dateAccept");
+                            string[] datesplit = datefirst.Split(' ');
+                            ForStandRegisterDrivers temp = new ForStandRegisterDrivers(myReader.GetString("drivers"), myReader.GetString("cars"), datesplit[0], myReader.GetString("object"), myReader.GetString("id"), myReader.GetString("timeLoading"), myReader.GetString("timeUnloading"));
+                            bool f = true;
+                            for (int i = 0; i < array.Count; i++)
+                            {
+                                if (array[i].id.Equals(temp.id))
+                                {
+                                    f = false;
+                                    break;
+                                }
+                            }
+                            if (f)
+                            {
+                                array.Add(temp);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    db.closeConnection();
+                    dgv.Columns.Clear();
+                    dgv.Rows.Clear();
+                    dgv.Columns.AddRange(
+                        new DataGridViewTextBoxColumn() { Name = "driver", HeaderText = "Водитель" },
+                        new DataGridViewTextBoxColumn() { Name = "car", HeaderText = "№ Автомобиля" },
+                        new DataGridViewTextBoxColumn() { Name = "date", HeaderText = "Дата" },
+                        new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Объект поставки" },
+                        new DataGridViewTextBoxColumn() { Name = "load", HeaderText = "Погрузка" },
+                        new DataGridViewTextBoxColumn() { Name = "unload", HeaderText = "Разгрузка" });
+                    dgv.Rows.Clear();
+                    //dgv.Rows.Add();
+                    string line = array[0].driver;
+                    int count = 0;
+                    int sumTrip = 0;
+                    int sumAll = 0;
+                    for (int i = 0; i < array.Count; i++)
+                    {
+                        if (!line.Equals(array[i].driver))
+                        {
+                            dgv.Rows.Add();
+                            dgv[0, count].Value = "Итого время простоя";
+                            string timeCar = sumTrip / 60 + ":" + sumTrip % 60;
+                            dgv[5, count].Value = timeCar;
+                            dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+                            sumAll += sumTrip;
+                            sumTrip = 0;
+                            count++;
+                            line = array[i].driver;
+                        }
+                        dgv.Rows.Add();
+                        dgv[0, count].Value = array[i].driver;
+                        dgv[1, count].Value = array[i].car;
+                        dgv[2, count].Value = array[i].date;
+                        dgv[3, count].Value = array[i].objectt;
+                        dgv[4, count].Value = array[i].timeLoad;
+                        dgv[5, count].Value = array[i].timeUnload;
+                        string[] timel = array[i].timeLoad.Split(':');
+                        int minutel = int.Parse(timel[0]) * 60 + int.Parse(timel[1]);
+                        string[] timeul = array[i].timeUnload.Split(':');
+                        int minuteul = int.Parse(timeul[0]) * 60 + int.Parse(timeul[1]);
+                        sumTrip += (minuteul - minutel);
+                        count++;
+                        if ((i == array.Count - 1))
+                        {
+                            dgv.Rows.Add();
+                            dgv[0, count].Value = "Итого время простоя";
+                            string timeCar = sumTrip / 60 + ":" + sumTrip % 60;
+                            dgv[5, count].Value = timeCar;
+                            dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+                            sumAll += sumTrip;
+                            sumTrip = 0;
+                            count++;
+                            line = array[i].driver;
+                        }
+                    }
+                    sumAll += sumTrip;
+                    dgv.Rows.Add();
+                    dgv[0, count].Value = "Всего время простоя";
+                    string timeCarr = sumAll / 60 + ":" + sumAll % 60;
+                    dgv[5, count].Value = timeCarr;
+                    dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
+                }
             }
         }
     }

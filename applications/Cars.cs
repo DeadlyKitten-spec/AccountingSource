@@ -151,7 +151,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         Point lastPoint;
@@ -235,7 +235,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
@@ -305,7 +305,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         private void pictureBox4_Click(object sender, EventArgs e)
@@ -357,7 +357,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)

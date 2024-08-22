@@ -186,7 +186,7 @@ namespace applications
                         //MessageBox.Show("nen");
                         string[] datesplit = datefirst.Split(' ');
                         dgv[1, i].Value = datesplit[0];
-                        //dgv[0, i].Value = myReader.GetString("docDate");
+                        //dgv[0, i].Value = myReader.GetString("dateAccept");
                         if (!myReader.GetString("numberDocTrip").Equals("-1"))
                             dgv[2, i].Value = myReader.GetString("numberDocTrip");
                         else
@@ -242,7 +242,7 @@ namespace applications
                 {
                     MessageBox.Show(ex.Message);
                 }
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                 db.closeConnection();
             }
 
@@ -599,7 +599,7 @@ namespace applications
             DataSet ds = new DataSet();
             DataTable dt = new DataTable();
             dt.Columns.Add("nameCargo", typeof(string));
-            dt.Columns.Add("docDate", typeof(string));
+            dt.Columns.Add("dateAccept", typeof(string));
             dt.Columns.Add("numberDocTrip", typeof(string));
             dt.Columns.Add("numberNom", typeof(string));
             dt.Columns.Add("countTrip", typeof(string));
@@ -806,7 +806,7 @@ namespace applications
             dataGridView1[0, itter].Value = "Итого";
             dataGridView1[4, itter].Value = all;
             dataGridView1.Rows[itter].DefaultCellStyle.BackColor = Color.LightGray;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             db.closeConnection();
         }
 
@@ -908,7 +908,7 @@ namespace applications
             {
                 MessageBox.Show(ex.Message);
             }
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             db.closeConnection();
         }
 

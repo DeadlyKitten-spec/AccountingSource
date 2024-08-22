@@ -48,16 +48,19 @@ namespace applications
             button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button4.FlatAppearance.BorderColor = FlatColor;
             */
+            
             InitializeComponent();
             FillCombo2();
             FillCombo3();
             FillCombo4();
             FillCombo5();
             FillCombo7();
+
             //FillCombo8();
             //FillCombo9();
             //FillCombo71();
-            FillCombo10();
+            //FillCombo10();
+
             FillText1();
             FlatColor = button1.FlatAppearance.BorderColor;
             button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -166,6 +169,38 @@ namespace applications
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
+            string tx1 = textBox1.Text;
+            bool tx1c = false;
+            for(int i = 0; i < tx1.Length; i++)
+            {
+                if (tx1[i].Equals('.'))
+                {
+                    tx1c = true;
+                    break;
+                }
+            }
+            string[] tx1sp = tx1.Split('.');
+            if (tx1c)
+            {
+                textBox1.Text = tx1sp[0] + "," + tx1sp[1];
+            }
+
+            string tx4 = textBox4.Text;
+            bool tx4c = false;
+            for (int i = 0; i < tx4.Length; i++)
+            {
+                if (tx4[i].Equals('.'))
+                {
+                    tx4c = true;
+                    break;
+                }
+            }
+            string[] tx4sp = tx4.Split('.');
+            if (tx4c)
+            {
+                textBox4.Text = tx4sp[0] + "," + tx4sp[1];
+            }
+
             bool pointCheck = false;
             bool doneCheck = false;
             bool paid = false;
@@ -978,27 +1013,29 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            comboBox2.Text = "";
         }
 
         void FillCombo3()
         {
-            string Query = "SELECT * FROM `counterparty` WHERE `status` != 'Грузоотправитель'" + /*WHERE status = 'Грузополучатель/грузоотправитель' OR status = 'Диспетчер'*/  " and `ageCP` = 'новый' ORDER BY `name` ASC;";
+            string Query = "SELECT * FROM `counterparty` WHERE `status` != 'Грузоотправитель' and `ageCP` = 'новый' ORDER BY `name` ASC;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader;
-            string[] names = new string[1000];
+            //string[] names = new string[1000];
+            List<string> names = new List<string>();
             try
             {
                 db.openConnection();
                 myReader = cmdDataBase.ExecuteReader();
 
-                int j = 0;
+                //int j = 0;
                 while (myReader.Read())
                 {
                     string objName = myReader.GetString("name");
                     bool f = true;
-                    for (int i = 0; i < names.Length; i++)
+                    for (int i = 0; i < names.Count; i++)
                     {
                         if (names[i] != null)
                         {
@@ -1011,8 +1048,9 @@ namespace applications
                     }
                     if (f == true)
                     {
-                        names[j] = objName;
-                        j++;
+                        //names[j] = objName;
+                        //j++;
+                        names.Add(objName);
                         comboBox3.Items.Add(objName);
                     }
                 }
@@ -1022,6 +1060,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            comboBox3.Text = "";
         }
 
         void FillCombo4()
@@ -1066,6 +1105,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            comboBox4.Text = "";
         }
 
         void FillCombo5()
@@ -1110,6 +1150,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            comboBox5.Text = "";
         }
 
 
@@ -1201,6 +1242,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            comboBox7.Text = "";
         }
 
         void FillCombo8()
@@ -1268,6 +1310,9 @@ namespace applications
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader;
+
+            //MessageBox.Show("asd");
+            /*
             string[] names = new string[1000];
             try
             {
@@ -1298,11 +1343,44 @@ namespace applications
                     }
                 }
             }
+            */
+            List<string> counter = new List<string>();
+            int k = 0;
+            try
+            {
+                db.openConnection();
+                myReader = cmdDataBase.ExecuteReader();
+
+                int j = 0;
+                while (myReader.Read())
+                {
+                    string Name = myReader.GetString("name");
+                    bool f = true;
+                    for (int i = 0; i < counter.Count; i++)
+                    {
+                        if (counter[i].Equals(Name))
+                        {
+                            f = false;
+                        }
+                    }
+                    if (f)
+                    {
+                        counter.Add(Name);
+                    }
+                }
+            }
+
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            /*
+            for (int i = 0; i < counter.Count; i++)
+            {
+                comboBox10.Items.Add(counter[i]);
+            }
+            */
         }
 
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
@@ -1345,6 +1423,37 @@ namespace applications
 
         private void button2_Click(object sender, EventArgs e)
         {
+            string tx1 = textBox1.Text;
+            bool tx1c = false;
+            for (int i = 0; i < tx1.Length; i++)
+            {
+                if (tx1[i].Equals('.'))
+                {
+                    tx1c = true;
+                    break;
+                }
+            }
+            string[] tx1sp = tx1.Split('.');
+            if (tx1c)
+            {
+                textBox1.Text = tx1sp[0] + "," + tx1sp[1];
+            }
+
+            string tx4 = textBox4.Text;
+            bool tx4c = false;
+            for (int i = 0; i < tx4.Length; i++)
+            {
+                if (tx4[i].Equals('.'))
+                {
+                    tx4c = true;
+                    break;
+                }
+            }
+            string[] tx4sp = tx4.Split('.');
+            if (tx4c)
+            {
+                textBox4.Text = tx4sp[0] + "," + tx4sp[1];
+            }
             DialogResult result = MessageBox.Show(
                        "Введенные данные верны?",
                        "Сообщение",
@@ -2211,6 +2320,37 @@ namespace applications
 
         private void button3_Click(object sender, EventArgs e)
         {
+            string tx1 = textBox1.Text;
+            bool tx1c = false;
+            for (int i = 0; i < tx1.Length; i++)
+            {
+                if (tx1[i].Equals('.'))
+                {
+                    tx1c = true;
+                    break;
+                }
+            }
+            string[] tx1sp = tx1.Split('.');
+            if (tx1c)
+            {
+                textBox1.Text = tx1sp[0] + "," + tx1sp[1];
+            }
+
+            string tx4 = textBox4.Text;
+            bool tx4c = false;
+            for (int i = 0; i < tx4.Length; i++)
+            {
+                if (tx4[i].Equals('.'))
+                {
+                    tx4c = true;
+                    break;
+                }
+            }
+            string[] tx4sp = tx4.Split('.');
+            if (tx4c)
+            {
+                textBox4.Text = tx4sp[0] + "," + tx4sp[1];
+            }
             DialogResult result = MessageBox.Show(
                        "Введенные данные верны?",
                        "Сообщение",
@@ -3136,7 +3276,7 @@ namespace applications
                 //comboBox8.Text = "";
                 DB db = new DB();
                 comboBox8.Items.Clear();
-                string Query = "SELECT * FROM `tracks` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' and `type` = '" + comboBox14.Text + "'ORDER BY `name`;";
+                string Query = "SELECT * FROM `tracks` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' and `type` = '" + comboBox14.Text + "'ORDER BY `car`;";
                 //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
                 MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
                 MySqlDataReader myReader2;

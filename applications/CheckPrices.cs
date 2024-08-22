@@ -153,7 +153,7 @@ namespace applications
             zxc = asd[0].Split('.');
             string answer2 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
 
-            string Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' ORDER BY `object`, `id` ASC;";
+            string Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' ORDER BY `object`, `id` ASC;";
             DB db = new DB();
             MySqlCommand command = new MySqlCommand(Line, db.getConnection());
             bool g = true;
@@ -171,7 +171,7 @@ namespace applications
                     myReader = command.ExecuteReader();
                     while (myReader.Read())
                     {
-                        string datefirst = myReader.GetString("docDate");
+                        string datefirst = myReader.GetString("dateAccept");
                         string[] datesplit = datefirst.Split(' ');
                         string pr = myReader.GetString("price");
                         if (pr.Equals("пусто"))
@@ -270,7 +270,7 @@ namespace applications
                 count++;
                     
             }
-            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
     }
 }

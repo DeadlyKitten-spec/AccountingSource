@@ -75,7 +75,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         void FillDGV()
@@ -168,7 +168,7 @@ namespace applications
                 dataGridView1[0, i].Value = names[i];
                 dataGridView1[1, i].Value = age[i];
             }
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         private void plusButton_Click(object sender, EventArgs e)
@@ -248,7 +248,7 @@ namespace applications
                 dataGridView1[0, i].Value = names[i];
                 dataGridView1[1, i].Value = age[i];
             }
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
@@ -335,7 +335,7 @@ namespace applications
                 dataGridView1[0, i].Value = names[i];
                 dataGridView1[1, i].Value = ages[i];
             }
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         private void pictureBox4_Click(object sender, EventArgs e)
@@ -404,7 +404,7 @@ namespace applications
                 dataGridView1[0, i].Value = names[i];
                 dataGridView1[1, i].Value = age[i];
             }
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)

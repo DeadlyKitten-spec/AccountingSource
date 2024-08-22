@@ -171,7 +171,7 @@ namespace applications
             zxc = asd[0].Split('.');
             string answer2 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
 
-            //string Line = "SELECT * FROM `request` WHERE `docDate` = '" + answer + "';";
+            //string Line = "SELECT * FROM `request` WHERE `dateAccept` = '" + answer + "';";
             bool fdriver = false;
 
             string Line = "";// = "SELECT * FROM `request` WHERE `status` = '" + comboBox1.Text + "';";
@@ -187,7 +187,7 @@ namespace applications
 
             if (fdriver)
             {
-                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `contractor` = '" + comboBox2.Text + "' AND `cars` = '" + comboBox1.Text + "' " + checkLine + " ORDER BY `object`, `id` ASC;";
+                Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `contractor` = '" + comboBox2.Text + "' AND `cars` = '" + comboBox1.Text + "' " + checkLine + " ORDER BY `object`, `id` ASC;";
                 DB db = new DB();
                 MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                 bool g = true;
@@ -388,15 +388,15 @@ namespace applications
                     dgv[4, itterr + 1].Value = summ * 0.15;*/
                     dgv.Rows[itterr].DefaultCellStyle.BackColor = Color.LightGray;
                     //dgv.Rows[itterr + 1].DefaultCellStyle.BackColor = Color.LightGray;
-                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                 }
 
             }
             else
             {
-                //Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "';";
+                //Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "';";
                 //MessageBox.Show("Выберите водителя");
-                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `contractor` = '" + comboBox2.Text + "' " + checkLine + " ORDER BY `cars`, `id` ASC;";
+                Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `contractor` = '" + comboBox2.Text + "' " + checkLine + " ORDER BY `cars`, `id` ASC;";
                 DB db = new DB();
                 MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                 bool g = true;
@@ -534,6 +534,7 @@ namespace applications
                     catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message);
+                        MessageBox.Show(idlast.ToString());
                     }
                     db.closeConnection();
                     for (int i = 0; i < 1000; i++)
@@ -736,7 +737,7 @@ namespace applications
                     dgv[4, itterr + 1].Value = summ * 0.15;*//*
                     dgv.Rows[itterr].DefaultCellStyle.BackColor = Color.LightGray;*/
                     //dgv.Rows[itterr + 1].DefaultCellStyle.BackColor = Color.LightGray;
-                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                     /*int[] mas = new int[100];
                     int itt = 0;
                     for(int k = 0; k < 100; k++)

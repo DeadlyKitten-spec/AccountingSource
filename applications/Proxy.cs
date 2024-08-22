@@ -91,7 +91,7 @@ namespace applications
             }
             db.closeConnection();
 
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         void FillCombo2()
@@ -101,6 +101,7 @@ namespace applications
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader;
+            /*
             string[] names = new string[1000];
             try
             {
@@ -136,15 +137,53 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            */
+
+            List<string> counter = new List<string>();
+            try
+            {
+                db.openConnection();
+                myReader = cmdDataBase.ExecuteReader();
+
+                int j = 0;
+                while (myReader.Read())
+                {
+                    string Name = myReader.GetString("name");
+                    bool f = true;
+                    for (int i = 0; i < counter.Count; i++)
+                    {
+                        if (counter[i].Equals(Name))
+                        {
+                            f = false;
+                        }
+                    }
+                    if (f)
+                    {
+                        counter.Add(Name);
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            db.closeConnection();
+            for (int i = 0; i < counter.Count; i++)
+            {
+                comboBox2.Items.Add(counter[i]);
+            }
         }
 
         void FillCombo4()
         {
-            string Query = "SELECT * FROM `counterparty` " + /*WHERE status = 'Грузополучатель/грузоотправитель' OR status = 'Диспетчер'*/  "ORDER BY `name` ASC;";
+            string Query = "SELECT * FROM `counterparty` " + /*WHERE status = 'Грузополучатель/грузоотправитель' OR status = 'Диспетчер'*/
+            "ORDER BY `name` ASC;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader;
+            /*
             string[] names = new string[1000];
             try
             {
@@ -180,6 +219,41 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            */
+            List<string> counter = new List<string>();
+            try
+            {
+                db.openConnection();
+                myReader = cmdDataBase.ExecuteReader();
+
+                int j = 0;
+                while (myReader.Read())
+                {
+                    string Name = myReader.GetString("name");
+                    bool f = true;
+                    for (int i = 0; i < counter.Count; i++)
+                    {
+                        if (counter[i].Equals(Name))
+                        {
+                            f = false;
+                        }
+                    }
+                    if (f)
+                    {
+                        counter.Add(Name);
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            db.closeConnection();
+            for (int i = 0; i < counter.Count; i++)
+            {
+                comboBox4.Items.Add(counter[i]);
+            }
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -305,7 +379,7 @@ namespace applications
             }
             db.closeConnection();
 
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
             dateTimePicker1.ResetText();
             comboBox1.Text = "";
@@ -582,7 +656,7 @@ namespace applications
                 }
                 db.closeConnection();
 
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
         }
 
@@ -742,7 +816,7 @@ namespace applications
             }
             db.closeConnection();
 
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
             dateTimePicker1.ResetText();
             comboBox1.Text = "";
@@ -837,7 +911,7 @@ namespace applications
             }
             db.closeConnection();
 
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
             dateTimePicker1.ResetText();
             comboBox1.Text = "";

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace applications
 {
-    class ForStandRegister
+    class ForStandRegisterCars
     {
         public string car = "";
         public string date = "";
@@ -15,7 +15,7 @@ namespace applications
         public string timeLoad = "";
         public string timeUnload = "";
 
-        public ForStandRegister(string car, string date, string objectt, string id, string timeLoad, string timeUnload)
+        public ForStandRegisterCars(string car, string date, string objectt, string id, string timeLoad, string timeUnload)
         {
             this.car = car;
             this.date = date;

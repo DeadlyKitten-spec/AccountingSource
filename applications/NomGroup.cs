@@ -214,7 +214,7 @@ namespace applications
                     dataGridView1[0, k].Value = counter[i].name;
                     k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
             else
             {
@@ -268,7 +268,7 @@ namespace applications
                     dataGridView1[0, k].Value = counter[i].name;
                     k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
         }
 
@@ -318,7 +318,7 @@ namespace applications
                     dataGridView1[0, k].Value = counter[i].name;
                     k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
             else
             {
@@ -364,7 +364,7 @@ namespace applications
                     dataGridView1[0, k].Value = counter[i].name;
                     k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
         }
 
@@ -422,7 +422,7 @@ namespace applications
                     dataGridView1[0, k].Value = counter[i].name;
                     k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
             else
             {
@@ -476,7 +476,7 @@ namespace applications
                     dataGridView1[0, k].Value = counter[i].name;
                     k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
         }
 
@@ -547,7 +547,7 @@ namespace applications
                     dataGridView1[0, k].Value = counter[i].name;
                     k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
             else
             {
@@ -600,7 +600,7 @@ namespace applications
                     dataGridView1[0, k].Value = counter[i].name;
                     k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
         }
     }

@@ -32,6 +32,7 @@ namespace applications
         public string idCupter = "";
         public bool idCupterBool = false;
         public bool commonList = false;
+        public WriteRequest writeRequest = new WriteRequest();
 
         public WorkSpace()
         {
@@ -40,6 +41,7 @@ namespace applications
             this.WindowState = FormWindowState.Maximized;
 
             InitializeComponent();
+
 
             LoadDB();
             FillCombo2();
@@ -137,24 +139,72 @@ namespace applications
 
         private void button1_Click_1(object sender, EventArgs e)
         {
+            writeRequest.label1.Text = "Регистрация заявки";
+            writeRequest.label14.Text = "Назначение заявки";
+            writeRequest.label21.Text = "Исполнение заявки";
+            /*
+            string timeNow = DateTime.Now.ToString();
+            //MessageBox.Show(timeNow);
+            string[] sdtp4 = timeNow.Split(' ');
+            string[] ssdtp4 = sdtp4[0].Split('.');
+            int day = int.Parse(ssdtp4[0]);
+            int month = int.Parse(ssdtp4[1]);
+            int year = int.Parse(ssdtp4[2]);
+            if (day - 3 >= 1)
+            {
+                day -= 3;
+            }
+            else
+            {
+                if(month - 1 >= 1)
+                {
+                    month -= 1;
+                    day = 28;
+                }
+                else
+                {
+                    year -= 1;
+                    month = 12;
+                    day = 30;
+                }
+            }
+            string timeEarly = year + "-" + month + "-" + day;
+            day = int.Parse(ssdtp4[0]);
+            month = int.Parse(ssdtp4[1]);
+            year = int.Parse(ssdtp4[2]);
+            if(month + 1 <= 12)
+            {
+                month += 1;
+            }
+            else
+            {
+                month = 1;
+                year += 1;
+            }
+            timeNow = year + "-" + month + "-" + day;
             comboBox1.Text = "";
             comboBox2.Text = "";
             comboBox3.Text = "";
             //g = false;
-            WriteRequest writeRequest = new WriteRequest();
-            string Query = "SELECT * FROM `request` ORDER BY `id` ASC";
+            //MessageBox.Show(timeEarly + " " + timeNow);
+            //WriteRequest writeRequest = new WriteRequest();
+            //string Query = "SELECT * FROM `request` ORDER BY `id` ASC";
+            string Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + timeEarly + "' AND '" + timeNow + "' ORDER BY `id`";
+            */
+
+            string Line = "SELECT * FROM `request` ORDER BY `id` DESC LIMIT 0,10";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
-            MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+            MySqlCommand cmdDataBase = new MySqlCommand(Line, db.getConnection());
             MySqlDataReader myReader;
-            string objId = "";
+            int objId = -1;
             try
             {
                 db.openConnection();
                 object obj = cmdDataBase.ExecuteScalar();
                 if (obj == null)
                 {
-                    objId = "0";
+                    objId = 0;
                 }
                 else
                 {
@@ -162,7 +212,11 @@ namespace applications
 
                     while (myReader.Read())
                     {
-                        objId = myReader.GetString("id");
+                        int objIdTemp = int.Parse(myReader.GetString("id"));
+                        if(objIdTemp > objId)
+                        {
+                            objId = objIdTemp;
+                        }
                     }
                 }
             }
@@ -171,13 +225,54 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            int a = int.Parse(objId);
-            a++;
-            objId = Convert.ToString(a);
+            objId++;
             writeRequest.Show();
             writeRequest.label1.Text = "Регистрация заявки № " + objId;
    //         writeRequest.textBox5.Text = "Б/Н";
-            writeRequest.idRequest = objId;
+            writeRequest.idRequest = objId.ToString();
+            writeRequest.comboBox1.Text = "Поставка";
+            writeRequest.comboBox3.Text = "";
+            writeRequest.comboBox4.Text = "";
+            writeRequest.comboBox5.Text = "";
+            writeRequest.comboBox6.Text = "";
+            writeRequest.comboBox7.Text = "";
+            writeRequest.comboBox8.Text = "";
+            writeRequest.comboBox9.Text = "";
+            writeRequest.comboBox11.Text = "";
+            writeRequest.comboBox12.Text = "";
+            writeRequest.comboBox13.Text = "";
+            writeRequest.comboBox14.Text = "";
+            writeRequest.dateTimePicker1.Value = DateTime.Now;
+            writeRequest.dateTimePicker3.Value = DateTime.Now;
+            writeRequest.dateTimePicker4.Value = DateTime.Now;
+            writeRequest.dateTimePicker5.Value = DateTime.Now;
+            writeRequest.label11.Hide();
+            writeRequest.checkBox2.Hide();
+            writeRequest.label13.Hide();
+            writeRequest.textBox1.Hide();
+            writeRequest.label24.Hide();
+            writeRequest.textBox4.Hide();
+            writeRequest.button2.Hide();
+            writeRequest.button3.Hide();
+            writeRequest.label33.Hide();
+            writeRequest.label34.Hide();
+            writeRequest.label35.Hide();
+            writeRequest.checkBox9.Hide();
+            writeRequest.dateTimePicker2.Hide();
+            writeRequest.dateTimePicker6.Hide();
+            writeRequest.textBox6.Text = "Введите номер";
+            writeRequest.checkBox1.CheckState = CheckState.Unchecked;
+            writeRequest.checkBox2.CheckState = CheckState.Unchecked;
+            writeRequest.checkBox3.CheckState = CheckState.Unchecked;
+            writeRequest.checkBox4.CheckState = CheckState.Unchecked;
+            writeRequest.checkBox5.CheckState = CheckState.Unchecked;
+            writeRequest.checkBox6.CheckState = CheckState.Unchecked;
+            writeRequest.checkBox7.CheckState = CheckState.Unchecked;
+            writeRequest.checkBox8.CheckState = CheckState.Unchecked;
+            writeRequest.checkBox9.CheckState = CheckState.Unchecked;
+            writeRequest.textBox2.Text = "Добавьте комментарий";
+            writeRequest.textBox2.ForeColor = Color.Gray;
+            writeRequest.comboBox2.Text = "АвтоСтройКом";
         }
 
         private void button1_MouseEnter(object sender, EventArgs e)
@@ -282,6 +377,7 @@ namespace applications
             db.closeConnection();
         }
 
+
         void FillCombo2()
         {
             string Query = "SELECT * FROM `counterparty` WHERE `status` != 'Грузоотправитель' ORDER BY `name` ASC";
@@ -289,18 +385,19 @@ namespace applications
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader;
-            string[] names = new string[1000];
+            //string[] names = new string[1000];
+            List<string> names = new List<string>();
             try
             {
                 db.openConnection();
                 myReader = cmdDataBase.ExecuteReader();
 
-                int j = 0;
+                //int j = 0;
                 while (myReader.Read())
                 {
                     string objName = myReader.GetString("name");
                     bool f = true;
-                    for (int i = 0; i < names.Length; i++)
+                    for (int i = 0; i < names.Count; i++)
                     {
                         if (names[i] != null)
                         {
@@ -313,8 +410,9 @@ namespace applications
                     }
                     if (f == true)
                     {
-                        names[j] = objName;
-                        j++;
+                        //names[j] = objName;
+                        //j++;
+                        names.Add(objName);
                         comboBox2.Items.Add(objName);
                     }
                 }
@@ -836,7 +934,7 @@ namespace applications
                 dgv["point", it + 1].Value = sumPoint;
                 dgv["done", it + 1].Value = sumDone;
                 dgv.Rows[it + 1].DefaultCellStyle.BackColor = Color.LightGray;
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
                 /*for(int i = 0; i < itter; i++)
                 {
@@ -891,6 +989,9 @@ namespace applications
 
         private void dgv_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            writeRequest.label1.Text = "Регистрация заявки";
+            writeRequest.label14.Text = "Назначение заявки";
+            writeRequest.label21.Text = "Исполнение заявки";
             //MessageBox.Show(dgv.CurrentCell.RowIndex.ToString());
             //MessageBox.Show(dgv.RowCount.ToString());
             if (dgv.CurrentCell.RowIndex + 1 == dgv.RowCount)
@@ -1079,7 +1180,7 @@ namespace applications
                         MessageBox.Show(ex.Message);
                     }
                     g = true;
-                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
                     db.closeConnection();
                     idCupterBool = false;
@@ -1298,7 +1399,7 @@ namespace applications
                             MessageBox.Show(ex.Message);
                         }
                         g = true;
-                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
                         db.closeConnection();
                     }
@@ -1312,6 +1413,7 @@ namespace applications
                         comboBox3.Text = "";
                         int idx = dgv.CurrentRow.Index;
                         string idTar = "";
+                        /*
                         if (commonList)
                         {
                             idTar = dgv[1, idx].Value.ToString();
@@ -1320,21 +1422,22 @@ namespace applications
                         {
                             idTar = dgv[2, idx].Value.ToString();
                         }
-
-                        WriteRequest write = new WriteRequest();
+                        */
+                        idTar = dgv["id", idx].Value.ToString();
+                        //WriteRequest write = new WriteRequest();
                         DB db = new DB();
                         MySqlCommand command = new MySqlCommand("SELECT * FROM `request` WHERE `id` = '" + idTar + "';", db.getConnection());
                         MySqlDataReader myReader;
-                        write.Show();
-                        write.label12.Hide();
-                        write.button14.Hide();
-                        write.textBox3.Hide();
-                        write.button5.Hide();
+                        writeRequest.Show();
+                        writeRequest.label12.Hide();
+                        writeRequest.button14.Hide();
+                        writeRequest.textBox3.Hide();
+                        writeRequest.button5.Hide();
                         int i = 0;
                         int ittercargo = 0;
                         int tripCount = 0;
                         bool size = false;
-                        write.dataGridView1.Rows.Clear();
+                        writeRequest.dataGridView1.Rows.Clear();
                         for (int kkk = 0; kkk < nameCargo.Length; kkk++)
                         {
                             nameCargo[kkk] = " ";
@@ -1352,26 +1455,26 @@ namespace applications
 
                             while (myReader.Read())
                             {
-                                write.status = myReader.GetString("status");
+                                writeRequest.status = myReader.GetString("status");
                                 if (myReader.GetString("status").Equals("В работе"))
                                 {
                                     tripCount++;
-                                    write.idRequest = myReader.GetString("id");
-                                    write.label14.Text = "Назначение заявки № " + myReader.GetString("id");
-                                    write.dateTimePicker1.Value = myReader.GetDateTime("docDate");
-                                    write.dateTimePicker3.Value = myReader.GetDateTime("dateAccept");
+                                    writeRequest.idRequest = myReader.GetString("id");
+                                    writeRequest.label14.Text = "Назначение заявки № " + myReader.GetString("id");
+                                    writeRequest.dateTimePicker1.Value = myReader.GetDateTime("docDate");
+                                    writeRequest.dateTimePicker3.Value = myReader.GetDateTime("dateAccept");
                                     string[] time = myReader.GetString("timeAccept").Split(':');
                                     int hour = int.Parse(time[0]);
                                     int minute = int.Parse(time[1]);
-                                    write.dateTimePicker4.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
-                                    write.comboBox1.Text = myReader.GetString("deal");
-                                    write.comboBox2.Text = myReader.GetString("ourFirms");
-                                    write.comboBox3.Text = myReader.GetString("buyer");
-                                    write.comboBox4.Text = myReader.GetString("sender");
-                                    write.comboBox5.Text = myReader.GetString("recipient");
-                                    write.comboBox6.Text = myReader.GetString("object");
-                                    write.comboBox13.Text = myReader.GetString("objectArrive");
-                                    write.comboBox12.Text = myReader.GetString("objectSend");
+                                    writeRequest.dateTimePicker4.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
+                                    writeRequest.comboBox1.Text = myReader.GetString("deal");
+                                    writeRequest.comboBox2.Text = myReader.GetString("ourFirms");
+                                    writeRequest.comboBox3.Text = myReader.GetString("buyer");
+                                    writeRequest.comboBox4.Text = myReader.GetString("sender");
+                                    writeRequest.comboBox5.Text = myReader.GetString("recipient");
+                                    writeRequest.comboBox6.Text = myReader.GetString("object");
+                                    writeRequest.comboBox13.Text = myReader.GetString("objectArrive");
+                                    writeRequest.comboBox12.Text = myReader.GetString("objectSend");
                                     if (!myReader.GetString("nameCargo").Equals("пусто"))
                                     {
                                         size = false;
@@ -1385,40 +1488,40 @@ namespace applications
                                         if (size == false)
                                         {
                                             //MessageBox.Show("asd");
-                                            write.dataGridView1.Rows.Add();
+                                            writeRequest.dataGridView1.Rows.Add();
                                             nameCargo[i] = myReader.GetString("nameCargo");
                                             cargoCount[i] = myReader.GetString("numberNomenclature");
-                                            write.dataGridView1[0, i].Value = myReader.GetString("nameCargo");
-                                            write.dataGridView1[1, i].Value = myReader.GetString("fromCounterparty");
-                                            write.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver");
+                                            writeRequest.dataGridView1[0, i].Value = myReader.GetString("nameCargo");
+                                            writeRequest.dataGridView1[1, i].Value = myReader.GetString("fromCounterparty");
+                                            writeRequest.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver");
                                             string[] asddd = myReader.GetString("dateDocDriver").Split(' ');
-                                            write.dataGridView1[3, i].Value = asddd[0];
-                                            write.dataGridView1[4, i].Value = myReader.GetString("numberNomenclature");
+                                            writeRequest.dataGridView1[3, i].Value = asddd[0];
+                                            writeRequest.dataGridView1[4, i].Value = myReader.GetString("numberNomenclature");
 
-                                            write.nom[i] = myReader.GetString("nameCargo");
-                                            write.from[i] = myReader.GetString("fromCounterparty");
-                                            write.numm[i] = myReader.GetString("numberDocDriver");
-                                            write.date[i] = asddd[0];
-                                            write.numOfNom[i] = myReader.GetString("numberNomenclature");
-                                            write.size = i;
+                                            writeRequest.nom[i] = myReader.GetString("nameCargo");
+                                            writeRequest.from[i] = myReader.GetString("fromCounterparty");
+                                            writeRequest.numm[i] = myReader.GetString("numberDocDriver");
+                                            writeRequest.date[i] = asddd[0];
+                                            writeRequest.numOfNom[i] = myReader.GetString("numberNomenclature");
+                                            writeRequest.size = i;
 
                                             ittercargo++;
                                             //i++;
                                         }
                                         if (ittercargo > 1)
                                         {
-                                            write.severalCargo = true;
+                                            writeRequest.severalCargo = true;
                                         }
                                     }
-                                    write.comboBox14.Text = myReader.GetString("traffic");
-                                    write.dateTimePicker5.Text = myReader.GetString("dateTTN");
-                                    write.textBox3.Text = myReader.GetString("numberTrip");
-                                    write.textBox1.Text = myReader.GetString("priceSalary");
-                                    write.textBox4.Text = myReader.GetString("price");
-                                    write.comboBox7.Text = myReader.GetString("contractor");
-                                    write.comboBox8.Text = myReader.GetString("cars");
-                                    write.comboBox11.Text = myReader.GetString("driveCont");
-                                    write.comboBox9.Text = myReader.GetString("drivers");
+                                    writeRequest.comboBox14.Text = myReader.GetString("traffic");
+                                    writeRequest.dateTimePicker5.Text = myReader.GetString("dateTTN");
+                                    writeRequest.textBox3.Text = myReader.GetString("numberTrip");
+                                    writeRequest.textBox1.Text = myReader.GetString("priceSalary");
+                                    writeRequest.textBox4.Text = myReader.GetString("price");
+                                    writeRequest.comboBox7.Text = myReader.GetString("contractor");
+                                    writeRequest.comboBox8.Text = myReader.GetString("cars");
+                                    writeRequest.comboBox11.Text = myReader.GetString("driveCont");
+                                    writeRequest.comboBox9.Text = myReader.GetString("drivers");
                                     //write.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver"); 
                                     //string[] asddd = myReader.GetString("dateDocDriver").Split(' ');
                                     //write.dataGridView1[3, i].Value = asddd[0];
@@ -1426,102 +1529,102 @@ namespace applications
                                     //write.textBox3.Text = tripCount.ToString();
                                     if (myReader.GetString("coment").Equals("пусто"))
                                     {
-                                        write.textBox2.Text = "Добавьте комментарий";
-                                        write.textBox2.ForeColor = Color.Gray;
+                                        writeRequest.textBox2.Text = "Добавьте комментарий";
+                                        writeRequest.textBox2.ForeColor = Color.Gray;
                                     }
                                     else
                                     {
-                                        write.textBox2.Text = myReader.GetString("coment");
+                                        writeRequest.textBox2.Text = myReader.GetString("coment");
                                     }
                                     if (myReader.GetString("cash").Equals("Да"))
                                     {
-                                        write.checkBox1.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox1.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox1.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox1.CheckState = CheckState.Unchecked;
                                     }
                                     if (myReader.GetString("card").Equals("Да"))
                                     {
-                                        write.checkBox9.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox9.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox9.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox9.CheckState = CheckState.Unchecked;
                                     }
                                     if (myReader.GetString("tax").Equals("Да"))
                                     {
-                                        write.checkBox5.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox5.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox5.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox5.CheckState = CheckState.Unchecked;
                                     }
                                     if (myReader.GetString("mission").Equals("Да"))
                                     {
-                                        write.checkBox6.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox6.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox6.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox6.CheckState = CheckState.Unchecked;
                                     }
                                     if (myReader.GetString("missionPaid").Equals("Да"))
                                     {
-                                        write.checkBox7.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox7.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox7.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox7.CheckState = CheckState.Unchecked;
                                     }
                                     if (myReader.GetString("paid").Equals("Да"))
                                     {
-                                        write.checkBox2.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox2.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox2.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox2.CheckState = CheckState.Unchecked;
                                     }
                                     if (myReader.GetString("stand").Equals("Да"))
                                     {
-                                        write.checkBox8.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox8.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox8.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox8.CheckState = CheckState.Unchecked;
                                     }
                                     string[] tload = myReader.GetString("timeLoading").Split(':');
                                     int hourl = int.Parse(tload[0]);
                                     int minutel = int.Parse(tload[1]);
-                                    write.dateTimePicker2.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hourl, minutel, 0);
+                                    writeRequest.dateTimePicker2.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hourl, minutel, 0);
                                     string[] tuload = myReader.GetString("timeUnloading").Split(':');
                                     int hourul = int.Parse(tuload[0]);
                                     int minuteul = int.Parse(tuload[1]);
-                                    write.dateTimePicker6.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hourul, minuteul, 0);
+                                    writeRequest.dateTimePicker6.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hourul, minuteul, 0);
                                     i++;
-                                    write.buttonAdd.Hide();
-                                    write.button2.Show();
-                                    write.button3.Hide();
+                                    writeRequest.buttonAdd.Hide();
+                                    writeRequest.button2.Show();
+                                    writeRequest.button3.Hide();
                                 }
                                 if (myReader.GetString("status").Equals("Назначена") || myReader.GetString("status").Equals("Исполнена") || myReader.GetString("status").Equals("Оплачена"))
                                 {
                                     //MessageBox.Show("ads");
                                     tripCount++;
-                                    write.idRequest = myReader.GetString("id");
-                                    write.label21.Text = "Исполнение заявки № " + myReader.GetString("id");
-                                    write.dateTimePicker1.Value = myReader.GetDateTime("docDate");
-                                    write.dateTimePicker3.Value = myReader.GetDateTime("dateAccept");
+                                    writeRequest.idRequest = myReader.GetString("id");
+                                    writeRequest.label21.Text = "Исполнение заявки № " + myReader.GetString("id");
+                                    writeRequest.dateTimePicker1.Value = myReader.GetDateTime("docDate");
+                                    writeRequest.dateTimePicker3.Value = myReader.GetDateTime("dateAccept");
                                     string[] time = myReader.GetString("timeAccept").Split(':');
                                     int hour = int.Parse(time[0]);
                                     int minute = int.Parse(time[1]);
-                                    write.dateTimePicker4.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
-                                    write.comboBox1.Text = myReader.GetString("deal");
-                                    write.comboBox2.Text = myReader.GetString("ourFirms");
-                                    write.comboBox3.Text = myReader.GetString("buyer");
-                                    write.comboBox4.Text = myReader.GetString("sender");
-                                    write.comboBox5.Text = myReader.GetString("recipient");
-                                    write.comboBox6.Text = myReader.GetString("object");
-                                    write.comboBox13.Text = myReader.GetString("objectArrive");
-                                    write.comboBox12.Text = myReader.GetString("objectSend");
+                                    writeRequest.dateTimePicker4.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
+                                    writeRequest.comboBox1.Text = myReader.GetString("deal");
+                                    writeRequest.comboBox2.Text = myReader.GetString("ourFirms");
+                                    writeRequest.comboBox3.Text = myReader.GetString("buyer");
+                                    writeRequest.comboBox4.Text = myReader.GetString("sender");
+                                    writeRequest.comboBox5.Text = myReader.GetString("recipient");
+                                    writeRequest.comboBox6.Text = myReader.GetString("object");
+                                    writeRequest.comboBox13.Text = myReader.GetString("objectArrive");
+                                    writeRequest.comboBox12.Text = myReader.GetString("objectSend");
                                     if (!myReader.GetString("nameCargo").Equals("пусто"))
                                     {
                                         size = false;
@@ -1534,40 +1637,40 @@ namespace applications
                                         }
                                         if (size == false)
                                         {
-                                            write.dataGridView1.Rows.Add();
+                                            writeRequest.dataGridView1.Rows.Add();
                                             nameCargo[i] = myReader.GetString("nameCargo");
                                             cargoCount[i] = myReader.GetString("numberNomenclature");
-                                            write.dataGridView1[0, i].Value = myReader.GetString("nameCargo");
-                                            write.dataGridView1[1, i].Value = myReader.GetString("fromCounterparty");
-                                            write.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver");
+                                            writeRequest.dataGridView1[0, i].Value = myReader.GetString("nameCargo");
+                                            writeRequest.dataGridView1[1, i].Value = myReader.GetString("fromCounterparty");
+                                            writeRequest.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver");
                                             string[] asddd = myReader.GetString("dateDocDriver").Split(' ');
-                                            write.dataGridView1[3, i].Value = asddd[0];
-                                            write.dataGridView1[4, i].Value = myReader.GetString("numberNomenclature");
+                                            writeRequest.dataGridView1[3, i].Value = asddd[0];
+                                            writeRequest.dataGridView1[4, i].Value = myReader.GetString("numberNomenclature");
 
-                                            write.nom[i] = myReader.GetString("nameCargo");
-                                            write.from[i] = myReader.GetString("fromCounterparty");
-                                            write.numm[i] = myReader.GetString("numberDocDriver");
-                                            write.date[i] = asddd[0];
-                                            write.numOfNom[i] = myReader.GetString("numberNomenclature");
-                                            write.size = i;
+                                            writeRequest.nom[i] = myReader.GetString("nameCargo");
+                                            writeRequest.from[i] = myReader.GetString("fromCounterparty");
+                                            writeRequest.numm[i] = myReader.GetString("numberDocDriver");
+                                            writeRequest.date[i] = asddd[0];
+                                            writeRequest.numOfNom[i] = myReader.GetString("numberNomenclature");
+                                            writeRequest.size = i;
 
                                             ittercargo++;
                                             //i++;
                                         }
                                         if (ittercargo > 1)
                                         {
-                                            write.severalCargo = true;
+                                            writeRequest.severalCargo = true;
                                         }
                                     }
                                     //write.textBox3.Text = myReader.GetString("numberTrip");
-                                    write.comboBox14.Text = myReader.GetString("traffic");
-                                    write.dateTimePicker5.Text = myReader.GetString("dateTTN");
-                                    write.textBox1.Text = myReader.GetString("priceSalary");
-                                    write.textBox4.Text = myReader.GetString("price");
-                                    write.comboBox7.Text = myReader.GetString("contractor");
-                                    write.comboBox8.Text = myReader.GetString("cars");
-                                    write.comboBox11.Text = myReader.GetString("driveCont");
-                                    write.comboBox9.Text = myReader.GetString("drivers");
+                                    writeRequest.comboBox14.Text = myReader.GetString("traffic");
+                                    writeRequest.dateTimePicker5.Text = myReader.GetString("dateTTN");
+                                    writeRequest.textBox1.Text = myReader.GetString("priceSalary");
+                                    writeRequest.textBox4.Text = myReader.GetString("price");
+                                    writeRequest.comboBox7.Text = myReader.GetString("contractor");
+                                    writeRequest.comboBox8.Text = myReader.GetString("cars");
+                                    writeRequest.comboBox11.Text = myReader.GetString("driveCont");
+                                    writeRequest.comboBox9.Text = myReader.GetString("drivers");
                                     //write.dataGridView1[2, i].Value = myReader.GetString("numberDocDriver");
                                     //string[] asddd = myReader.GetString("dateDocDriver").Split(' ');
                                     //write.dataGridView1[3, i].Value = asddd[0];
@@ -1575,97 +1678,97 @@ namespace applications
                                     //write.textBox3.Text = tripCount.ToString();
                                     if (myReader.GetString("coment").Equals("пусто"))
                                     {
-                                        write.textBox2.Text = "Добавьте комментарий";
-                                        write.textBox2.ForeColor = Color.Gray;
+                                        writeRequest.textBox2.Text = "Добавьте комментарий";
+                                        writeRequest.textBox2.ForeColor = Color.Gray;
                                     }
                                     else
                                     {
-                                        write.textBox2.Text = myReader.GetString("coment");
+                                        writeRequest.textBox2.Text = myReader.GetString("coment");
                                     }
                                     if (myReader.GetString("cash").Equals("Да"))
                                     {
-                                        write.checkBox1.CheckState = CheckState.Checked;
-                                        write.checkBox2.Show();
-                                        write.label11.Show();
+                                        writeRequest.checkBox1.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox2.Show();
+                                        writeRequest.label11.Show();
                                     }
                                     else
                                     {
-                                        write.checkBox2.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox2.CheckState = CheckState.Unchecked;
                                     }
                                     if (myReader.GetString("card").Equals("Да"))
                                     {
-                                        write.checkBox9.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox9.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox9.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox9.CheckState = CheckState.Unchecked;
                                     }
                                     if (myReader.GetString("mission").Equals("Да"))
                                     {
-                                        write.checkBox6.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox6.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox6.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox6.CheckState = CheckState.Unchecked;
                                     }
                                     if (myReader.GetString("missionPaid").Equals("Да"))
                                     {
-                                        write.checkBox7.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox7.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox7.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox7.CheckState = CheckState.Unchecked;
                                     }
                                     if (!myReader.GetString("numberDocTrip").Equals("-1"))
                                     {
-                                        write.textBox6.Text = myReader.GetString("numberDocTrip");
-                                        write.textBox6.ForeColor = Color.Black;
+                                        writeRequest.textBox6.Text = myReader.GetString("numberDocTrip");
+                                        writeRequest.textBox6.ForeColor = Color.Black;
                                     }
                                     //write.textBox6.Text = myReader.GetString("numberDocTrip");
                                     if (myReader.GetString("cash").Equals("Да"))
                                     {
-                                        write.checkBox1.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox1.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox1.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox1.CheckState = CheckState.Unchecked;
                                     }
                                     if (myReader.GetString("tax").Equals("Да"))
                                     {
-                                        write.checkBox5.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox5.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox5.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox5.CheckState = CheckState.Unchecked;
                                     }
                                     if (myReader.GetString("paid").Equals("Да"))
                                     {
-                                        write.checkBox2.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox2.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox2.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox2.CheckState = CheckState.Unchecked;
                                     }
                                     if (myReader.GetString("stand").Equals("Да"))
                                     {
-                                        write.checkBox8.CheckState = CheckState.Checked;
+                                        writeRequest.checkBox8.CheckState = CheckState.Checked;
                                     }
                                     else
                                     {
-                                        write.checkBox8.CheckState = CheckState.Unchecked;
+                                        writeRequest.checkBox8.CheckState = CheckState.Unchecked;
                                     }
                                     string[] tload = myReader.GetString("timeLoading").Split(':');
                                     int hourl = int.Parse(tload[0]);
                                     int minutel = int.Parse(tload[1]);
-                                    write.dateTimePicker2.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hourl, minutel, 0);
+                                    writeRequest.dateTimePicker2.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hourl, minutel, 0);
                                     string[] tuload = myReader.GetString("timeUnloading").Split(':');
                                     int hourul = int.Parse(tuload[0]);
                                     int minuteul = int.Parse(tuload[1]);
-                                    write.dateTimePicker6.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hourul, minuteul, 0);
+                                    writeRequest.dateTimePicker6.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hourul, minuteul, 0);
                                     i++;
-                                    write.buttonAdd.Hide();
-                                    write.button2.Hide();
-                                    write.button3.Show();
+                                    writeRequest.buttonAdd.Hide();
+                                    writeRequest.button2.Hide();
+                                    writeRequest.button3.Show();
                                 }
                                 /*WriteRequest.Cargo[WriteRequest.CargoCount] = myReader.GetString("nameCargo");
                                 WriteRequest.CargoCount++;*/
@@ -1678,7 +1781,7 @@ namespace applications
                         //dgv.Rows.Clear();
 
                         db.closeConnection();
-                        write.dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                        writeRequest.dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                     }
                 }
             }
@@ -2911,7 +3014,7 @@ namespace applications
                         dgv["point", it + 1].Value = sumPoint;
                         dgv["done", it + 1].Value = sumDone;
                         dgv.Rows[it + 1].DefaultCellStyle.BackColor = Color.LightGray;
-                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
                         /*for(int i = 0; i < itter; i++)
                         {
@@ -3211,7 +3314,7 @@ namespace applications
                     dgv["point", it + 1].Value = sumPoint;
                     dgv["done", it + 1].Value = sumDone;
                     dgv.Rows[it + 1].DefaultCellStyle.BackColor = Color.LightGray;
-                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
                     /*for(int i = 0; i < itter; i++)
                     {
@@ -3526,7 +3629,7 @@ namespace applications
                 dgv["point", it + 1].Value = sumPoint;
                 dgv["done", it + 1].Value = sumDone;
                 dgv.Rows[it + 1].DefaultCellStyle.BackColor = Color.LightGray;
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
                 /*for(int i = 0; i < itter; i++)
                 {
@@ -3803,7 +3906,7 @@ namespace applications
                 dgv["point", it + 1].Value = sumPoint;
                 dgv["done", it + 1].Value = sumDone;
                 dgv.Rows[it + 1].DefaultCellStyle.BackColor = Color.LightGray;
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
                 /*for(int i = 0; i < itter; i++)
                 {
@@ -3904,16 +4007,17 @@ namespace applications
 
                 dgv.Columns.AddRange(
                 new DataGridViewTextBoxColumn() { Name = "status", HeaderText = "Статус" },
+                new DataGridViewTextBoxColumn() { Name = "deal", HeaderText = "Вид деятельности" },
                 new DataGridViewTextBoxColumn() { Name = "id", HeaderText = "№" },
                 new DataGridViewTextBoxColumn() { Name = "docDate", HeaderText = "Дата" },
                 new DataGridViewTextBoxColumn() { Name = "timeAccept", HeaderText = "Время поставки" },
+                new DataGridViewTextBoxColumn() { Name = "ourFirms", HeaderText = "Наши организации" },
                 new DataGridViewTextBoxColumn() { Name = "buyer", HeaderText = "Покупатель/заказчик" },
                 new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Объект" },
+                new DataGridViewTextBoxColumn() { Name = "priceSalary", HeaderText = "Расценок для ЗП" },
+                new DataGridViewTextBoxColumn() { Name = "price", HeaderText = "Расценок покупателю" },
                 new DataGridViewTextBoxColumn() { Name = "recipient", HeaderText = "Грузополучатель" },
                 new DataGridViewTextBoxColumn() { Name = "sender", HeaderText = "Грузоотправитель" },
-                new DataGridViewTextBoxColumn() { Name = "numberDocDriver", HeaderText = "Номер доверенности" },
-                new DataGridViewTextBoxColumn() { Name = "dateDocDriver", HeaderText = "Дата доверенности" },
-                new DataGridViewTextBoxColumn() { Name = "fromDounterparty", HeaderText = "От кого доверенность" },
                 new DataGridViewTextBoxColumn() { Name = "nameCargo", HeaderText = "Наименование" },
                 new DataGridViewTextBoxColumn() { Name = "numberNom", HeaderText = "Кол-во номенклатуры" },
                 new DataGridViewTextBoxColumn() { Name = "traffic", HeaderText = "Вид транспорта" },
@@ -3950,62 +4054,67 @@ namespace applications
                         }
                         else
                             dgv[0, i].Value = " ";
+                        dgv[1, i].Value = myReader.GetString("deal");
                         if (i != 0)
                         {
-                            if (myReader.GetString("id").Equals(dgv[1, i - 1].Value))
+                            if (myReader.GetString("id").Equals(dgv[2, i - 1].Value))
                             {
-                                dgv[1, i].Value = myReader.GetString("id");
+                                dgv[2, i].Value = myReader.GetString("id");
                                 /*dgv.Rows[i].DefaultCellStyle.BackColor = Color.MistyRose;
                                 dgv.Rows[i - 1].DefaultCellStyle.BackColor = Color.MistyRose;*/
                             }
                             else
                             {
-                                dgv[1, i].Value = myReader.GetString("id");
+                                dgv[2, i].Value = myReader.GetString("id");
                             }
                         }
                         else
                         {
-                            dgv[1, i].Value = myReader.GetString("id");
+                            dgv[2, i].Value = myReader.GetString("id");
                         }
                         string datefirst = myReader.GetString("docDate");
                         string[] datesplit = datefirst.Split(' ');
-                        dgv[2, i].Value = datesplit[0];
-                        dgv[3, i].Value = myReader.GetString("timeAccept");
+                        dgv[3, i].Value = datesplit[0];
+                        dgv[4, i].Value = myReader.GetString("timeAccept");
+                        dgv[5, i].Value = myReader.GetString("ourFirms");
                         if (!myReader.GetString("buyer").Equals("пусто"))
                         {
-                            dgv[4, i].Value = myReader.GetString("buyer");
+                            dgv[6, i].Value = myReader.GetString("buyer");
                             //comboBox2.Text = myReader.GetString("buyer");
                         }
                         else
                         {
-                            dgv[4, i].Value = " ";
+                            dgv[6, i].Value = " ";
                             //comboBox2.Text = " ";
                         }
                         if (!myReader.GetString("object").Equals("пусто"))
                         {
-                            dgv[5, i].Value = myReader.GetString("object");
+                            dgv[7, i].Value = myReader.GetString("object");
                             //comboBox3.Text = myReader.GetString("object");
                         }
                         else
                         {
-                            dgv[5, i].Value = " ";
+                            dgv[7, i].Value = " ";
                             //comboBox3.Text = " ";
                         }
+                        dgv[8, i].Value = myReader.GetString("priceSalary");
+                        dgv[9, i].Value = myReader.GetString("price");
                         if (!myReader.GetString("recipient").Equals("пусто"))
-                            dgv[6, i].Value = myReader.GetString("recipient");
+                            dgv[10, i].Value = myReader.GetString("recipient");
                         else
-                            dgv[6, i].Value = " ";
+                            dgv[10, i].Value = " ";
                         if (!myReader.GetString("sender").Equals("пусто"))
                         {
-                            dgv[7, i].Value = myReader.GetString("sender");
+                            dgv[11, i].Value = myReader.GetString("sender");
                             //textBox1.Show();
                             //label7.Show();
                             //textBox1.Text = myReader.GetString("sender");
                         }
                         else
                         {
-                            dgv[7, i].Value = " ";
+                            dgv[11, i].Value = " ";
                         }
+                        /*
                         if (!myReader.GetString("numberDocDriver").Equals("пусто"))
                             dgv[8, i].Value = myReader.GetString("numberDocDriver");
                         else
@@ -4020,42 +4129,43 @@ namespace applications
                             dgv[10, i].Value = myReader.GetString("fromCounterparty");
                         else
                             dgv[10, i].Value = " ";
+                        */
                         if (!myReader.GetString("nameCargo").Equals("пусто"))
-                            dgv[11, i].Value = myReader.GetString("nameCargo");
-                        else
-                            dgv[11, i].Value = " ";
-                        if (!myReader.GetString("numberNomenclature").Equals("0"))
-                            dgv[12, i].Value = myReader.GetString("numberNomenclature");
+                            dgv[12, i].Value = myReader.GetString("nameCargo");
                         else
                             dgv[12, i].Value = " ";
-                        if (!myReader.GetString("traffic").Equals("пусто"))
-                            dgv[13, i].Value = myReader.GetString("traffic");
+                        if (!myReader.GetString("numberNomenclature").Equals("0"))
+                            dgv[13, i].Value = myReader.GetString("numberNomenclature");
                         else
                             dgv[13, i].Value = " ";
-                        if (!myReader.GetString("cars").Equals("пусто"))
-                            dgv[14, i].Value = myReader.GetString("cars");
+                        if (!myReader.GetString("traffic").Equals("пусто"))
+                            dgv[14, i].Value = myReader.GetString("traffic");
                         else
                             dgv[14, i].Value = " ";
-                        if (!myReader.GetString("drivers").Equals("пусто"))
-                            dgv[15, i].Value = myReader.GetString("drivers");
+                        if (!myReader.GetString("cars").Equals("пусто"))
+                            dgv[15, i].Value = myReader.GetString("cars");
                         else
                             dgv[15, i].Value = " ";
-                        if (!myReader.GetString("cash").Equals("пусто"))
-                            dgv[16, i].Value = myReader.GetString("cash");
+                        if (!myReader.GetString("drivers").Equals("пусто"))
+                            dgv[16, i].Value = myReader.GetString("drivers");
                         else
                             dgv[16, i].Value = " ";
-                        if (!myReader.GetString("numberDocTrip").Equals("-1"))
-                            dgv[17, i].Value = myReader.GetString("numberDocTrip");
+                        if (!myReader.GetString("cash").Equals("пусто"))
+                            dgv[17, i].Value = myReader.GetString("cash");
                         else
                             dgv[17, i].Value = " ";
-                        if (!myReader.GetString("paid").Equals("пусто"))
-                            dgv[18, i].Value = myReader.GetString("paid");
+                        if (!myReader.GetString("numberDocTrip").Equals("-1"))
+                            dgv[18, i].Value = myReader.GetString("numberDocTrip");
                         else
                             dgv[18, i].Value = " ";
-                        if (!myReader.GetString("coment").Equals("пусто"))
-                            dgv[19, i].Value = myReader.GetString("coment");
+                        if (!myReader.GetString("paid").Equals("пусто"))
+                            dgv[19, i].Value = myReader.GetString("paid");
                         else
                             dgv[19, i].Value = " ";
+                        if (!myReader.GetString("coment").Equals("пусто"))
+                            dgv[20, i].Value = myReader.GetString("coment");
+                        else
+                            dgv[20, i].Value = " ";
                         i++;
                     }
                 }
@@ -4064,7 +4174,7 @@ namespace applications
                     MessageBox.Show(ex.Message);
                 }
                 g = true;
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
                 db.closeConnection();
                 idCupterBool = false;
@@ -4073,6 +4183,78 @@ namespace applications
 
         private void button19_Click(object sender, EventArgs e)
         {
+            /*try
+            {
+                double b = double.Parse("13,6");
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }*/
+            DB db = new DB();
+            MySqlCommand command = new MySqlCommand("SELECT * FROM `request`;", db.getConnection());
+            MySqlDataReader myReader;
+            string[] id = new string[25486];
+            string[] priceSalary = new string[25486];
+            string[] price = new string[25486];
+            int i = 0;
+            try
+            {
+                db.openConnection();
+                myReader = command.ExecuteReader();
+                //command.ExecuteNonQuery();
+                while (myReader.Read())
+                {
+                    id[i] = myReader.GetString("iddUseless");
+                    string prs = myReader.GetString("priceSalary");
+                    bool prsc = false;
+                    for (int j = 0; j < prs.Length; j++)
+                    {
+                        if (prs[j].Equals('.'))
+                        {
+                            prsc = true;
+                            break;
+                        }
+                    }
+                    string[] prssp = prs.Split('.');
+                    if (prsc)
+                    {
+                        prs = prssp[0] + "," + prssp[1];
+                    }
+                    priceSalary[i] = prs;
+                    string pr = myReader.GetString("price");
+                    bool prc = false;
+                    for (int j = 0; j < pr.Length; j++)
+                    {
+                        if (pr[j].Equals('.'))
+                        {
+                            prc = true;
+                            break;
+                        }
+                    }
+                    string[] prsp = pr.Split('.');
+                    if (prc)
+                    {
+                        pr = prsp[0] + "," + prsp[1];
+                    }
+                    price[i] = pr;
+                    i++;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            db.closeConnection();
+            for (int j = 0; j < i; j++)
+            {
+                command = new MySqlCommand("UPDATE request SET `priceSalary` = '" + priceSalary[j] + "', `price` = '" + price[j] + "' WHERE `iddUseless` = '" + id[j] + "';", db.getConnection());
+                db.openConnection();
+
+                command.ExecuteNonQuery();
+
+                db.closeConnection();
+            }
+            MessageBox.Show("finish");
             /*string[] cargo = new string[46];
             DB db = new DB();
             //MySqlCommand command = new MySqlCommand("UPDATE request SET status = 'В работе' WHERE cars = 'пусто'", db.getConnection());
@@ -4147,7 +4329,7 @@ namespace applications
                 command.ExecuteNonQuery();
 
                 db.closeConnection();
-            }*/
+            }
 
             string priceNow = "";
             string priceNowCount = "";
@@ -4205,7 +4387,7 @@ namespace applications
                 db.closeConnection();
                 //MessageBox.Show(price.Count.ToString() + " " + names.Count.ToString());
             }
-            
+            */
         }
 
         private void pictureBox6_Click(object sender, EventArgs e)
@@ -4578,7 +4760,7 @@ namespace applications
                 dgv["point", it + 1].Value = sumPoint;
                 dgv["done", it + 1].Value = sumDone;
                 dgv.Rows[it + 1].DefaultCellStyle.BackColor = Color.LightGray;
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
 
                 /*for(int i = 0; i < itter; i++)
                 {

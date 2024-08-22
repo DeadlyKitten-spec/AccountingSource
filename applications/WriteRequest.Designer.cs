@@ -1212,9 +1212,7 @@
         public System.Windows.Forms.CheckBox checkBox1;
         public System.Windows.Forms.CheckBox checkBox2;
         public System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.Label label24;
         public System.Windows.Forms.TextBox textBox2;
         public System.Windows.Forms.ComboBox comboBox11;
         private System.Windows.Forms.Label label25;
@@ -1227,7 +1225,6 @@
         private System.Windows.Forms.Label label27;
         public System.Windows.Forms.ComboBox comboBox13;
         private System.Windows.Forms.Label label28;
-        private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.Label label29;
         public System.Windows.Forms.DateTimePicker dateTimePicker4;
         private System.Windows.Forms.Label label30;
@@ -1253,12 +1250,8 @@
         public System.Windows.Forms.CheckBox checkBox6;
         public System.Windows.Forms.TextBox textBox4;
         public System.Windows.Forms.DateTimePicker dateTimePicker6;
-        private System.Windows.Forms.Label label34;
         public System.Windows.Forms.DateTimePicker dateTimePicker2;
-        private System.Windows.Forms.Label label33;
-        private System.Windows.Forms.Label label23;
         public System.Windows.Forms.CheckBox checkBox8;
-        private System.Windows.Forms.Label label35;
         public System.Windows.Forms.CheckBox checkBox9;
         public System.Windows.Forms.Button button4;
         public System.Windows.Forms.Button button7;
@@ -1268,5 +1261,12 @@
         public System.Windows.Forms.Button button8;
         public System.Windows.Forms.Button button12;
         public System.Windows.Forms.Button button11;
+        public System.Windows.Forms.Label label13;
+        public System.Windows.Forms.Label label24;
+        public System.Windows.Forms.Label label34;
+        public System.Windows.Forms.Label label33;
+        public System.Windows.Forms.Label label23;
+        public System.Windows.Forms.Label label35;
+        public System.Windows.Forms.CheckBox checkBox3;
     }
 }

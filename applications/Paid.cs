@@ -168,7 +168,7 @@ namespace applications
             zxc = asd[0].Split('.');
             string answer2 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
 
-            //string Line = "SELECT * FROM `request` WHERE `docDate` = '" + answer + "';";
+            //string Line = "SELECT * FROM `request` WHERE `dateAccept` = '" + answer + "';";
             bool fdriver = false;
 
             string Line = "";// = "SELECT * FROM `request` WHERE `status` = '" + comboBox1.Text + "';";
@@ -193,7 +193,7 @@ namespace applications
                     }
                 }
 
-                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' " + tar + " AND `status` = 'Исполнена' ORDER BY `buyer`, `id` ASC;";
+                Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' " + tar + " AND `status` = 'Исполнена' ORDER BY `buyer`, `id` ASC;";
                 DB db = new DB();
                 MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                 bool g = true;
@@ -207,6 +207,7 @@ namespace applications
                 new DataGridViewTextBoxColumn() { Name = "date", HeaderText = "Дата" },
                 new DataGridViewTextBoxColumn() { Name = "buyer", HeaderText = "Заказчик" },
                 new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Название Объекта" },
+                new DataGridViewTextBoxColumn() { Name = "priceBuyer", HeaderText = "Расценок покупателю" },
                 new DataGridViewTextBoxColumn() { Name = "paid", HeaderText = "Оплата" },
                 new DataGridViewTextBoxColumn() { Name = "cash", HeaderText = "Наличные" },
                 new DataGridViewTextBoxColumn() { Name = "card", HeaderText = "На карту" });
@@ -228,21 +229,22 @@ namespace applications
                         }
                         dgv.Rows.Add();
                         dgv[0, itter].Value = myReader.GetString("id");
-                        string[] fs = myReader.GetString("docDate").Split(' ');
+                        string[] fs = myReader.GetString("dateAccept").Split(' ');
                         dgv[1, itter].Value = fs[0];
                         dgv[2, itter].Value = myReader.GetString("buyer");
                         dgv[3, itter].Value = myReader.GetString("object");
+                        dgv[4, itter].Value = myReader.GetString("price");
                         if (myReader.GetString("paid").Equals("Да"))
                         {
-                            dgv[4, itter].Value = "Оплачено";
+                            dgv[5, itter].Value = "Оплачено";
                         }
                         else
                         {
 
-                            dgv[4, itter].Value = "Не оплачено";
+                            dgv[5, itter].Value = "Не оплачено";
                         }
-                        dgv[5, itter].Value = myReader.GetString("cash");
-                        dgv[6, itter].Value = myReader.GetString("card");
+                        dgv[6, itter].Value = myReader.GetString("cash");
+                        dgv[7, itter].Value = myReader.GetString("card");
                         itter++;
                     }
                 }
@@ -250,7 +252,7 @@ namespace applications
                 {
                     MessageBox.Show(ex.Message);
                 }
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
         }
     }
