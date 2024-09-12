@@ -33,11 +33,11 @@
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label2 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -107,6 +107,13 @@
             this.dataGridView1.TabIndex = 45;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
+            // name
+            // 
+            this.name.HeaderText = "Субподрядчик";
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            this.name.Width = 200;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -130,9 +137,10 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(242, 593);
+            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox2.Location = new System.Drawing.Point(212, 590);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(208, 20);
+            this.textBox2.Size = new System.Drawing.Size(262, 26);
             this.textBox2.TabIndex = 41;
             // 
             // pictureBox2
@@ -145,13 +153,6 @@
             this.pictureBox2.TabIndex = 39;
             this.pictureBox2.TabStop = false;
             this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
-            // 
-            // name
-            // 
-            this.name.HeaderText = "Субподрядчик";
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
-            this.name.Width = 200;
             // 
             // Contractor
             // 

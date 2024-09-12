@@ -79,7 +79,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            dataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         private void pictureBox5_Click(object sender, EventArgs e)
@@ -238,7 +238,7 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -315,7 +315,7 @@ namespace applications
                 db.closeConnection();
             }
 
-            dataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         private void button3_Click(object sender, EventArgs e)

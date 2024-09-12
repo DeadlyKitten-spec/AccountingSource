@@ -71,6 +71,8 @@
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.button18 = new System.Windows.Forms.Button();
+            this.button19 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
@@ -84,6 +86,8 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(253)))), ((int)(((byte)(245)))), ((int)(((byte)(196)))));
+            this.panel1.Controls.Add(this.button19);
+            this.panel1.Controls.Add(this.button18);
             this.panel1.Controls.Add(this.button17);
             this.panel1.Controls.Add(this.button16);
             this.panel1.Controls.Add(this.dataGridView1);
@@ -165,7 +169,7 @@
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AllowUserToOrderColumns = true;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(1038, 256);
+            this.dataGridView1.Location = new System.Drawing.Point(1040, 265);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(822, 561);
             this.dataGridView1.TabIndex = 59;
@@ -302,7 +306,7 @@
             // pictureBox4
             // 
             this.pictureBox4.Image = global::applications.Properties.Resources.clearTrash;
-            this.pictureBox4.Location = new System.Drawing.Point(442, 204);
+            this.pictureBox4.Location = new System.Drawing.Point(555, 213);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(33, 29);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -313,7 +317,7 @@
             // pictureBox3
             // 
             this.pictureBox3.Image = global::applications.Properties.Resources.clearTrash;
-            this.pictureBox3.Location = new System.Drawing.Point(442, 119);
+            this.pictureBox3.Location = new System.Drawing.Point(555, 119);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(33, 29);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -324,7 +328,7 @@
             // pictureBox2
             // 
             this.pictureBox2.Image = global::applications.Properties.Resources.clearTrash;
-            this.pictureBox2.Location = new System.Drawing.Point(442, 161);
+            this.pictureBox2.Location = new System.Drawing.Point(555, 161);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(33, 29);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -335,7 +339,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::applications.Properties.Resources.clearTrash;
-            this.pictureBox1.Location = new System.Drawing.Point(442, 77);
+            this.pictureBox1.Location = new System.Drawing.Point(555, 77);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(33, 29);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -349,7 +353,7 @@
             this.button8.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button8.ForeColor = System.Drawing.Color.Black;
-            this.button8.Location = new System.Drawing.Point(715, 140);
+            this.button8.Location = new System.Drawing.Point(715, 166);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(154, 78);
             this.button8.TabIndex = 42;
@@ -464,7 +468,7 @@
             this.button6.Cursor = System.Windows.Forms.Cursors.Hand;
             this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button6.ForeColor = System.Drawing.Color.Black;
-            this.button6.Location = new System.Drawing.Point(526, 140);
+            this.button6.Location = new System.Drawing.Point(715, 82);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(154, 78);
             this.button6.TabIndex = 32;
@@ -476,9 +480,9 @@
             // 
             this.comboBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(242, 205);
+            this.comboBox4.Location = new System.Drawing.Point(242, 214);
             this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(200, 28);
+            this.comboBox4.Size = new System.Drawing.Size(313, 28);
             this.comboBox4.TabIndex = 31;
             // 
             // comboBox3
@@ -487,7 +491,7 @@
             this.comboBox3.FormattingEnabled = true;
             this.comboBox3.Location = new System.Drawing.Point(242, 120);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(200, 28);
+            this.comboBox3.Size = new System.Drawing.Size(313, 28);
             this.comboBox3.TabIndex = 30;
             // 
             // comboBox2
@@ -496,7 +500,7 @@
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Location = new System.Drawing.Point(242, 78);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(200, 28);
+            this.comboBox2.Size = new System.Drawing.Size(313, 28);
             this.comboBox2.TabIndex = 29;
             this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
@@ -516,7 +520,7 @@
             this.label4.AutoSize = true;
             this.label4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(42, 212);
+            this.label4.Location = new System.Drawing.Point(42, 221);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(183, 25);
             this.label4.TabIndex = 27;
@@ -560,7 +564,7 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(242, 162);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(200, 28);
+            this.comboBox1.Size = new System.Drawing.Size(313, 28);
             this.comboBox1.TabIndex = 11;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
@@ -593,6 +597,26 @@
             this.label1.Size = new System.Drawing.Size(62, 25);
             this.label1.TabIndex = 8;
             this.label1.Text = "Дата";
+            // 
+            // button18
+            // 
+            this.button18.Location = new System.Drawing.Point(242, 241);
+            this.button18.Name = "button18";
+            this.button18.Size = new System.Drawing.Size(313, 22);
+            this.button18.TabIndex = 97;
+            this.button18.Text = "Показать все записи";
+            this.button18.UseVisualStyleBackColor = true;
+            this.button18.Click += new System.EventHandler(this.button18_Click);
+            // 
+            // button19
+            // 
+            this.button19.Location = new System.Drawing.Point(242, 189);
+            this.button19.Name = "button19";
+            this.button19.Size = new System.Drawing.Size(313, 22);
+            this.button19.TabIndex = 98;
+            this.button19.Text = "Показать все записи";
+            this.button19.UseVisualStyleBackColor = true;
+            this.button19.Click += new System.EventHandler(this.button19_Click);
             // 
             // StatementBuyer
             // 
@@ -661,5 +685,7 @@
         private System.Windows.Forms.Button button16;
         private System.Windows.Forms.DataGridView dataGridView1;
         public System.Windows.Forms.ComboBox comboBox1;
+        public System.Windows.Forms.Button button18;
+        public System.Windows.Forms.Button button19;
     }
 }

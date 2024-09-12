@@ -15,5 +15,17 @@ namespace applications
         public string pricecount;
         public string pricebuy;
         public string pricebuycount;
+        public string age;
+
+        public ForPrice(string counterparty, string objectt, string price, string pricecount, string pricebuy, string pricebuycount, string age)
+        {
+            this.counterparty = counterparty;
+            this.objectt = objectt;
+            this.price = price;
+            this.pricecount = pricecount;
+            this.pricebuy = pricebuy;
+            this.pricebuycount = pricebuycount;
+            this.age = age;
+        }
     }
 }

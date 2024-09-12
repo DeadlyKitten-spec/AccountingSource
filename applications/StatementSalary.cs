@@ -49,7 +49,7 @@ namespace applications
             zxc = asd[0].Split('.');
             string answer2 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
 
-            //string Line = "SELECT * FROM `request` WHERE `docDate` = '" + answer + "';";
+            //string Line = "SELECT * FROM `request` WHERE `dateAccept` = '" + answer + "';";
             bool fdriver = false;
 
             string Line = "";// = "SELECT * FROM `request` WHERE `status` = '" + comboBox1.Text + "';";
@@ -58,9 +58,15 @@ namespace applications
                 fdriver = true;
             }
 
+            string checkLine = "AND `status` = 'Исполнена'";
+            if (checkBox3.CheckState == CheckState.Checked)
+            {
+                checkLine = "AND (`status` = 'Исполнена' or `status` = 'Назначена')";
+            }
+
             if (fdriver)
             {
-                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `drivers` = '" + comboBox1.Text + "' AND `status` = 'Исполнена' ORDER BY `cars` ASC;";
+                Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `drivers` = '" + comboBox1.Text + "' " + checkLine + " ORDER BY `cars`, `id` ASC;";
                 DB db = new DB();
                 MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                 bool g = true;
@@ -95,19 +101,22 @@ namespace applications
                             double tax = 0;
                             double wotax = 0;
                             double cash = 0;
-                            if (myReader.GetString("tax").Equals("Нет"))
-                            {
-                                tax = pr;
-                                wotax = 0;
-                            }
-                            else
-                            {
-                                tax = 0;
-                                wotax = pr;
-                            }
                             if (myReader.GetString("cash").Equals("Да"))
                             {
                                 cash = pr;
+                            }
+                            else
+                            {
+                                if (myReader.GetString("tax").Equals("Нет"))
+                                {
+                                    tax = pr;
+                                    wotax = 0;
+                                }
+                                else
+                                {
+                                    tax = 0;
+                                    wotax = pr;
+                                }
                             }
                             Salary temp = new Salary(myReader.GetString("id"), myReader.GetString("cars"), myReader.GetString("object"), 1, pr, pr, tax, wotax, cash);
                             bool f = true;
@@ -115,12 +124,15 @@ namespace applications
                             bool p = true;
                             for (int i = 0; i < array.Count; i++)
                             {
+                                /*if (temp.id.Equals("18244")) { 
+                                    MessageBox.Show(temp.id.ToString() + array[i].id.ToString()); 
+                                }*/
                                 if (array[i].id.Equals(temp.id))
                                 {
                                     f = false;
                                     break;
                                 }
-                                if (array[i].objectt.Equals(temp.objectt))
+                                if (array[i].objectt.Equals(temp.objectt) && array[i].car.Equals(temp.car))
                                 {
                                     ob = false;
                                 }
@@ -139,16 +151,23 @@ namespace applications
                                 {
                                     if (!ob)
                                     {
+                                        bool priceSame = false;
                                         for (int i = 0; i < array.Count; i++)
                                         {
-                                            if (array[i].objectt.Equals(temp.objectt) && array[i].price.Equals(temp.price))
+                                            if (array[i].objectt.Equals(temp.objectt) && array[i].price.Equals(temp.price) && array[i].car.Equals(temp.car))
                                             {
+                                                array[i].id = temp.id;
                                                 array[i].countTrip++;
                                                 array[i].sum += temp.sum;
                                                 array[i].tax += temp.tax;
                                                 array[i].wotax += temp.wotax;
                                                 array[i].cash += temp.cash;
+                                                priceSame = true;
                                             }
+                                        }
+                                        if (!priceSame)
+                                        {
+                                            array.Add(temp);
                                         }
                                     }
                                     else
@@ -196,12 +215,12 @@ namespace applications
                             dgv.Rows.Add();
                             dgv[0, count].Value = "Итого";
                             dgv[2, count].Value = sumTrip;
-                            dgv[4, count].Value = sumSum;
-                            dgv[5, count].Value = sumTax;
-                            dgv[6, count].Value = sumWOTax;
-                            dgv[7, count].Value = sumCash;
+                            dgv[4, count].Value = Math.Round(sumSum,2);
+                            dgv[5, count].Value = Math.Round(sumTax,2);
+                            dgv[6, count].Value = Math.Round(sumWOTax,2);
+                            dgv[7, count].Value = Math.Round(sumCash,2);
                             dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                             sumAll += sumTrip;
                             sumTrip = 0;
                             sumAllSum += sumSum;
@@ -220,10 +239,10 @@ namespace applications
                         dgv[1, count].Value = array[i].objectt;
                         dgv[2, count].Value = array[i].countTrip;
                         dgv[3, count].Value = array[i].price;
-                        dgv[4, count].Value = array[i].sum;
-                        dgv[5, count].Value = array[i].tax;
-                        dgv[6, count].Value = array[i].wotax;
-                        dgv[7, count].Value = array[i].cash;
+                        dgv[4, count].Value = Math.Round(array[i].sum,2);
+                        dgv[5, count].Value = Math.Round(array[i].tax,2);
+                        dgv[6, count].Value = Math.Round(array[i].wotax,2);
+                        dgv[7, count].Value = Math.Round(array[i].cash,2);
                         sumTrip += array[i].countTrip;
                         sumSum += array[i].sum;
                         sumTax += array[i].tax;
@@ -235,12 +254,12 @@ namespace applications
                             dgv.Rows.Add();
                             dgv[0, count].Value = "Итого";
                             dgv[2, count].Value = sumTrip;
-                            dgv[4, count].Value = sumSum;
-                            dgv[5, count].Value = sumTax;
-                            dgv[6, count].Value = sumWOTax;
-                            dgv[7, count].Value = sumCash;
+                            dgv[4, count].Value = Math.Round(sumSum,2);
+                            dgv[5, count].Value = Math.Round(sumTax,2);
+                            dgv[6, count].Value = Math.Round(sumWOTax,2);
+                            dgv[7, count].Value = Math.Round(sumCash,2);
                             dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                             sumAll += sumTrip;
                             sumTrip = 0;
                             sumAllSum += sumSum;
@@ -259,25 +278,25 @@ namespace applications
                     dgv.Rows.Add();
                     dgv[0, count].Value = "Всего";
                     dgv[2, count].Value = sumAll;
-                    dgv[4, count].Value = sumAllSum;
-                    dgv[5, count].Value = sumAllTax;
-                    dgv[6, count].Value = sumAllWOTax;
-                    dgv[7, count].Value = sumAllCash;
+                    dgv[4, count].Value = Math.Round(sumAllSum,2);
+                    dgv[5, count].Value = Math.Round(sumAllTax,2);
+                    dgv[6, count].Value = Math.Round(sumAllWOTax,2);
+                    dgv[7, count].Value = Math.Round(sumAllCash,2);
                     dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                     dgv[0, count + 1].Value = "ЗП водителю";
-                    dgv[4, count + 1].Value = sumAllSum * 0.15;
+                    dgv[4, count + 1].Value = Math.Round(sumAllSum * 0.15,2);
                     dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
                     dgv.Rows[count + 1].DefaultCellStyle.BackColor = Color.LightGray;
-                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                 }
 
             }
             else
             {
-                //Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "';";
+                //Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "';";
                 //MessageBox.Show("Выберите водителя");
-                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `driveCont` = '" + comboBox2.Text + "' AND `status` = 'Исполнена' ORDER BY `cars` ASC;";
+                Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `driveCont` = '" + comboBox2.Text + "'  " + checkLine + " ORDER BY `cars`, `id` ASC;";
                 DB db = new DB();
                 MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                 bool g = true;
@@ -312,19 +331,22 @@ namespace applications
                             double tax = 0;
                             double wotax = 0;
                             double cash = 0;
-                            if (myReader.GetString("tax").Equals("Нет"))
-                            {
-                                tax = pr;
-                                wotax = 0;
-                            }
-                            else
-                            {
-                                tax = 0;
-                                wotax = pr;
-                            }
                             if (myReader.GetString("cash").Equals("Да"))
                             {
                                 cash = pr;
+                            }
+                            else
+                            {
+                                if (myReader.GetString("tax").Equals("Нет"))
+                                {
+                                    tax = pr;
+                                    wotax = 0;
+                                }
+                                else
+                                {
+                                    tax = 0;
+                                    wotax = pr;
+                                }
                             }
                             Salary temp = new Salary(myReader.GetString("id"), myReader.GetString("cars"), myReader.GetString("object"), 1, pr, pr, tax, wotax, cash);
                             bool f = true;
@@ -337,7 +359,7 @@ namespace applications
                                     f = false;
                                     break;
                                 }
-                                if (array[i].objectt.Equals(temp.objectt))
+                                if (array[i].objectt.Equals(temp.objectt) && array[i].car.Equals(temp.car))
                                 {
                                     ob = false;
                                 }
@@ -356,16 +378,23 @@ namespace applications
                                 {
                                     if (!ob)
                                     {
-                                        for(int i = 0; i < array.Count; i++)
+                                        bool priceSame = false;
+                                        for (int i = 0; i < array.Count; i++)
                                         {
-                                            if (array[i].objectt.Equals(temp.objectt) && array[i].price.Equals(temp.price))
+                                            if (array[i].objectt.Equals(temp.objectt) && array[i].price.Equals(temp.price) && array[i].car.Equals(temp.car))
                                             {
+                                                array[i].id = temp.id;
                                                 array[i].countTrip++;
                                                 array[i].sum += temp.sum;
                                                 array[i].tax += temp.tax;
                                                 array[i].wotax += temp.wotax;
                                                 array[i].cash += temp.cash;
+                                                priceSame = true;
                                             }
+                                        }
+                                        if (!priceSame)
+                                        {
+                                            array.Add(temp);
                                         }
                                     }
                                     else
@@ -413,12 +442,12 @@ namespace applications
                             dgv.Rows.Add();
                             dgv[0, count].Value = "Итого";
                             dgv[2, count].Value = sumTrip;
-                            dgv[4, count].Value = sumSum;
-                            dgv[5, count].Value = sumTax;
-                            dgv[6, count].Value = sumWOTax;
-                            dgv[7, count].Value = sumCash;
+                            dgv[4, count].Value = Math.Round(sumSum,2);
+                            dgv[5, count].Value = Math.Round(sumTax,2);
+                            dgv[6, count].Value = Math.Round(sumWOTax,2);
+                            dgv[7, count].Value = Math.Round(sumCash,2);
                             dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                             sumAll += sumTrip;
                             sumTrip = 0;
                             sumAllSum += sumSum;
@@ -437,10 +466,10 @@ namespace applications
                         dgv[1, count].Value = array[i].objectt;
                         dgv[2, count].Value = array[i].countTrip;
                         dgv[3, count].Value = array[i].price;
-                        dgv[4, count].Value = array[i].sum;
-                        dgv[5, count].Value = array[i].tax;
-                        dgv[6, count].Value = array[i].wotax;
-                        dgv[7, count].Value = array[i].cash;
+                        dgv[4, count].Value = Math.Round(array[i].sum,2);
+                        dgv[5, count].Value = Math.Round(array[i].tax,2);
+                        dgv[6, count].Value = Math.Round(array[i].wotax,2);
+                        dgv[7, count].Value = Math.Round(array[i].cash,2);
                         sumTrip += array[i].countTrip;
                         sumSum += array[i].sum;
                         sumTax += array[i].tax;
@@ -452,12 +481,12 @@ namespace applications
                             dgv.Rows.Add();
                             dgv[0, count].Value = "Итого";
                             dgv[2, count].Value = sumTrip;
-                            dgv[4, count].Value = sumSum;
-                            dgv[5, count].Value = sumTax;
-                            dgv[6, count].Value = sumWOTax;
-                            dgv[7, count].Value = sumCash;
+                            dgv[4, count].Value = Math.Round(sumSum,2);
+                            dgv[5, count].Value = Math.Round(sumTax,2);
+                            dgv[6, count].Value = Math.Round(sumWOTax,2);
+                            dgv[7, count].Value = Math.Round(sumCash,2);
                             dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                             sumAll += sumTrip;
                             sumTrip = 0;
                             sumAllSum += sumSum;
@@ -476,17 +505,17 @@ namespace applications
                     dgv.Rows.Add();
                     dgv[0, count].Value = "Всего";
                     dgv[2, count].Value = sumAll;
-                    dgv[4, count].Value = sumAllSum;
-                    dgv[5, count].Value = sumAllTax;
-                    dgv[6, count].Value = sumAllWOTax;
-                    dgv[7, count].Value = sumAllCash;
+                    dgv[4, count].Value = Math.Round(sumAllSum,2);
+                    dgv[5, count].Value = Math.Round(sumAllTax,2);
+                    dgv[6, count].Value = Math.Round(sumAllWOTax,2);
+                    dgv[7, count].Value = Math.Round(sumAllCash,2);
                     dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                     dgv[0, count + 1].Value = "ЗП водителю";
-                    dgv[4, count + 1].Value = sumAllSum * 0.15;
+                    dgv[4, count + 1].Value = Math.Round(sumAllSum * 0.15,2);
                     dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
                     dgv.Rows[count + 1].DefaultCellStyle.BackColor = Color.LightGray;
-                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                    dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                 }
             }
             
@@ -547,7 +576,7 @@ namespace applications
         {
             DB db = new DB();
             comboBox1.Items.Clear();
-            string Query = "SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox2.Text.ToString() + "' ORDER BY `name` ASC;";
+            string Query = "SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox2.Text.ToString() + "' and `age` = 'новый' ORDER BY `name` ASC;";
             //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
             MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader2;
@@ -749,6 +778,46 @@ namespace applications
         {
             this.Close();
             //WorkSpace.ActiveForm.Activate();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if(button9.Text.Equals("Показать все записи"))
+            {
+                DB db = new DB();
+                comboBox1.Items.Clear();
+                string Query = "SELECT * FROM `drivers` WHERE `contractor` = '" + comboBox2.Text.ToString() + "' ORDER BY `name` ASC;";
+                //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+                MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader2;
+
+                try
+                {
+                    db.openConnection();
+                    myReader2 = cmdDataBase2.ExecuteReader();
+
+                    while (myReader2.Read())
+                    {
+                        string objName = myReader2.GetString("name");
+                        if (objName.Equals(""))
+                        {
+                            continue;
+                        }
+                        comboBox1.Items.Add(objName);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button9.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                button9.Text = "Показать все записи";
+                this.comboBox2_SelectedIndexChanged(sender, e);
+            }
         }
     }
 }

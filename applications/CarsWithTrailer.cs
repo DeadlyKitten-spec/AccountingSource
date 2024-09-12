@@ -29,6 +29,7 @@ namespace applications
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
 
             comboBox4.Text = "АвтоСтройХолдинг бортовые";
+            comboBox5.Text = "АвтоСтройХолдинг бортовые";
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)
@@ -162,10 +163,12 @@ namespace applications
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             DB db = new DB();
-            MySqlCommand command = new MySqlCommand("INSERT INTO `tracks` (`car`, `model`, `driver`, `trailer`, `option`, `type`) VALUES (@car, @model, @driver, @trailer, @option, @type)", db.getConnection());
+            MySqlCommand command = new MySqlCommand("INSERT INTO `tracks` (`contractor`, `car`, `model`, `driveCont`, `driver`, `trailer`, `option`, `type`) VALUES (@contr, @car, @model, @drCont, @driver, @trailer, @option, @type)", db.getConnection());
 
+            command.Parameters.Add("@contr", MySqlDbType.VarChar).Value = comboBox4.Text;
             command.Parameters.Add("@car", MySqlDbType.VarChar).Value = comboBox1.Text;
             command.Parameters.Add("@model", MySqlDbType.VarChar).Value = textBox1.Text;
+            command.Parameters.Add("@drCont", MySqlDbType.VarChar).Value = comboBox5.Text;
             command.Parameters.Add("@driver", MySqlDbType.VarChar).Value = comboBox2.Text;
             command.Parameters.Add("@trailer", MySqlDbType.VarChar).Value = comboBox3.Text;
             command.Parameters.Add("@option", MySqlDbType.VarChar).Value = textBox2.Text;
@@ -182,9 +185,10 @@ namespace applications
             comboBox3.Text = "";
             textBox2.Text = "";
             textBox3.Text = "";
+            comboBox5.Text = "";
 
             dataGridView1.Rows.Clear();
-            string Query = "SELECT * FROM `tracks`;";
+            string Query = "SELECT * FROM `tracks` where `contractor` = '" + comboBox4.Text + "';";
             //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
             MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader2;
@@ -249,10 +253,12 @@ namespace applications
 
             db.closeConnection();
 
-            command = new MySqlCommand("INSERT INTO `tracks` (`car`, `model`, `driver`, `trailer`, `option`, `type`) VALUES (@car, @model, @driver, @trailer, @option, @type)", db.getConnection());
+            command = new MySqlCommand("INSERT INTO `tracks` (`contractor`, `car`, `model`, `driveCont`, `driver`, `trailer`, `option`, `type`) VALUES (@contr, @car, @model, @drCont, @driver, @trailer, @option, @type)", db.getConnection());
 
+            command.Parameters.Add("@contr", MySqlDbType.VarChar).Value = comboBox4.Text;
             command.Parameters.Add("@car", MySqlDbType.VarChar).Value = comboBox1.Text;
             command.Parameters.Add("@model", MySqlDbType.VarChar).Value = textBox1.Text;
+            command.Parameters.Add("@drCont", MySqlDbType.VarChar).Value = comboBox5.Text;
             command.Parameters.Add("@driver", MySqlDbType.VarChar).Value = comboBox2.Text;
             command.Parameters.Add("@trailer", MySqlDbType.VarChar).Value = comboBox3.Text;
             command.Parameters.Add("@option", MySqlDbType.VarChar).Value = textBox2.Text;
@@ -269,8 +275,9 @@ namespace applications
             comboBox3.Text = "";
             textBox2.Text = "";
             textBox3.Text = "";
+            comboBox5.Text = "";
             dataGridView1.Rows.Clear();
-            string Query = "SELECT * FROM `tracks`;";
+            string Query = "SELECT * FROM `tracks` where `contractor` = '" + comboBox4.Text + "';";
             //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
             MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader2;
@@ -317,9 +324,10 @@ namespace applications
             comboBox3.Text = "";
             textBox2.Text = "";
             textBox3.Text = "";
+            comboBox5.Text = "";
             dataGridView1.Rows.Clear();
 
-            string Query = "SELECT * FROM `tracks`;";
+            string Query = "SELECT * FROM `tracks` where `contractor` = '" + comboBox4.Text + "';";
             //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
             MySqlCommand cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader2;
@@ -458,6 +466,13 @@ namespace applications
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e)
         {
             comboBox1.Items.Clear();
+            comboBox1.Text = "";
+            textBox1.Text = "";
+            comboBox2.Text = "";
+            comboBox3.Text = "";
+            textBox2.Text = "";
+            textBox3.Text = "";
+            comboBox5.Text = "";
             DB db = new DB();
             string Query = "SELECT * FROM `cars` WHERE `contractor` = '" + comboBox4.Text + "'ORDER BY `name` ASC;";
             //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
@@ -477,6 +492,35 @@ namespace applications
                         continue;
                     }
                     comboBox1.Items.Add(objName);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            db.closeConnection();
+
+            dataGridView1.Rows.Clear();
+            Query = "SELECT * FROM `tracks` where `contractor` = '" + comboBox4.Text + "';";
+            //string Query = "(SELECT * FROM `cars` WHERE `contractor` = '" + comboBox7.Text.ToString() + "' ORDER BY `name` ASC) ORDER BY `count` desc;";
+            cmdDataBase2 = new MySqlCommand(Query, db.getConnection());
+            int i = 0;
+            try
+            {
+                db.openConnection();
+                myReader2 = cmdDataBase2.ExecuteReader();
+
+                while (myReader2.Read())
+                {
+                    dataGridView1.Rows.Add();
+                    dataGridView1["id", i].Value = i + 1;
+                    dataGridView1["car", i].Value = myReader2.GetString("car");
+                    dataGridView1["model", i].Value = myReader2.GetString("model");
+                    dataGridView1["driver", i].Value = myReader2.GetString("driver");
+                    dataGridView1["trailer", i].Value = myReader2.GetString("trailer");
+                    dataGridView1["option", i].Value = myReader2.GetString("option");
+                    dataGridView1["type", i].Value = myReader2.GetString("type");
+                    i++;
                 }
             }
             catch (Exception ex)
@@ -560,5 +604,6 @@ namespace applications
             }
             db.closeConnection();
         }
+
     }
 }

@@ -28,6 +28,7 @@ namespace applications
         public string val = "";
         void FillDGV()
         {
+            /*
             dataGridView1.Rows.Clear();
             if (comboBox1.Text.Equals("Груз"))
             {
@@ -41,7 +42,6 @@ namespace applications
                 {
                     counter[i] = new CounterObject();
                     counter[i].name = "-1";
-                    //counter[i].status = "-1";
                 }
                 int k = 0;
                 try
@@ -53,20 +53,8 @@ namespace applications
                     while (myReader.Read())
                     {
                         string Name = myReader.GetString("group");
-                        //string objName = myReader.GetString("status");
                         bool f = true;
                         int itter = 0;
-                        /*for (int i = 0; i < names.Length; i++)
-                        {
-                            if (names[i].Equals(Name))
-                            {
-                                if (namesStatus[i].Equals(objName))
-                                {   
-                                    f = false;
-                                    break;
-                                }
-                            }
-                        }*/
                         for (int i = 0; i < 1000; i++)
                         {
                             if (counter[i].name.Equals("-1"))
@@ -76,20 +64,12 @@ namespace applications
                             }
                             if (counter[i].name.Equals(Name))
                             {
-                                /*if (!counter[i].status.Equals(objName))
-                                {
-                                    if (!objName.Equals("пусто"))
-                                    {
-                                        counter[i].status = objName;
-                                    }
-                                }*/
                                 f = false;
                             }
                         }
                         if (f == true)
                         {
                             counter[itter].name = Name;
-                            //counter[itter].status = objName;
                         }
                     }
                 }
@@ -103,9 +83,7 @@ namespace applications
                     if (!counter[i].name.Equals("-1"))
                     {
                         dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
                         dataGridView1[0, k].Value = counter[i].name;
-                        //dataGridView1[2, k].Value = counter[i].status;
                         k++;
                     }
                     else
@@ -128,7 +106,6 @@ namespace applications
                 {
                     counter[i] = new CounterObject();
                     counter[i].name = "-1";
-                    //counter[i].status = "-1";
                 }
                 int k = 0;
                 try
@@ -140,20 +117,8 @@ namespace applications
                     while (myReader.Read())
                     {
                         string Name = myReader.GetString("group");
-                        //string objName = myReader.GetString("status");
                         bool f = true;
                         int itter = 0;
-                        /*for (int i = 0; i < names.Length; i++)
-                        {
-                            if (names[i].Equals(Name))
-                            {
-                                if (namesStatus[i].Equals(objName))
-                                {   
-                                    f = false;
-                                    break;
-                                }
-                            }
-                        }*/
                         for (int i = 0; i < 1000; i++)
                         {
                             if (counter[i].name.Equals("-1"))
@@ -163,20 +128,12 @@ namespace applications
                             }
                             if (counter[i].name.Equals(Name))
                             {
-                                /*if (!counter[i].status.Equals(objName))
-                                {
-                                    if (!objName.Equals("пусто"))
-                                    {
-                                        counter[i].status = objName;
-                                    }
-                                }*/
                                 f = false;
                             }
                         }
                         if (f == true)
                         {
                             counter[itter].name = Name;
-                            //counter[itter].status = objName;
                         }
                     }
                 }
@@ -190,9 +147,7 @@ namespace applications
                     if (!counter[i].name.Equals("-1"))
                     {
                         dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
                         dataGridView1[0, k].Value = counter[i].name;
-                        //dataGridView1[2, k].Value = counter[i].status;
                         k++;
                     }
                     else
@@ -202,6 +157,7 @@ namespace applications
                 }
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             }
+            */
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -222,13 +178,7 @@ namespace applications
                 dataGridView1.Rows.Clear();
                 command = new MySqlCommand("SELECT * FROM `namecargo` ORDER BY `group` ASC", db.getConnection());
                 MySqlDataReader myReader;
-                CounterObject[] counter = new CounterObject[1000];
-                for (int i = 0; i < 1000; i++)
-                {
-                    counter[i] = new CounterObject();
-                    counter[i].name = "-1";
-                    //counter[i].status = "-1";
-                }
+                List<CounterObject> counter = new List<CounterObject>();
                 int k = 0;
                 try
                 {
@@ -239,43 +189,17 @@ namespace applications
                     while (myReader.Read())
                     {
                         string Name = myReader.GetString("group");
-                        //string objName = myReader.GetString("status");
                         bool f = true;
-                        int itter = 0;
-                        /*for (int i = 0; i < names.Length; i++)
+                        for (int i = 0; i < counter.Count; i++)
                         {
-                            if (names[i].Equals(Name))
-                            {
-                                if (namesStatus[i].Equals(objName))
-                                {   
-                                    f = false;
-                                    break;
-                                }
-                            }
-                        }*/
-                        for (int i = 0; i < 1000; i++)
-                        {
-                            if (counter[i].name.Equals("-1"))
-                            {
-                                itter = i;
-                                break;
-                            }
                             if (counter[i].name.Equals(Name))
                             {
-                                /*if (!counter[i].status.Equals(objName))
-                                {
-                                    if (!objName.Equals("пусто"))
-                                    {
-                                        counter[i].status = objName;
-                                    }
-                                }*/
                                 f = false;
                             }
                         }
-                        if (f == true)
+                        if (f)
                         {
-                            counter[itter].name = Name;
-                            //counter[itter].status = objName;
+                            counter.Add(new CounterObject(Name, "", ""));
                         }
                     }
                 }
@@ -284,22 +208,13 @@ namespace applications
                     MessageBox.Show(ex.Message);
                 }
                 db.closeConnection();
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < counter.Count; i++)
                 {
-                    if (!counter[i].name.Equals("-1"))
-                    {
-                        dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[0, k].Value = counter[i].name;
-                        //dataGridView1[2, k].Value = counter[i].status;
-                        k++;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    dataGridView1.Rows.Add();
+                    dataGridView1[0, k].Value = counter[i].name;
+                    k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
             else
             {
@@ -317,13 +232,7 @@ namespace applications
                 dataGridView1.Rows.Clear();
                 command = new MySqlCommand("SELECT * FROM `product` ORDER BY `group` ASC", db.getConnection());
                 MySqlDataReader myReader;
-                CounterObject[] counter = new CounterObject[1000];
-                for (int i = 0; i < 1000; i++)
-                {
-                    counter[i] = new CounterObject();
-                    counter[i].name = "-1";
-                    //counter[i].status = "-1";
-                }
+                List<CounterObject> counter = new List<CounterObject>();
                 int k = 0;
                 try
                 {
@@ -334,43 +243,17 @@ namespace applications
                     while (myReader.Read())
                     {
                         string Name = myReader.GetString("group");
-                        //string objName = myReader.GetString("status");
                         bool f = true;
-                        int itter = 0;
-                        /*for (int i = 0; i < names.Length; i++)
+                        for (int i = 0; i < counter.Count; i++)
                         {
-                            if (names[i].Equals(Name))
-                            {
-                                if (namesStatus[i].Equals(objName))
-                                {   
-                                    f = false;
-                                    break;
-                                }
-                            }
-                        }*/
-                        for (int i = 0; i < 1000; i++)
-                        {
-                            if (counter[i].name.Equals("-1"))
-                            {
-                                itter = i;
-                                break;
-                            }
                             if (counter[i].name.Equals(Name))
                             {
-                                /*if (!counter[i].status.Equals(objName))
-                                {
-                                    if (!objName.Equals("пусто"))
-                                    {
-                                        counter[i].status = objName;
-                                    }
-                                }*/
                                 f = false;
                             }
                         }
-                        if (f == true)
+                        if (f)
                         {
-                            counter[itter].name = Name;
-                            //counter[itter].status = objName;
+                            counter.Add(new CounterObject(Name, "", ""));
                         }
                     }
                 }
@@ -379,22 +262,13 @@ namespace applications
                     MessageBox.Show(ex.Message);
                 }
                 db.closeConnection();
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < counter.Count; i++)
                 {
-                    if (!counter[i].name.Equals("-1"))
-                    {
-                        dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[0, k].Value = counter[i].name;
-                        //dataGridView1[2, k].Value = counter[i].status;
-                        k++;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    dataGridView1.Rows.Add();
+                    dataGridView1[0, k].Value = counter[i].name;
+                    k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
         }
 
@@ -408,13 +282,7 @@ namespace applications
                 MySqlDataAdapter adapter = new MySqlDataAdapter();
                 MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
                 MySqlDataReader myReader;
-                CounterObject[] counter = new CounterObject[1000];
-                for (int i = 0; i < 1000; i++)
-                {
-                    counter[i] = new CounterObject();
-                    counter[i].name = "-1";
-                    //counter[i].status = "-1";
-                }
+                List<CounterObject> counter = new List<CounterObject>();
                 int k = 0;
                 try
                 {
@@ -425,43 +293,17 @@ namespace applications
                     while (myReader.Read())
                     {
                         string Name = myReader.GetString("group");
-                        //string objName = myReader.GetString("status");
                         bool f = true;
-                        int itter = 0;
-                        /*for (int i = 0; i < names.Length; i++)
+                        for (int i = 0; i < counter.Count; i++)
                         {
-                            if (names[i].Equals(Name))
-                            {
-                                if (namesStatus[i].Equals(objName))
-                                {   
-                                    f = false;
-                                    break;
-                                }
-                            }
-                        }*/
-                        for (int i = 0; i < 1000; i++)
-                        {
-                            if (counter[i].name.Equals("-1"))
-                            {
-                                itter = i;
-                                break;
-                            }
                             if (counter[i].name.Equals(Name))
                             {
-                                /*if (!counter[i].status.Equals(objName))
-                                {
-                                    if (!objName.Equals("пусто"))
-                                    {
-                                        counter[i].status = objName;
-                                    }
-                                }*/
                                 f = false;
                             }
                         }
-                        if (f == true)
+                        if (f)
                         {
-                            counter[itter].name = Name;
-                            //counter[itter].status = objName;
+                            counter.Add(new CounterObject(Name, "", ""));
                         }
                     }
                 }
@@ -470,22 +312,13 @@ namespace applications
                     MessageBox.Show(ex.Message);
                 }
                 db.closeConnection();
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < counter.Count; i++)
                 {
-                    if (!counter[i].name.Equals("-1"))
-                    {
-                        dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[0, k].Value = counter[i].name;
-                        //dataGridView1[2, k].Value = counter[i].status;
-                        k++;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    dataGridView1.Rows.Add();
+                    dataGridView1[0, k].Value = counter[i].name;
+                    k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
             else
             {
@@ -495,13 +328,7 @@ namespace applications
                 MySqlDataAdapter adapter = new MySqlDataAdapter();
                 MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
                 MySqlDataReader myReader;
-                CounterObject[] counter = new CounterObject[1000];
-                for (int i = 0; i < 1000; i++)
-                {
-                    counter[i] = new CounterObject();
-                    counter[i].name = "-1";
-                    //counter[i].status = "-1";
-                }
+                List<CounterObject> counter = new List<CounterObject>();
                 int k = 0;
                 try
                 {
@@ -512,43 +339,17 @@ namespace applications
                     while (myReader.Read())
                     {
                         string Name = myReader.GetString("group");
-                        //string objName = myReader.GetString("status");
                         bool f = true;
-                        int itter = 0;
-                        /*for (int i = 0; i < names.Length; i++)
+                        for (int i = 0; i < counter.Count; i++)
                         {
-                            if (names[i].Equals(Name))
-                            {
-                                if (namesStatus[i].Equals(objName))
-                                {   
-                                    f = false;
-                                    break;
-                                }
-                            }
-                        }*/
-                        for (int i = 0; i < 1000; i++)
-                        {
-                            if (counter[i].name.Equals("-1"))
-                            {
-                                itter = i;
-                                break;
-                            }
                             if (counter[i].name.Equals(Name))
                             {
-                                /*if (!counter[i].status.Equals(objName))
-                                {
-                                    if (!objName.Equals("пусто"))
-                                    {
-                                        counter[i].status = objName;
-                                    }
-                                }*/
                                 f = false;
                             }
                         }
-                        if (f == true)
+                        if (f)
                         {
-                            counter[itter].name = Name;
-                            //counter[itter].status = objName;
+                            counter.Add(new CounterObject(Name, "", ""));
                         }
                     }
                 }
@@ -557,22 +358,13 @@ namespace applications
                     MessageBox.Show(ex.Message);
                 }
                 db.closeConnection();
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < counter.Count; i++)
                 {
-                    if (!counter[i].name.Equals("-1"))
-                    {
-                        dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[0, k].Value = counter[i].name;
-                        //dataGridView1[2, k].Value = counter[i].status;
-                        k++;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    dataGridView1.Rows.Add();
+                    dataGridView1[0, k].Value = counter[i].name;
+                    k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
         }
 
@@ -594,60 +386,28 @@ namespace applications
                 MySqlDataAdapter adapter = new MySqlDataAdapter();
                 MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
                 MySqlDataReader myReader;
-                CounterObject[] counter = new CounterObject[1000];
-                for (int i = 0; i < 1000; i++)
-                {
-                    counter[i] = new CounterObject();
-                    counter[i].name = "-1";
-                    //counter[i].status = "-1";
-                }
+                List<CounterObject> counter = new List<CounterObject>();
                 int k = 0;
                 try
                 {
                     db.openConnection();
-                    myReader = cmdDataBase.ExecuteReader();
+                    myReader = command.ExecuteReader();
 
                     int j = 0;
                     while (myReader.Read())
                     {
                         string Name = myReader.GetString("group");
-                        //string objName = myReader.GetString("status");
                         bool f = true;
-                        int itter = 0;
-                        /*for (int i = 0; i < names.Length; i++)
+                        for (int i = 0; i < counter.Count; i++)
                         {
-                            if (names[i].Equals(Name))
-                            {
-                                if (namesStatus[i].Equals(objName))
-                                {   
-                                    f = false;
-                                    break;
-                                }
-                            }
-                        }*/
-                        for (int i = 0; i < 1000; i++)
-                        {
-                            if (counter[i].name.Equals("-1"))
-                            {
-                                itter = i;
-                                break;
-                            }
                             if (counter[i].name.Equals(Name))
                             {
-                                /*if (!counter[i].status.Equals(objName))
-                                {
-                                    if (!objName.Equals("пусто"))
-                                    {
-                                        counter[i].status = objName;
-                                    }
-                                }*/
                                 f = false;
                             }
                         }
-                        if (f == true)
+                        if (f)
                         {
-                            counter[itter].name = Name;
-                            //counter[itter].status = objName;
+                            counter.Add(new CounterObject(Name, "", ""));
                         }
                     }
                 }
@@ -656,22 +416,13 @@ namespace applications
                     MessageBox.Show(ex.Message);
                 }
                 db.closeConnection();
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < counter.Count; i++)
                 {
-                    if (!counter[i].name.Equals("-1"))
-                    {
-                        dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[0, k].Value = counter[i].name;
-                        //dataGridView1[2, k].Value = counter[i].status;
-                        k++;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    dataGridView1.Rows.Add();
+                    dataGridView1[0, k].Value = counter[i].name;
+                    k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
             else
             {
@@ -689,60 +440,28 @@ namespace applications
                 MySqlDataAdapter adapter = new MySqlDataAdapter();
                 MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
                 MySqlDataReader myReader;
-                CounterObject[] counter = new CounterObject[1000];
-                for (int i = 0; i < 1000; i++)
-                {
-                    counter[i] = new CounterObject();
-                    counter[i].name = "-1";
-                    //counter[i].status = "-1";
-                }
+                List<CounterObject> counter = new List<CounterObject>();
                 int k = 0;
                 try
                 {
                     db.openConnection();
-                    myReader = cmdDataBase.ExecuteReader();
+                    myReader = command.ExecuteReader();
 
                     int j = 0;
                     while (myReader.Read())
                     {
                         string Name = myReader.GetString("group");
-                        //string objName = myReader.GetString("status");
                         bool f = true;
-                        int itter = 0;
-                        /*for (int i = 0; i < names.Length; i++)
+                        for (int i = 0; i < counter.Count; i++)
                         {
-                            if (names[i].Equals(Name))
-                            {
-                                if (namesStatus[i].Equals(objName))
-                                {   
-                                    f = false;
-                                    break;
-                                }
-                            }
-                        }*/
-                        for (int i = 0; i < 1000; i++)
-                        {
-                            if (counter[i].name.Equals("-1"))
-                            {
-                                itter = i;
-                                break;
-                            }
                             if (counter[i].name.Equals(Name))
                             {
-                                /*if (!counter[i].status.Equals(objName))
-                                {
-                                    if (!objName.Equals("пусто"))
-                                    {
-                                        counter[i].status = objName;
-                                    }
-                                }*/
                                 f = false;
                             }
                         }
-                        if (f == true)
+                        if (f)
                         {
-                            counter[itter].name = Name;
-                            //counter[itter].status = objName;
+                            counter.Add(new CounterObject(Name, "", ""));
                         }
                     }
                 }
@@ -751,22 +470,13 @@ namespace applications
                     MessageBox.Show(ex.Message);
                 }
                 db.closeConnection();
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < counter.Count; i++)
                 {
-                    if (!counter[i].name.Equals("-1"))
-                    {
-                        dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[0, k].Value = counter[i].name;
-                        //dataGridView1[2, k].Value = counter[i].status;
-                        k++;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    dataGridView1.Rows.Add();
+                    dataGridView1[0, k].Value = counter[i].name;
+                    k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
         }
 
@@ -801,60 +511,28 @@ namespace applications
                 MySqlDataAdapter adapter = new MySqlDataAdapter();
                 MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
                 MySqlDataReader myReader;
-                CounterObject[] counter = new CounterObject[1000];
-                for (int i = 0; i < 1000; i++)
-                {
-                    counter[i] = new CounterObject();
-                    counter[i].name = "-1";
-                    //counter[i].status = "-1";
-                }
+                List<CounterObject> counter = new List<CounterObject>();
                 int k = 0;
                 try
                 {
                     db.openConnection();
-                    myReader = cmdDataBase.ExecuteReader();
+                    myReader = command.ExecuteReader();
 
                     int j = 0;
                     while (myReader.Read())
                     {
                         string Name = myReader.GetString("group");
-                        //string objName = myReader.GetString("status");
                         bool f = true;
-                        int itter = 0;
-                        /*for (int i = 0; i < names.Length; i++)
+                        for (int i = 0; i < counter.Count; i++)
                         {
-                            if (names[i].Equals(Name))
-                            {
-                                if (namesStatus[i].Equals(objName))
-                                {   
-                                    f = false;
-                                    break;
-                                }
-                            }
-                        }*/
-                        for (int i = 0; i < 1000; i++)
-                        {
-                            if (counter[i].name.Equals("-1"))
-                            {
-                                itter = i;
-                                break;
-                            }
                             if (counter[i].name.Equals(Name))
                             {
-                                /*if (!counter[i].status.Equals(objName))
-                                {
-                                    if (!objName.Equals("пусто"))
-                                    {
-                                        counter[i].status = objName;
-                                    }
-                                }*/
                                 f = false;
                             }
                         }
-                        if (f == true)
+                        if (f)
                         {
-                            counter[itter].name = Name;
-                            //counter[itter].status = objName;
+                            counter.Add(new CounterObject(Name, "", ""));
                         }
                     }
                 }
@@ -863,22 +541,13 @@ namespace applications
                     MessageBox.Show(ex.Message);
                 }
                 db.closeConnection();
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < counter.Count; i++)
                 {
-                    if (!counter[i].name.Equals("-1"))
-                    {
-                        dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[0, k].Value = counter[i].name;
-                        //dataGridView1[2, k].Value = counter[i].status;
-                        k++;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    dataGridView1.Rows.Add();
+                    dataGridView1[0, k].Value = counter[i].name;
+                    k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
             else
             {
@@ -895,60 +564,28 @@ namespace applications
                 MySqlDataAdapter adapter = new MySqlDataAdapter();
                 MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
                 MySqlDataReader myReader;
-                CounterObject[] counter = new CounterObject[1000];
-                for (int i = 0; i < 1000; i++)
-                {
-                    counter[i] = new CounterObject();
-                    counter[i].name = "-1";
-                    //counter[i].status = "-1";
-                }
+                List<CounterObject> counter = new List<CounterObject>();
                 int k = 0;
                 try
                 {
                     db.openConnection();
-                    myReader = cmdDataBase.ExecuteReader();
+                    myReader = command.ExecuteReader();
 
                     int j = 0;
                     while (myReader.Read())
                     {
                         string Name = myReader.GetString("group");
-                        //string objName = myReader.GetString("status");
                         bool f = true;
-                        int itter = 0;
-                        /*for (int i = 0; i < names.Length; i++)
+                        for (int i = 0; i < counter.Count; i++)
                         {
-                            if (names[i].Equals(Name))
-                            {
-                                if (namesStatus[i].Equals(objName))
-                                {   
-                                    f = false;
-                                    break;
-                                }
-                            }
-                        }*/
-                        for (int i = 0; i < 1000; i++)
-                        {
-                            if (counter[i].name.Equals("-1"))
-                            {
-                                itter = i;
-                                break;
-                            }
                             if (counter[i].name.Equals(Name))
                             {
-                                /*if (!counter[i].status.Equals(objName))
-                                {
-                                    if (!objName.Equals("пусто"))
-                                    {
-                                        counter[i].status = objName;
-                                    }
-                                }*/
                                 f = false;
                             }
                         }
-                        if (f == true)
+                        if (f)
                         {
-                            counter[itter].name = Name;
-                            //counter[itter].status = objName;
+                            counter.Add(new CounterObject(Name, "", ""));
                         }
                     }
                 }
@@ -957,22 +594,13 @@ namespace applications
                     MessageBox.Show(ex.Message);
                 }
                 db.closeConnection();
-                for (int i = 0; i < 1000; i++)
+                for (int i = 0; i < counter.Count; i++)
                 {
-                    if (!counter[i].name.Equals("-1"))
-                    {
-                        dataGridView1.Rows.Add();
-                        //dataGridView1[0, k].Value = k + 1;
-                        dataGridView1[0, k].Value = counter[i].name;
-                        //dataGridView1[2, k].Value = counter[i].status;
-                        k++;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    dataGridView1.Rows.Add();
+                    dataGridView1[0, k].Value = counter[i].name;
+                    k++;
                 }
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             }
         }
     }

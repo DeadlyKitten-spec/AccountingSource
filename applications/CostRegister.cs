@@ -144,7 +144,7 @@ namespace applications
 
         void FillCombo2()
         {
-            string Query = "SELECT * FROM `counterparty` WHERE `status` != 'Грузоотправитель'" + /*WHERE status = 'Грузополучатель/грузоотправитель' OR status = 'Диспетчер'*/  "ORDER BY `name` ASC;";
+            string Query = "SELECT * FROM `counterparty` WHERE `status` != 'Грузоотправитель'" + /*WHERE status = 'Грузополучатель/грузоотправитель' OR status = 'Диспетчер'*/  " and `ageCP` = 'новый' ORDER BY `name` ASC;";
             DB db = new DB();
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
@@ -221,7 +221,7 @@ namespace applications
                 zxc = asd[0].Split('.');
                 string answer2 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
 
-                //string Line = "SELECT * FROM `request` WHERE `docDate` = '" + answer + "';";
+                //string Line = "SELECT * FROM `request` WHERE `dateAccept` = '" + answer + "';";
                 bool fbuyer = false;
 
                 string Line = "";// = "SELECT * FROM `request` WHERE `status` = '" + comboBox1.Text + "';";
@@ -232,7 +232,7 @@ namespace applications
 
                 if (fbuyer)
                 {
-                    Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `deal` = '" + comboBox3.Text + "' AND `ourFirms` = '" + comboBox4.Text + "' AND `buyer` = '" + comboBox2.Text + "' ORDER BY `object` ASC;";
+                    Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `deal` = '" + comboBox3.Text + "' AND `ourFirms` = '" + comboBox4.Text + "' AND `buyer` = '" + comboBox2.Text + "' ORDER BY `object` ASC;";
                     DB db = new DB();
                     MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                     bool g = true;
@@ -250,14 +250,19 @@ namespace applications
                             myReader = command.ExecuteReader();
                             while (myReader.Read())
                             {
-                                string datefirst = myReader.GetString("docDate");
+                                string datefirst = myReader.GetString("dateAccept");
                                 string[] datesplit = datefirst.Split(' ');
                                 string pr = myReader.GetString("price");
                                 if (pr.Equals("пусто"))
                                 {
                                     pr = "0";
                                 }
-                                ForCostRegister temp = new ForCostRegister(datesplit[0], myReader.GetString("object"), myReader.GetString("id"), pr);
+                                string prS = myReader.GetString("priceSalary");
+                                if (prS.Equals("пусто"))
+                                {
+                                    prS = "0";
+                                }
+                                ForCostRegister temp = new ForCostRegister(datesplit[0], myReader.GetString("buyer"), myReader.GetString("object"), myReader.GetString("id"), pr, prS);
                                 bool f = true;
                                 for(int i = 0; i < array.Count; i++)
                                 {
@@ -284,12 +289,15 @@ namespace applications
                         new DataGridViewTextBoxColumn() { Name = "date", HeaderText = "Дата" },
                         new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Объект поставки" },
                         new DataGridViewTextBoxColumn() { Name = "id", HeaderText = "№ заявки" },
-                        new DataGridViewTextBoxColumn() { Name = "price", HeaderText = "Стоимость" });
+                        new DataGridViewTextBoxColumn() { Name = "price", HeaderText = "Расценок покупателю" },
+                        new DataGridViewTextBoxColumn() { Name = "priceSalary", HeaderText = "Расценок ЗП" });
                         dgv.Rows.Clear();
                         string line = array[0].objectt;
                         int count = 0;
                         double sumTrip = 0;
                         double sumAll = 0;
+                        double sumTripS = 0;
+                        double sumAllS = 0;
                         for (int i = 0; i < array.Count; i++)
                         {
                             if (!line.Equals(array[i].objectt) || ((i == array.Count - 1) && (i != 0)))
@@ -297,10 +305,13 @@ namespace applications
                                 dgv.Rows.Add();
                                 dgv[0, count].Value = "Итого";
                                 dgv[3, count].Value = sumTrip;
+                                dgv[4, count].Value = sumTripS;
                                 dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                                 sumAll += sumTrip;
                                 sumTrip = 0;
+                                sumAllS += sumTripS;
+                                sumTripS = 0;
                                 count++;
                                 line = array[i].objectt;
                             }
@@ -309,33 +320,40 @@ namespace applications
                             dgv[1, count].Value = array[i].objectt;
                             dgv[2, count].Value = array[i].id;
                             dgv[3, count].Value = array[i].price;
+                            dgv[4, count].Value = array[i].priceSalary;
                             sumTrip += double.Parse(array[i].price);
+                            sumTripS += double.Parse(array[i].priceSalary);
                             count++;
                             if ((i == array.Count - 1))
                             {
                                 dgv.Rows.Add();
                                 dgv[0, count].Value = "Итого";
                                 dgv[3, count].Value = sumTrip;
+                                dgv[4, count].Value = sumTripS;
                                 dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                                 sumAll += sumTrip;
                                 sumTrip = 0;
+                                sumAllS += sumTripS;
+                                sumTripS = 0;
                                 count++;
                                 line = array[i].objectt;
                             }
                         }
                         sumAll += sumTrip;
+                        sumAllS += sumTripS;
                         dgv.Rows.Add();
                         dgv[0, count].Value = "Всего";
                         dgv[3, count].Value = sumAll;
+                        dgv[4, count].Value = sumAllS;
                         dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                     }
 
                 }
                 else
                 {
-                    Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `deal` = '" + comboBox3.Text + "' AND `ourFirms` = '" + comboBox4.Text + "' ORDER BY `object` ASC;";
+                    Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `deal` = '" + comboBox3.Text + "' AND `ourFirms` = '" + comboBox4.Text + "' ORDER BY `object` ASC;";
                     DB db = new DB();
                     MySqlCommand command = new MySqlCommand(Line, db.getConnection());
                     bool g = true;
@@ -353,14 +371,19 @@ namespace applications
                             myReader = command.ExecuteReader();
                             while (myReader.Read())
                             {
-                                string datefirst = myReader.GetString("docDate");
+                                string datefirst = myReader.GetString("dateAccept");
                                 string[] datesplit = datefirst.Split(' ');
                                 string pr = myReader.GetString("price");
                                 if (pr.Equals("пусто"))
                                 {
                                     pr = "0";
                                 }
-                                ForCostRegister temp = new ForCostRegister(datesplit[0], myReader.GetString("object"), myReader.GetString("id"), pr);
+                                string prS = myReader.GetString("priceSalary");
+                                if (prS.Equals("пусто"))
+                                {
+                                    prS = "0";
+                                }
+                                ForCostRegister temp = new ForCostRegister(datesplit[0], myReader.GetString("buyer"), myReader.GetString("object"), myReader.GetString("id"), pr, prS);
                                 bool f = true;
                                 for (int i = 0; i < array.Count; i++)
                                 {
@@ -385,54 +408,69 @@ namespace applications
                         dgv.Rows.Clear();
                         dgv.Columns.AddRange(
                         new DataGridViewTextBoxColumn() { Name = "date", HeaderText = "Дата" },
+                        new DataGridViewTextBoxColumn() { Name = "cp", HeaderText = "Заказчик" },
                         new DataGridViewTextBoxColumn() { Name = "object", HeaderText = "Объект поставки" },
                         new DataGridViewTextBoxColumn() { Name = "id", HeaderText = "№ заявки" },
-                        new DataGridViewTextBoxColumn() { Name = "price", HeaderText = "Стоимость" });
+                        new DataGridViewTextBoxColumn() { Name = "price", HeaderText = "Расценок покупателю" },
+                        new DataGridViewTextBoxColumn() { Name = "priceSalary", HeaderText = "Расценок ЗП" });
                         dgv.Rows.Clear();
                         string line = array[0].objectt;
                         int count = 0;
                         double sumTrip = 0;
                         double sumAll = 0;
+                        double sumTripS = 0;
+                        double sumAllS = 0;
                         for (int i = 0; i < array.Count; i++)
                         {
                             if (!line.Equals(array[i].objectt) || ((i == array.Count - 1) && (i != 0)))
                             {
                                 dgv.Rows.Add();
                                 dgv[0, count].Value = "Итого";
-                                dgv[3, count].Value = sumTrip;
+                                dgv[4, count].Value = sumTrip;
+                                dgv[5, count].Value = sumTripS;
                                 dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                                 sumAll += sumTrip;
                                 sumTrip = 0;
+                                sumAllS += sumTripS;
+                                sumTripS = 0;
                                 count++;
                                 line = array[i].objectt;
                             }
                             dgv.Rows.Add();
                             dgv[0, count].Value = array[i].date;
-                            dgv[1, count].Value = array[i].objectt;
-                            dgv[2, count].Value = array[i].id;
-                            dgv[3, count].Value = array[i].price;
+                            dgv[1, count].Value = array[i].cp;
+                            dgv[2, count].Value = array[i].objectt;
+                            dgv[3, count].Value = array[i].id;
+                            dgv[4, count].Value = array[i].price;
+                            dgv[5, count].Value = array[i].priceSalary;
                             sumTrip += double.Parse(array[i].price);
+                            sumTripS += double.Parse(array[i].priceSalary);
                             count++;
                             if ((i == array.Count - 1))
                             {
                                 dgv.Rows.Add();
                                 dgv[0, count].Value = "Итого";
-                                dgv[3, count].Value = sumTrip;
+                                dgv[4, count].Value = sumTrip;
+                                dgv[5, count].Value = sumTripS;
                                 dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                                 sumAll += sumTrip;
-                                sumTrip = 0;
+                                sumTrip = 0; 
+                                sumAllS += sumTripS;
+                                sumTripS = 0;
                                 count++;
                                 line = array[i].objectt;
                             }
                         }
                         sumAll += sumTrip;
+                        sumAllS += sumTripS;
                         dgv.Rows.Add();
                         dgv[0, count].Value = "Всего";
-                        dgv[3, count].Value = sumAll;
+                        dgv[4, count].Value = sumAll;
+                        dgv[5, count].Value = sumAllS;
                         dgv.Rows[count].DefaultCellStyle.BackColor = Color.LightGray;
-                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                        dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                     }
                 }
             }
@@ -441,6 +479,61 @@ namespace applications
         private void pictureBox3_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if (button9.Text.Equals("Показать все записи"))
+            {
+                comboBox2.Items.Clear();
+                string Query = "SELECT * FROM `counterparty` WHERE `status` != 'Грузоотправитель'" + /*WHERE status = 'Грузополучатель/грузоотправитель' OR status = 'Диспетчер'*/  "ORDER BY `name` ASC;";
+                DB db = new DB();
+                MySqlDataAdapter adapter = new MySqlDataAdapter();
+                MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
+                MySqlDataReader myReader;
+                string[] names = new string[1000];
+                try
+                {
+                    db.openConnection();
+                    myReader = cmdDataBase.ExecuteReader();
+
+                    int j = 0;
+                    while (myReader.Read())
+                    {
+                        string objName = myReader.GetString("name");
+                        bool f = true;
+                        for (int i = 0; i < names.Length; i++)
+                        {
+                            if (names[i] != null)
+                            {
+                                if (names[i].Equals(objName))
+                                {
+                                    f = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (f == true)
+                        {
+                            names[j] = objName;
+                            j++;
+                            comboBox2.Items.Add(objName);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                db.closeConnection();
+                button9.Text = "Показать актуальные записи";
+            }
+            else
+            {
+                comboBox2.Items.Clear();
+                button9.Text = "Показать все записи";
+                FillCombo2();
+            }
         }
     }
 }

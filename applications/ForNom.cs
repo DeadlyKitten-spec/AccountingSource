@@ -38,6 +38,7 @@ namespace applications
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand cmdDataBase = new MySqlCommand(Query, db.getConnection());
             MySqlDataReader myReader;
+            /*
             string[] names = new string[1000];
             try
             {
@@ -73,6 +74,42 @@ namespace applications
                 MessageBox.Show(ex.Message);
             }
             db.closeConnection();
+            */
+            List<string> counter = new List<string>();
+            int k = 0;
+            try
+            {
+                db.openConnection();
+                myReader = cmdDataBase.ExecuteReader();
+
+                int j = 0;
+                while (myReader.Read())
+                {
+                    string Name = myReader.GetString("name");
+                    bool f = true;
+                    for (int i = 0; i < counter.Count; i++)
+                    {
+                        if (counter[i].Equals(Name))
+                        {
+                            f = false;
+                        }
+                    }
+                    if (f)
+                    {
+                        counter.Add(Name);
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            db.closeConnection();
+            for (int i = 0; i < counter.Count; i++)
+            {
+                comboBox1.Items.Add(counter[i]);
+            }
         }
 
 

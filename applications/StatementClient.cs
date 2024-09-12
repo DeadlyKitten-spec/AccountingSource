@@ -209,17 +209,17 @@ namespace applications
             zxc = asd[0].Split('.');
             string answer2 = zxc[2] + '-' + zxc[1] + '-' + zxc[0];
 
-            //string Line = "SELECT * FROM `request` WHERE `docDate` = '" + answer + "';";
+            //string Line = "SELECT * FROM `request` WHERE `dateAccept` = '" + answer + "';";
             bool fdriver = false;
 
             string Line = "";// = "SELECT * FROM `request` WHERE `status` = '" + comboBox1.Text + "';";
             if (comboBox2.Text.Equals(""))
             {
-                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `status` = 'Исполнена' ORDER BY `buyer`, `id` ASC;";
+                Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `status` = 'Исполнена' ORDER BY `buyer`, `id` ASC;";
             }
             else
             {
-                Line = "SELECT * FROM `request` WHERE `docDate` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `contractor` = '" + comboBox2.Text + "' AND `status` = 'Исполнена' ORDER BY `buyer`, `id` ASC;";
+                Line = "SELECT * FROM `request` WHERE `dateAccept` BETWEEN '" + answer1 + "' AND '" + answer2 + "' AND `contractor` = '" + comboBox2.Text + "' AND `status` = 'Исполнена' ORDER BY `buyer`, `id` ASC;";
             }
             DB db = new DB();
             MySqlCommand command = new MySqlCommand(Line, db.getConnection());
@@ -559,7 +559,7 @@ namespace applications
                 dgv[4, itterr + 1].Value = summ * 0.15;*//*
                 dgv.Rows[itterr].DefaultCellStyle.BackColor = Color.LightGray;*/
                 //dgv.Rows[itterr + 1].DefaultCellStyle.BackColor = Color.LightGray;
-                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
                 /*int[] mas = new int[100];
                 int itt = 0;
                 for(int k = 0; k < 100; k++)

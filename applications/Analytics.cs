@@ -33,6 +33,9 @@ namespace applications
 
             button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             button4.FlatAppearance.BorderColor = FlatColor;
+
+            button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            button5.FlatAppearance.BorderColor = FlatColor;
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -58,10 +61,6 @@ namespace applications
             stcl.Show();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -73,6 +72,12 @@ namespace applications
         {
             StandRegister sr = new StandRegister();
             sr.Show();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            CheckPrices chep = new CheckPrices();
+            chep.Show();
         }
     }
 }
